@@ -17,11 +17,17 @@ class TagSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
     tags = TagSerializer(many=True)
+    average_rating = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = '__all__'
 
+    def get_average_rating(self, obj):
+        ratings = obj.ratings.all()
+        if ratings.exists():
+            return round(sum(r.stars for r in ratings) / ratings.count(), 1)
+        return None
 class OrderItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
 
@@ -36,3 +42,9 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id', 'user', 'created_at', 'is_paid', 'items']
+
+class RatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rating
+        fields = ['id', 'user', 'product', 'stars']
+        read_only_fields = ['user']
