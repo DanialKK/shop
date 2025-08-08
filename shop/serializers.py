@@ -1,7 +1,7 @@
 # shop/serializers.py
 
 from rest_framework import serializers
-from .models import Category, Tag, Product, Order, OrderItem
+from .models import Category, Tag, Product, Order, OrderItem, Rating
 from django.contrib.auth.models import User
 
 class CategorySerializer(serializers.ModelSerializer):
