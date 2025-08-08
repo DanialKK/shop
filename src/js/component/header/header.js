@@ -3,7 +3,7 @@ const createHeader = () => {
     header.className = "py-3 z-20 fixed right-0 top-0 left-0 bg-white/0 backdrop-blur-[100rem]"
     header.innerHTML = `<div class="container bg-bg-top-menu rounded-4xl py-2">
         <div class="flex items-center justify-between">
-            <a href="" class="flex items-center gap-1">
+            <a href="/" class="flex items-center gap-1">
                 <span class="text-2xl font-bold">Digix</span>
                 <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M16.3551 7.72248L12.8148 4.03793H4.46021V0H14.674L18.9959 4.97227L16.3551 7.72248Z" fill="#00C76D"/>
@@ -23,7 +23,7 @@ const createHeader = () => {
                 </span>
                 <ul id="menu" class="max-sm:text-sm font-semibold max-md:shadow-2xl flex items-start gap-6 max-md:flex-col max-md:bg-menu-bg max-md:backdrop-blur-lg transition-all duration-200 z-10 max-md:fixed max-md:-right-44 max-md:top-0 max-md:-bottom-2000 max-md:w-40 max-md:pr-2 max-md:pt-4 md:items-center md:text-lg">
                     <li>
-                        <a href="" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
+                        <a href="/" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
                             خانه
                         </a>
                     </li>
@@ -33,8 +33,8 @@ const createHeader = () => {
                         </a>
                     </li>
                     <li>
-                        <a href="" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
-                            خدمات
+                        <a href="/shop/" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
+                            فروشگاه
                         </a>
                     </li>
                     <li>
