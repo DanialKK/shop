@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fa" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- title -->
+    <title></title>
+
+    <!-- scripts -->
+    <script type="module" src="/src/js/admin/manage.js"></script>
+</head>
+
+<body data-page="admin">
+<header class="mt-4">
+    <div class="container flex justify-between items-center">
+        <div>
+            Flow
+        </div>
+        <ul class="flex justify-center items-center gap-4">
+            <li>
+                <a href="/" class="text-custom-subtext hover:text-menu-link-hover transition-all duration-250">صفحه اصلی</a>
+            </li>
+            <li id="theme" class="cursor-pointer bg-primary-button-bg text-primary-button-text rounded-full p-1">
+                <svg data-icon-theme="dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
+                </svg>
+                <svg data-icon-theme="light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hidden">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/>
+                </svg>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<main class="my-10">
+    <section id="login" class="hidden items-center justify-center min-h-screen px-4 bg-custom-bg text-custom-text">
+        <div class="w-full max-w-md space-y-8">
+            <div class="text-center">
+                <h1>فرم لاگین</h1>
+            </div>
+
+            <form id="admin-form" class="space-y-6 bg-content-bg shadow-lg rounded-xl p-6 border border-custom-border">
+                <div>
+                    <label for="username" dir="ltr" class="block text-sm font-medium text-custom-text">نام کاربری</label>
+                    <input placeholder="نام کاربری" dir="ltr" id="username" name="username" type="text" required class="mt-1 block w-full rounded-md border-custom-border bg-white border border-b-gray-400 p-2 text-black shadow-sm focus:border-primary focus:ring-primary"/>
+                </div>
+
+                <div>
+                    <label for="password" dir="ltr" class="block text-sm font-medium text-custom-text">رمز عبور</label>
+                    <input placeholder="رمز عبور" dir="ltr" id="password" name="password" type="password" required class="mt-1 block w-full rounded-md border-custom-border text-black bg-white border border-b-gray-400 p-2 shadow-sm focus:border-primary focus:ring-primary"/>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center text-sm text-custom-subtext">
+                        <input type="checkbox" class="h-4 w-4 text-primary border-custom-border rounded"/>
+                        <span class="ml-2">منو بخاطر بسپار</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="primary-btn w-full">
+                    ورود
+                </button>
+
+                <div>
+                    در صورت ثبت نام نکردن،
+                    <a href="" class="text-green-600 hover:text-menu-link-hover transition-all duration-250">ثبت نام کنید</a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section id="register" class="hidden items-center justify-center min-h-screen px-4 bg-custom-bg text-custom-text">
+        <div class="w-full max-w-md space-y-8">
+            <div class="text-center">
+                <h1>فرم ثبت نام</h1>
+            </div>
+
+            <form id="register-form" class="space-y-6 bg-content-bg shadow-lg rounded-xl p-6 border border-custom-border">
+                <div>
+                    <label for="new-username" dir="ltr" class="block text-sm font-medium text-custom-text">نام کاربری</label>
+                    <input placeholder="نام کاربری" dir="ltr" id="new-username" name="username" type="text" required class="mt-1 block w-full rounded-md border-custom-border bg-white border border-b-gray-400 p-2 text-black shadow-sm focus:border-primary focus:ring-primary"/>
+                </div>
+
+                <div>
+                    <label for="new-password" dir="ltr" class="block text-sm font-medium text-custom-text">رمز عبور</label>
+                    <input placeholder="رمز عبور" dir="ltr" id="new-password" name="password" type="password" required class="mt-1 block w-full rounded-md border-custom-border text-black bg-white border border-b-gray-400 p-2 shadow-sm focus:border-primary focus:ring-primary"/>
+                </div>
+
+                <div>
+                    <label for="confirm-password" dir="ltr" class="block text-sm font-medium text-custom-text">تکرار رمز عبور</label>
+                    <input placeholder="تکرار رمز عبور" dir="ltr" id="confirm-password" name="confirmPassword" type="password" required class="mt-1 block w-full rounded-md border-custom-border text-black bg-white border border-b-gray-400 p-2 shadow-sm focus:border-primary focus:ring-primary"/>
+                </div>
+
+                <button type="submit" class="primary-btn w-full">
+                    ثبت نام
+                </button>
+
+                <div>
+                    قبلاً ثبت‌نام کرده‌اید؟
+                    <a href="" class="text-green-600 hover:text-menu-link-hover transition-all duration-250">وارد شوید</a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section id="panel" class="hidden">
+        <div class="container">
+            <div class="text-center">
+                <h1 class="mx-auto">
+                    پنل مدیریت
+                </h1>
+            </div>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>
