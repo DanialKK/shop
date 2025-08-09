@@ -18,8 +18,7 @@
 🚀 راه‌اندازی فرانت‌اند
 
 ```bash
-git clone https://github.com/DanialKK/shop.git
-git checkout front-end
+git clone --single-branch --branch front-end https://github.com/DanialKK/shop.git
 npm install
 vite
 ```
