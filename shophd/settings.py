@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'comment',
     'accounts',
     'django_extensions',
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -69,7 +70,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+# هر آدرس دیگه فرانت که نیاز داری
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+#خطرناک برای حالت پروداکت
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 ROOT_URLCONF = 'shophd.urls'
 
@@ -143,3 +154,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
