@@ -3,6 +3,7 @@ import {themeControl} from "@/js/component/header/header.js";
 import {renderSignup} from "@/js/admin/signup.js";
 import {renderLogin} from "@/js/admin/login.js";
 import {renderPanel} from "@/js/admin/panel.js";
+import {createCategory} from "@/js/api/auth.js"
 
 const root = document.documentElement
 const themeWrapper = document.getElementById("theme")
@@ -109,7 +110,7 @@ const checkAccessToken = () => {
         router()
     }
 }
-checkAccessToken()
+checkAccessToken();
 
 window.addEventListener("popstate", router);
 export {accessToken, pushLink, router, showHidePassword}

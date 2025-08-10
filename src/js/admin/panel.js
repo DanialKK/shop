@@ -1,4 +1,5 @@
 import {accessToken} from "@/js/admin/admin.js";
+import {createCategory, getSessionUser} from "@/js/api/auth.js";
 
 export const renderPanel = () => {
     const app = document.getElementById("app")
@@ -10,6 +11,12 @@ export const renderPanel = () => {
                     <h1 class="mx-auto">
                         پنل مدیریت
                     </h1>
+                    <h2 id="session"></h2>
+                </div>
+                <div class="flex justify-center items-center">
+                    <button class="primary-btn" id="add-category">
+                        اضافه کردن دسته بندی
+                    </button>
                 </div>
             </div>
         </section>`
@@ -23,5 +30,20 @@ export const renderPanel = () => {
 }
 
 const bindEvent = () => {
+    const session = document.getElementById("session");
 
+    (async () => {
+        const data = await getSessionUser("changiz", 12345678)
+        console.log(data)
+        session.textContent = data
+    })()
+
+    const addCategory = document.getElementById("add-category")
+
+    addCategory.addEventListener("click", () => {
+        (async () => {
+            const res = await createCategory("tests", "tests")
+            console.log(res)
+        })()
+    })
 }

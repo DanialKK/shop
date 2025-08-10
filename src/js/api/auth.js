@@ -50,8 +50,6 @@ async function loginAdmin(username, password, remember = false) {
 
     const data = await res.json()
     const storage = remember ? localStorage : sessionStorage;
-    console.log(storage)
-    console.log(remember)
 
     storage.setItem("access", data.access);
     storage.setItem("refresh", data.refresh);
@@ -64,4 +62,46 @@ async function handleLoginAdmin({username, password, remember}) {
     return await loginAdmin(username, password, remember)
 }
 
-export {handleRegisterAdmin, handleLoginAdmin}
+// test
+async function createCategory(name, slug) {
+    const token = localStorage.getItem("access")
+    const res = await fetch(`${baseApiURL}/categories/`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name, slug
+        })
+    })
+
+    if (!res.ok) throw res
+    return await res.json()
+}
+
+async function getSessionUser(username, password) {
+    const token = localStorage.getItem("access");
+    const res = await fetch(`${baseApiURL}/users/me/`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({username, password}),
+    })
+
+    const data = await res.json()
+    if (!res.ok) throw data
+    return data
+}
+
+// async function addProduct() {
+//     const res = await fetch(`${baseApiURL}/product/`, {
+//         method: "POST",
+//         headers: {"Content-Type": "application/json"},
+//
+//     })
+// }
+
+export {handleRegisterAdmin, handleLoginAdmin, createCategory, getSessionUser}
