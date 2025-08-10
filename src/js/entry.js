@@ -10,3 +10,9 @@ if (dataPage) {
         })
         .catch((err) => console.error(err))
 }
+
+window.addEventListener("DOMContentLoaded", () => {
+    if (window.location.pathname.startsWith("/admin")) {
+        window.location.href = `${/admin/}`
+    }
+})
