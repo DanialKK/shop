@@ -1,3 +1,5 @@
+import {refreshToken, accessToken} from "@/js/api/main-var.js";
+
 // config api url
 const configAPI = () => {
     if (window.API_CONFIG && window.API_CONFIG.API_BASE_URL) {
@@ -58,9 +60,9 @@ async function registerUser({username, email, password, password2}) {
 
 // handle signup
 async function handleRegisterUser({username, email, password, password2}) {
-    const checkPassword = validatePassword(password)
     if (password !== password2) throw new Error("رمز های عبور شما یکسان نیست!")
-    if (checkPassword) throw new Error(checkPassword)
+    const checkPassword = validatePassword(password)
+    if (checkPassword) throw new Error(checkPassword[checkPassword.length - 1])
     return await registerUser({username, email, password, password2})
 }
 
@@ -76,8 +78,8 @@ async function loginUser(username, password, remember = false) {
     const data = await res.json()
     const storage = remember ? localStorage : sessionStorage;
 
-    storage.setItem("access", data.access);
-    storage.setItem("refresh", data.refresh);
+    storage.setItem(accessToken, data.access);
+    storage.setItem(refreshToken, data.refresh);
 
     return data
 }
@@ -89,23 +91,18 @@ async function handleLoginUser({username, password, remember}) {
 
 // logout user
 async function logOutUser() {
-    const tokenAccess = sessionStorage.getItem("access") || localStorage.getItem("access");
-    const tokenRefresh = sessionStorage.getItem("refresh") || localStorage.getItem("refresh");
-    console.log(tokenAccess)
-    console.log(tokenRefresh)
+    const getTokenAccess = sessionStorage.getItem(accessToken) || localStorage.getItem(accessToken);
+    const getTokenRefresh = sessionStorage.getItem(refreshToken) || localStorage.getItem(refreshToken);
     const res = await fetch(`${baseApiURL}/auth/logout/`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${tokenAccess}`,
+            "Authorization": `Bearer ${getTokenAccess}`,
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({refresh: tokenRefresh})
-    })
-
-    const data = await res.json()
-    console.log(data)
-    if (!res.ok) throw new Error(JSON.stringify(res))
-    return data
+        body: JSON.stringify({refresh: getTokenRefresh})
+    });
+    if (!res.ok) throw new Error("Error in /account/logOutUser()");
+    return true
 }
 
 // handle log out user
@@ -114,12 +111,12 @@ async function handleLogoutUser() {
 }
 
 // get user info
-async function getUserInfo () {
-    const token = sessionStorage.getItem("access") || localStorage.getItem("access");
+async function getUserInfo() {
+    const getAccessToken = sessionStorage.getItem(accessToken) || localStorage.getItem(accessToken);
     const res = await fetch(`${baseApiURL}/auth/user/`, {
         method: "GET",
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${getAccessToken}`,
             "Content-Type": "application/json"
         }
     })
@@ -135,12 +132,12 @@ async function handleGetUserInfo() {
 }
 
 // refresh tokens
-async function refreshToken() {
-    const refreshToken = sessionStorage.getItem("refresh") || localStorage.getItem("refresh");
+async function newRefreshToken() {
+    const getRefreshToken = sessionStorage.getItem(refreshToken) || localStorage.getItem(refreshToken);
     const res = await fetch(`${baseApiURL}/token/refresh/`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({refresh: refreshToken}),
+        body: JSON.stringify({refresh: getRefreshToken}),
     })
     console.log(res)
     const json = await res.json()
@@ -149,17 +146,17 @@ async function refreshToken() {
 }
 
 // handle refresh token
-async function handleRefreshToken() {
-    return await refreshToken()
+async function handleNewRefreshToken() {
+    return await newRefreshToken()
 }
 
 // create category
 async function createCategory(name, slug) {
-    const token = sessionStorage.getItem("access") || localStorage.getItem("access");
+    const getAccessToken = sessionStorage.getItem(accessToken) || localStorage.getItem(accessToken);
     const res = await fetch(`${baseApiURL}/categories/`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${getAccessToken}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({name, slug})
@@ -174,4 +171,4 @@ async function handleCreateCategory(name, slug) {
     return await createCategory(name, slug);
 }
 
-export {handleRegisterUser, handleLoginUser, handleGetUserInfo, handleRefreshToken, handleCreateCategory, handleLogoutUser}
+export {handleRegisterUser, handleLoginUser, handleGetUserInfo, handleNewRefreshToken, handleCreateCategory, handleLogoutUser}

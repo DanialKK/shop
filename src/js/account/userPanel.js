@@ -1,11 +1,13 @@
-import {accessToken} from "@/js/account/account.js";
 import {handleLogoutUser} from "@/js/api/auth.js"
+import {accessToken} from "@/js/api/main-var.js";
 
 const renderUserPanel = () => {
     const app = document.getElementById("app")
+    const getAccessToken = sessionStorage.getItem(accessToken) || localStorage.getItem(accessToken);
 
-    if (accessToken) {
-        app.innerHTML = `<h1>پنل کاربری</h1>
+    if (getAccessToken) {
+        app.innerHTML = `
+<h1>پنل کاربری</h1>
 <button id="logout-btn" type="button" class="primary-btn">خروج از حساب کاربری</button>`;
         bindEvent();
     } else {

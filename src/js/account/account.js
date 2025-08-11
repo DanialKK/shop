@@ -3,11 +3,12 @@ import {themeControl} from "@/js/component/header/header.js";
 import {renderSignup} from "@/js/account/signup.js";
 import {renderLogin} from "@/js/account/login.js";
 import {renderUserPanel} from "@/js/account/userPanel.js"
-import {handleGetUserInfo, handleRefreshToken, handleCreateCategory, handleLogoutUser} from "@/js/api/auth.js"
+// import {handleGetUserInfo, handleRefreshToken, handleCreateCategory, handleLogoutUser} from "@/js/api/auth.js"
+import {accessToken} from "@/js/api/main-var.js";
 
 const root = document.documentElement
 const themeWrapper = document.getElementById("theme")
-const accessToken = sessionStorage.getItem("access") || localStorage.getItem("access");
+const getAccessToken = sessionStorage.getItem(accessToken) || localStorage.getItem(accessToken);
 const loader = document.getElementById("loader-account")
 
 const renderSPA = {
@@ -19,9 +20,15 @@ const renderSPA = {
         render: renderSignup,
         title: "صفحه ثبت نام"
     },
-    "/account/userPanel": {
+    "/account/user-panel": {
         render: renderUserPanel,
         title: "پنل کاربری"
+    },
+    404: {
+        render: (() => {
+            document.getElementById("app").innerHTML = `<h1 class="mx-auto text-center">آدرس اشتباهه</h1>`
+        }),
+        title: 404
     }
 }
 
@@ -68,8 +75,8 @@ const hideLoader = () => {
 
 function redirectAccountsPage(route) {
     setTimeout(() => {
-        showLoader()
         pushLink(`/account/${route}`)
+        showLoader()
         router()
         hideLoader()
     }, 800)
@@ -94,9 +101,7 @@ handleLinks()
 // route and render pages
 const router = () => {
     const path = window.location.pathname;
-    const rout = renderSPA[path] || (() => {
-        document.getElementById("app").innerHTML = `<h1 class="mx-auto text-center">آدرس اشتباهه</h1>`
-    })
+    const rout = renderSPA[path] || renderSPA[404]
     rout.render()
     document.title = rout.title
     handleLinks()
@@ -111,8 +116,8 @@ const pushLink = (link) => {
 function checkAccessToken() {
     const mode = getModeFormURL()
 
-    if (accessToken) {
-        pushLink("/account/userPanel")
+    if (getAccessToken) {
+        pushLink("/account/user-panel")
         router()
     } else if (mode) {
         loadModeFormURL()
@@ -121,8 +126,8 @@ function checkAccessToken() {
         router()
     }
 }
-
 checkAccessToken();
+
 
 // load signup and login when click the header links
 function getModeFormURL() {
@@ -142,27 +147,22 @@ function loadModeFormURL() {
         router()
     }
 }
-
 loadModeFormURL();
 
-window.addEventListener("popstate", router);
-
-const categories = [
-    {
-        name: "بازی",
-        slug: "game",
-    },
-    {
-        name: "بنر",
-        slug: "banner",
-    },
-    {
-        name: "متفرقه",
-        slug: "more",
-    }
-];
-
-
+// const categories = [
+//     {
+//         name: "بازی",
+//         slug: "game",
+//     },
+//     {
+//         name: "بنر",
+//         slug: "banner",
+//     },
+//     {
+//         name: "متفرقه",
+//         slug: "more",
+//     }
+// ];
 
 // create category
 // (async () => {
@@ -197,4 +197,5 @@ const categories = [
 //     }
 // })();
 
-export {accessToken, pushLink, router, showHidePassword, handleLinks, redirectAccountsPage}
+window.addEventListener("popstate", router);
+export {pushLink, router, showHidePassword, handleLinks, redirectAccountsPage}

@@ -69,8 +69,9 @@ const bindEvent = () => {
             try {
                 await handleLoginUser(userData)
                 document.querySelector("[data-success-login-message]").textContent = "لاگین موفقیت آمیز بود"
-                redirectAccountsPage("userPanel")
+                redirectAccountsPage("user-panel")
             } catch (e) {
+                console.log(e)
                 document.querySelector("[data-error-message-login]").textContent = "رمز یا نام کاربری اشتباه است یا وجود ندارد"
             }
         })()

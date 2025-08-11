@@ -1,8 +1,9 @@
 const createHeader = () => {
     const header = document.createElement('header');
     header.className = "py-3 z-20 fixed right-0 top-0 left-0 bg-white/0 backdrop-blur-[100rem]"
-    header.innerHTML = `<div class="container bg-bg-top-menu rounded-4xl py-2">
-        <div class="flex items-center justify-between md:gap-4">
+    header.innerHTML = `<div id="overlay" class="fixed inset-0 -bottom-2000 bg-black/60 z-10 hidden"></div>
+<div class="container bg-bg-top-menu rounded-4xl py-2">
+        <div class="flex items-center justify-between md:gap-8">
             <a href="/" class="flex items-center gap-1">
                 <span class="text-2xl font-bold">Digix</span>
                 <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +70,6 @@ const createHeader = () => {
             </nav>
         </div>
     </div>`
-
     return header;
 }
 
@@ -79,6 +79,7 @@ const navMenuHandler = elem => {
     const openIcon = elem.querySelector("[data-icon-menu=open]");
     const closeIcon = elem.querySelector("[data-icon-menu=close]");
     const menu = document.getElementById("menu")
+    const overlay = document.getElementById("overlay");
 
     elem.dataset.navMenu = flagMenu === "close" ? "open" : "close";
 
@@ -87,8 +88,10 @@ const navMenuHandler = elem => {
 
     if (elem.dataset.navMenu === "open") {
         menu.style.right = "0"
+        overlay.classList.remove("hidden");
     } else {
         menu.style.right = "-170px"
+        overlay.classList.add("hidden");
     }
 }
 
