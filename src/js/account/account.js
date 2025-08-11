@@ -3,7 +3,7 @@ import {themeControl} from "@/js/component/header/header.js";
 import {renderSignup} from "@/js/account/signup.js";
 import {renderLogin} from "@/js/account/login.js";
 import {renderUserPanel} from "@/js/account/userPanel.js"
-import {handleGetUserInfo, handleRefreshToken, handleCreateCategory} from "@/js/api/auth.js"
+import {handleGetUserInfo, handleRefreshToken, handleCreateCategory, handleLogoutUser} from "@/js/api/auth.js"
 
 const root = document.documentElement
 const themeWrapper = document.getElementById("theme")
@@ -162,16 +162,18 @@ const categories = [
     }
 ];
 
+
+
 // create category
-(async () => {
-    try {
-        for (const category of categories) {
-            console.log(await handleCreateCategory(category.name, category.slug));
-        }
-    } catch (e) {
-        console.error(e);
-    }
-})();
+// (async () => {
+//     try {
+//         for (const category of categories) {
+//             console.log(await handleCreateCategory(category.name, category.slug));
+//         }
+//     } catch (e) {
+//         console.error(e);
+//     }
+// })();
 
 // get info user
 // (async () => {

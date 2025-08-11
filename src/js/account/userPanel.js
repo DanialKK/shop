@@ -1,4 +1,5 @@
 import {accessToken} from "@/js/account/account.js";
+import {handleLogoutUser} from "@/js/api/auth.js"
 
 const renderUserPanel = () => {
     const app = document.getElementById("app")
@@ -19,8 +20,20 @@ const bindEvent = () => {
     const logoutBtn = document.getElementById("logout-btn")
 
     logoutBtn.addEventListener("click", e => {
-        e.preventDefault()
-
+        e.preventDefault();
+        // logout
+        (async () => {
+            try {
+                const res = await handleLogoutUser()
+                console.log(res)
+                localStorage.removeItem("access")
+                localStorage.removeItem("refresh")
+                sessionStorage.removeItem("access")
+                sessionStorage.removeItem("refresh")
+            } catch (e) {
+                console.error(e);
+            }
+        })();
     })
 }
 

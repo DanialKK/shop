@@ -87,6 +87,32 @@ async function handleLoginUser({username, password, remember}) {
     return await loginUser(username, password, remember)
 }
 
+// logout user
+async function logOutUser() {
+    const tokenAccess = sessionStorage.getItem("access") || localStorage.getItem("access");
+    const tokenRefresh = sessionStorage.getItem("refresh") || localStorage.getItem("refresh");
+    console.log(tokenAccess)
+    console.log(tokenRefresh)
+    const res = await fetch(`${baseApiURL}/auth/logout/`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${tokenAccess}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({refresh: tokenRefresh})
+    })
+
+    const data = await res.json()
+    console.log(data)
+    if (!res.ok) throw new Error(JSON.stringify(res))
+    return data
+}
+
+// handle log out user
+async function handleLogoutUser() {
+    return await logOutUser()
+}
+
 // get user info
 async function getUserInfo () {
     const token = sessionStorage.getItem("access") || localStorage.getItem("access");
@@ -148,4 +174,4 @@ async function handleCreateCategory(name, slug) {
     return await createCategory(name, slug);
 }
 
-export {handleRegisterUser, handleLoginUser, handleGetUserInfo, handleRefreshToken, handleCreateCategory}
+export {handleRegisterUser, handleLoginUser, handleGetUserInfo, handleRefreshToken, handleCreateCategory, handleLogoutUser}
