@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'shop',
     'comment',
     'accounts',
-    'django_extensions',
     'corsheaders',
 ]
 

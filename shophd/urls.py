@@ -13,5 +13,4 @@ urlpatterns = [
     path('api/comments/', include(comment_api_urls)),
     path('api/auth/', include(account_api_urls)), # JWT Auth
 
-
 ]
