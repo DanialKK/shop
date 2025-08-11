@@ -9,23 +9,42 @@ const baseApiURL = configAPI();
 
 // validate password in signup
 function validatePassword(password) {
+    const errors = [];
+
+    // طول رمز عبور
     if (password.length < 8) {
-        return "رمز عبور باید حداقل 8 کاراکتر باشد.";
+        errors.push("رمز عبور باید حداقل ۸ کاراکتر باشد.");
     }
 
+    // فقط عدد بودن
     if (/^\d+$/.test(password)) {
-        return "رمز عبور نمی‌تواند فقط شامل اعداد باشد.";
+        errors.push("رمز عبور نمی‌تواند فقط شامل اعداد باشد.");
     }
 
-    const commonPasswords = ["12345678", "password", "qwerty", "11111111"];
-    if (commonPasswords.includes(password.toLowerCase())) {
-        return "رمز عبور خیلی ساده است.";
+    // فقط حروف بودن
+    if (/^[a-zA-Z]+$/.test(password)) {
+        errors.push("رمز عبور نمی‌تواند فقط شامل حروف باشد.");
     }
-    return null;
+
+    // رمزهای رایج
+    const commonPasswords = [
+        "123456", "12345678", "password", "qwerty", "111111", "abc123",
+        "123123", "qwer1234", "admin", "letmein", "welcome"
+    ];
+    if (commonPasswords.includes(password.toLowerCase())) {
+        errors.push("رمز عبور خیلی رایج و ساده است.");
+    }
+
+    // تکرار کاراکترها مثل "aaaaaaa"
+    if (/^(.)\1+$/.test(password)) {
+        errors.push("رمز عبور نباید شامل کاراکترهای تکراری باشد.");
+    }
+
+    return errors.length ? errors : null;
 }
 
 // signup
-async function registerAdmin({username, email, password, password2}) {
+async function registerUser({username, email, password, password2}) {
     const res = await fetch(`${baseApiURL}/auth/register/`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
@@ -38,22 +57,20 @@ async function registerAdmin({username, email, password, password2}) {
 }
 
 // handle signup
-async function handleRegisterAdmin({username, email, password, password2}) {
+async function handleRegisterUser({username, email, password, password2}) {
     const checkPassword = validatePassword(password)
     if (password !== password2) throw new Error("رمز های عبور شما یکسان نیست!")
     if (checkPassword) throw new Error(checkPassword)
-    return await registerAdmin({username, email, password, password2})
+    return await registerUser({username, email, password, password2})
 }
 
 // login
-async function loginAdmin(username, password, remember = false) {
+async function loginUser(username, password, remember = false) {
     const res = await fetch(`${baseApiURL}/auth/login/`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({username, password}),
     })
-    console.log(`${baseApiURL}/auth/login/`)
-    console.log(res)
     if (!res.ok) throw new Error("هنوز ثبت نام نکردید یا اطلاعتتون اشتباهه")
 
     const data = await res.json()
@@ -66,26 +83,69 @@ async function loginAdmin(username, password, remember = false) {
 }
 
 // handle login
-async function handleLoginAdmin({username, password, remember}) {
-    return await loginAdmin(username, password, remember)
+async function handleLoginUser({username, password, remember}) {
+    return await loginUser(username, password, remember)
 }
 
-// test
+// get user info
+async function getUserInfo () {
+    const token = sessionStorage.getItem("access") || localStorage.getItem("access");
+    const res = await fetch(`${baseApiURL}/auth/user/`, {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            "Content-Type": "application/json"
+        }
+    })
+    console.log(res)
+    const json = await res.json()
+    if (!res.ok) throw new Error(JSON.stringify(json))
+    return json
+}
+
+// handle get user info
+async function handleGetUserInfo() {
+    return await getUserInfo()
+}
+
+// refresh tokens
+async function refreshToken() {
+    const refreshToken = sessionStorage.getItem("refresh") || localStorage.getItem("refresh");
+    const res = await fetch(`${baseApiURL}/token/refresh/`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({refresh: refreshToken}),
+    })
+    console.log(res)
+    const json = await res.json()
+    if (!res.ok) throw new Error(JSON.stringify(json))
+    return json
+}
+
+// handle refresh token
+async function handleRefreshToken() {
+    return await refreshToken()
+}
+
+// create category
 async function createCategory(name, slug) {
-    const token = localStorage.getItem("access")
+    const token = sessionStorage.getItem("access") || localStorage.getItem("access");
     const res = await fetch(`${baseApiURL}/categories/`, {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            name, slug
-        })
+        body: JSON.stringify({name, slug})
     })
-
-    if (!res.ok) throw res
-    return await res.json()
+    const data = await res.json()
+    console.log(data)
+    if (!res.ok) throw new Error(JSON.stringify(data))
+    return data
 }
 
-export {handleRegisterAdmin, handleLoginAdmin, createCategory}
+async function handleCreateCategory(name, slug) {
+    return await createCategory(name, slug);
+}
+
+export {handleRegisterUser, handleLoginUser, handleGetUserInfo, handleRefreshToken, handleCreateCategory}

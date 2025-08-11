@@ -1,7 +1,7 @@
 import {accessToken} from "@/js/account/account.js";
 import {createCategory} from "@/js/api/auth.js";
 
-export const renderPanel = () => {
+export const renderAdminPanel = () => {
     const app = document.getElementById("app")
 
     if (accessToken) {
@@ -23,8 +23,8 @@ export const renderPanel = () => {
         bindEvent()
     } else {
         app.innerHTML = `<div class="flex justify-center items-center flex-col gap-8">
-<h2 class="mx-auto text-center">هنوز وارد نشدید، لطفا ابتدا وارد شوید</h2>
-<a data-spa-admin-links href="/admin/login" class="primary-btn">ورود</a>
+    <h2 class="mx-auto text-center">هنوز وارد نشدید، لطفا ابتدا وارد شوید</h2>
+    <a data-spa-account-links href="/account/login" class="primary-btn">ورود</a>
 </div>`
     }
 }

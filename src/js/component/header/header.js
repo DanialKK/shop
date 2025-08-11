@@ -2,7 +2,7 @@ const createHeader = () => {
     const header = document.createElement('header');
     header.className = "py-3 z-20 fixed right-0 top-0 left-0 bg-white/0 backdrop-blur-[100rem]"
     header.innerHTML = `<div class="container bg-bg-top-menu rounded-4xl py-2">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between md:gap-4">
             <a href="/" class="flex items-center gap-1">
                 <span class="text-2xl font-bold">Digix</span>
                 <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -12,7 +12,7 @@ const createHeader = () => {
                     <path d="M32.0001 17.1725V22.8832L24.9968 16.2756L28.0222 13.4188L32.0001 17.1725Z" fill="#00C76D"/>
                 </svg>
             </a>
-            <nav>
+            <nav class="md:flex-1">
                 <span class="cursor-pointer md:hidden" id="toggle-nav-menu" data-nav-menu="close">
                     <svg class="-scale-100 rotate-x-180" data-icon-menu="open" width="22" height="20" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M28 2C28 0.89375 27.1063 0 26 0H2C0.893749 0 0 0.89375 0 2C0 3.10625 0.893749 4 2 4H26C27.1063 4 28 3.10625 28 2ZM28 12C28 10.8938 27.1063 10 26 10H10C8.89375 10 8 10.8938 8 12C8 13.1062 8.89375 14 10 14H18H26C27.1063 14 28 13.1062 28 12ZM16 22C16 23.1063 16.8938 24 18 24H26C27.1063 24 28 23.1063 28 22C28 20.8937 27.1063 20 26 20H18C16.8938 20 16 20.8937 16 22Z" fill="var(--color-custom-text)"/>
@@ -21,41 +21,52 @@ const createHeader = () => {
                       <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                     </svg>
                 </span>
-                <ul id="menu" class="max-sm:text-sm font-semibold max-md:shadow-2xl flex items-start gap-6 max-md:flex-col max-md:bg-menu-bg max-md:backdrop-blur-lg transition-all duration-200 z-10 max-md:fixed max-md:-right-44 max-md:top-0 max-md:-bottom-2000 max-md:w-40 max-md:pr-2 max-md:pt-4 md:items-center md:text-lg">
-                    <li>
-                        <a href="/" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
-                            خانه
-                        </a>
-                    </li>
-                    <li>
-                        <a href="" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
-                            درباره ما
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/shop/" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
-                            فروشگاه
-                        </a>
-                    </li>
-                    <li>
-                        <a href="" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
-                            داستان ما
-                        </a>
-                    </li>
-                    <li id="theme" class="cursor-pointer bg-primary-button-bg text-primary-button-text rounded-full p-1">
-                        <svg data-icon-theme="dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-                        </svg>
-                        <svg data-icon-theme="light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hidden">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
-                        </svg>
-                    </li>
-                </ul>
+                <div id="menu" class="flex items-center justify-between transition-all duration-200 z-10 max-md:fixed max-md:-right-44 max-md:top-0 max-md:justify-start max-md:-bottom-2000 max-md:gap-12 max-md:items-start max-md:w-40 max-sm:text-sm font-semibold max-md:shadow-2xl gap-6 max-md:flex-col max-md:bg-menu-bg max-md:backdrop-blur-lg max-md:pr-2 max-md:pt-4 md:items-center md:text-lg">
+                    <ul class="max-sm:text-sm font-semibold flex items-start gap-6 max-md:flex-col max-md:bg-menu-bg max-md:backdrop-blur-lg  max-md:pr-2 max-md:pt-4 md:items-center md:text-lg">
+                        <li>
+                            <a href="/" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
+                                خانه
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
+                                درباره ما
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/shop/" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
+                                فروشگاه
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
+                                داستان ما
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="flex items-center gap-8 max-md:flex-col-reverse max-md:items-start">
+                        <div id="account-icons" class="text-sm font-normal lg:text-base">
+                            <a data-account-icons-link href="/account/?mode=login" class="primary-btn">ورود</a>
+                            <a data-account-icons-link href="/account/?mode=signup" class="secondary-btn">ثبت نام</a>
+                            <a href="/account/" data-account-icons-icon class="hidden flex-row gap-2 secondary-btn border-0 max-md:pr-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                   <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                                حساب کاربری
+                            </a>
+                        </div>
+                        <div id="theme" class="cursor-pointer bg-primary-button-bg text-primary-button-text rounded-full p-1">
+                            <svg data-icon-theme="dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                            </svg>
+                            <svg data-icon-theme="light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 hidden">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
             </nav>
-            <div>
-                <a href="/account/" class=""></a>
-                <a href="" class=""></a>
-            </div>
         </div>
     </div>`
 
@@ -96,4 +107,19 @@ const themeControl = {
     },
 };
 
-export {createHeader, themeControl, navMenuHandler};
+// show and hide account icons
+const controlAccountIcons = (links, icon, token) => {
+    if (token) {
+        links.forEach(link => {
+            link.style.display = "none";
+        })
+        icon.style.display = "flex";
+    } else {
+        icon.style.display = "none";
+        links.forEach(link => {
+            link.style.display = "inline-block";
+        })
+    }
+}
+
+export {createHeader, themeControl, navMenuHandler, controlAccountIcons};

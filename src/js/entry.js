@@ -13,6 +13,6 @@ if (dataPage) {
 
 window.addEventListener("DOMContentLoaded", () => {
     if (window.location.pathname.startsWith("/account")) {
-        window.location.href = `${/admin/}`
+        window.location.href = `${/account/}`
     }
 })

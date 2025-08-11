@@ -4,6 +4,7 @@ import {createScrollUp} from "@/js/component/scroll-up/scroll-up.js";
 import {customObserver} from "@/js/main/main.js";
 
 const root = document.documentElement;
+const accessToken = sessionStorage.getItem("access") || localStorage.getItem("access");
 
 document.addEventListener("DOMContentLoaded", () => {
     // include header
@@ -28,6 +29,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 headerComponent.navMenuHandler(btnNavMenu)
             }
         })
+
+        // control account icons
+        const dataAccountIconsLink = document.querySelectorAll("[data-account-icons-link]")
+        const dataAccountIconsIcon = document.querySelector("[data-account-icons-icon]")
+
+        headerComponent.controlAccountIcons(dataAccountIconsLink, dataAccountIconsIcon, accessToken)
 
         themeWrapper.addEventListener("click", headerComponent.themeControl.changeThemeHandler.bind(null, root))
     })();

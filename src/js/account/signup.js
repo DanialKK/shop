@@ -1,5 +1,5 @@
-import {handleRegisterAdmin} from "@/js/api/auth.js"
-import {pushLink, router, showHidePassword} from "@/js/account/account.js";
+import {handleRegisterUser} from "@/js/api/auth.js"
+import {showHidePassword, handleLinks, redirectAccountsPage} from "@/js/account/account.js";
 
 const renderSignup = () => {
     const app = document.getElementById("app")
@@ -49,7 +49,7 @@ const renderSignup = () => {
 
                 <div>
                     قبلاً ثبت‌نام کرده‌اید؟
-                    <a data-spa-admin-links href="/admin/login" class="text-green-600 hover:text-menu-link-hover transition-all duration-250">وارد شوید</a>
+                    <a data-spa-account-links href="/account/login" class="text-green-600 hover:text-menu-link-hover transition-all duration-250">وارد شوید</a>
                 </div>
             </form>
         </div>
@@ -58,6 +58,7 @@ const renderSignup = () => {
 }
 
 const bindEvent = () => {
+    handleLinks()
     showHidePassword()
 
     const form = document.getElementById("register-form")
@@ -73,13 +74,10 @@ const bindEvent = () => {
 
         (async () => {
             try {
-                await handleRegisterAdmin(dataUser)
-                document.querySelector("[data-success-signup-message]").textContent = "ثبت نام موفقت امیز بود"
-                form.reset()
-                pushLink("/admin/login")
-                router()
+                await handleRegisterUser(dataUser)
+                document.querySelector("[data-success-signup-message]").innerHTML = "ثبت نام موفقت امیز بود"
+                redirectAccountsPage("login")
             } catch (e) {
-                console.log(e)
                 document.querySelector("[data-error-message-register]").textContent = e.message
             }
         })();

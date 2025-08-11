@@ -1,7 +1,7 @@
-import {showHidePassword} from "@/js/account/account.js"
-import {handleLoginAdmin} from "@/js/api/auth.js"
+import {showHidePassword, redirectAccountsPage} from "@/js/account/account.js"
+import {handleLoginUser} from "@/js/api/auth.js"
 
-export const renderLogin = () => {
+const renderLogin = () => {
     const app = document.getElementById("app")
     app.innerHTML = `<section id="login" class="flex items-center justify-center px-4 bg-custom-bg text-custom-text">
         <div class="w-full max-w-md space-y-8">
@@ -45,7 +45,7 @@ export const renderLogin = () => {
 
                 <div>
                     در صورت ثبت نام نکردن،
-                    <a data-spa-admin-links href="/admin/signup" class="text-green-600 hover:text-menu-link-hover transition-all duration-250">ثبت نام کنید</a>
+                    <a data-spa-account-links href="/account/signup" class="text-green-600 hover:text-menu-link-hover transition-all duration-250">ثبت نام کنید</a>
                 </div>
             </form>
         </div>
@@ -67,12 +67,14 @@ const bindEvent = () => {
 
         (async () => {
             try {
-                const res = await handleLoginAdmin(userData)
+                await handleLoginUser(userData)
                 document.querySelector("[data-success-login-message]").textContent = "لاگین موفقیت آمیز بود"
-                console.log(res)
+                redirectAccountsPage("userPanel")
             } catch (e) {
                 document.querySelector("[data-error-message-login]").textContent = "رمز یا نام کاربری اشتباه است یا وجود ندارد"
             }
         })()
     })
 }
+
+export {renderLogin}
