@@ -115,13 +115,14 @@ python manage.py runserver
 
 ## API Authentication
 
-مسیرهای احراز هویت شامل ثبت‌نام، لاگین و رفرش توکن:
+مسیرهای احراز هویت شامل ثبت‌نام، لاگین، خروج و رفرش توکن:
 
 | عملیات            | متد HTTP | مسیر API                  | توضیح                      |
 |-------------------|----------|---------------------------|----------------------------|
 | ثبت‌نام (Register) | POST     | `/api/auth/register/`      | ارسال نام‌کاربری، ایمیل، رمز عبور و تکرارش |
 | لاگین (Login)      | POST     | `/api/auth/login/`         | ارسال نام‌کاربری و رمز عبور، دریافت JWT    |
 | رفرش توکن (Refresh Token) | POST | `/api/auth/token/refresh/` | ارسال توکن رفرش برای دریافت توکن دسترسی جدید |
+|  خروج (Logout) |POST   |   	`/api/auth/logout/` | ارسال توکن رفرش برای بلاک شدن و پایان جلسه کاربری  |
 
 ---
 
@@ -136,9 +137,19 @@ python manage.py runserver
 }
 ```
 ### نمونه درخواست لاگین
-```
+```json
 {
   "username": "danial",
   "password": "123456Aa!"
+}
+```
+### نمونه درخواست لاگ اوت و بلاک توکن رفرش 
+```json
+POST /api/auth/logout/
+Content-Type: application/json
+Authorization: Bearer <access_token>
+
+{
+  "refresh": "<refresh_token>"
 }
 ```
