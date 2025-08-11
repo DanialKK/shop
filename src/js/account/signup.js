@@ -1,5 +1,5 @@
 import {handleRegisterAdmin} from "@/js/api/auth.js"
-import {pushLink, router, showHidePassword} from "@/js/admin/admin.js";
+import {pushLink, router, showHidePassword} from "@/js/account/account.js";
 
 const renderSignup = () => {
     const app = document.getElementById("app")

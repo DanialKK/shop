@@ -1,4 +1,4 @@
-import {showHidePassword} from "@/js/admin/admin.js"
+import {showHidePassword} from "@/js/account/account.js"
 import {handleLoginAdmin} from "@/js/api/auth.js"
 
 export const renderLogin = () => {

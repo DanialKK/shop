@@ -1,7 +1,7 @@
 const baseApiURL = import.meta.env.VITE_API_BASE_URL;
 
 export function init() {
-    // authorization admin with superuser data
+    // authorization account with superuser data
     async function authAdmin(username, password) {
         const res = await fetch(`${baseApiURL}/token/`, {
             method: "POST",

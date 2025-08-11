@@ -52,6 +52,10 @@ const createHeader = () => {
                     </li>
                 </ul>
             </nav>
+            <div>
+                <a href="/account/" class=""></a>
+                <a href="" class=""></a>
+            </div>
         </div>
     </div>`
 

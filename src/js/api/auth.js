@@ -1,4 +1,11 @@
-const baseApiURL = import.meta.env.VITE_API_BASE_URL
+// config api url
+const configAPI = () => {
+    if (window.API_CONFIG && window.API_CONFIG.API_BASE_URL) {
+        return window.API_CONFIG.API_BASE_URL;
+    }
+    return import.meta.env.VITE_API_BASE_URL;
+}
+const baseApiURL = configAPI();
 
 // validate password in signup
 function validatePassword(password) {
@@ -45,7 +52,8 @@ async function loginAdmin(username, password, remember = false) {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({username, password}),
     })
-
+    console.log(`${baseApiURL}/auth/login/`)
+    console.log(res)
     if (!res.ok) throw new Error("هنوز ثبت نام نکردید یا اطلاعتتون اشتباهه")
 
     const data = await res.json()
@@ -80,28 +88,4 @@ async function createCategory(name, slug) {
     return await res.json()
 }
 
-async function getSessionUser(username, password) {
-    const token = localStorage.getItem("access");
-    const res = await fetch(`${baseApiURL}/users/me/`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({username, password}),
-    })
-
-    const data = await res.json()
-    if (!res.ok) throw data
-    return data
-}
-
-// async function addProduct() {
-//     const res = await fetch(`${baseApiURL}/product/`, {
-//         method: "POST",
-//         headers: {"Content-Type": "application/json"},
-//
-//     })
-// }
-
-export {handleRegisterAdmin, handleLoginAdmin, createCategory, getSessionUser}
+export {handleRegisterAdmin, handleLoginAdmin, createCategory}

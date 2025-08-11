@@ -1,14 +1,13 @@
 import "@/css/style.css"
 import {themeControl} from "@/js/component/header/header.js";
-import {renderSignup} from "@/js/admin/signup.js";
-import {renderLogin} from "@/js/admin/login.js";
-import {renderPanel} from "@/js/admin/panel.js";
-import {createCategory} from "@/js/api/auth.js"
+import {renderSignup} from "@/js/account/signup.js";
+import {renderLogin} from "@/js/account/login.js";
+import {renderPanel} from "@/js/account/panel.js";
 
 const root = document.documentElement
 const themeWrapper = document.getElementById("theme")
 const accessToken = localStorage.getItem("access");
-const loader = document.getElementById("loader-admin")
+const loader = document.getElementById("loader-account")
 
 const renderSPA = {
     "/admin/login": {
@@ -69,7 +68,7 @@ const hideLoader = () => {
 
 // render links
 const handleLinks = () => {
-    const spaAdminLinks = document.querySelectorAll("[data-spa-admin-links]");
+    const spaAdminLinks = document.querySelectorAll("[data-spa-account-links]");
 
     spaAdminLinks.forEach(link => {
         link.addEventListener("click", e => {
@@ -100,7 +99,7 @@ const pushLink = (link) => {
     history.pushState(null, null, link)
 }
 
-// render pages in loading address: /admin/index.html
+// render pages in loading address: /account/index.html
 const checkAccessToken = () => {
     if (accessToken) {
         pushLink("/admin/panel")
