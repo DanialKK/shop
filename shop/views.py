@@ -10,7 +10,7 @@ from .serializers import (
     OrderItemSerializer,
     RatingSerializer
 )
-
+from .permissions import IsSuperUser
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -19,7 +19,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             return [AllowAny()]
-        return [IsAdminUser()]  # فقط ادمین یا سوپر یوزر
+        print(f"User {self.request.user.username} is_staff: {self.request.user.is_staff}")  # دیباگ
+        return [IsSuperUser()]  # فقط سوپر یوزر
 
 
 class TagViewSet(viewsets.ModelViewSet):
@@ -29,7 +30,7 @@ class TagViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             return [AllowAny()]
-        return [IsAdminUser()]
+        return [IsSuperUser()]
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -39,7 +40,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             return [AllowAny()]
-        return [IsAdminUser()]  # ایجاد/ویرایش/حذف فقط برای ادمین
+        return [IsSuperUser()]  # ایجاد/ویرایش/حذف فقط برای ادمین
 
 
 class OrderViewSet(viewsets.ModelViewSet):
