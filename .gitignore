@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+
+# Env
+.env
+Core/backend-dev/venv/
+env/
+ENV/
+.venv/
+
+# Django stuff:
+db.sqlite3
+*.sqlite3
+media/
+staticfiles/
+
+# VSCode & Mac
+.vscode/
+.DS_Store
+
+# Django migrations
+**/migrations/*.pyc
+**/migrations/__pycache__/
+
+# Node / frontend
+node_modules/
+dist/
+dist-ssr/
+
+# IDEs
+.idea/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor files
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
