@@ -52,3 +52,5 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+core/front-end.orig/
+core/back-end.orig/
