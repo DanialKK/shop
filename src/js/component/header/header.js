@@ -1,3 +1,5 @@
+import {removeToken} from "@/js/api/main-var.js";
+
 const createHeader = () => {
     const header = document.createElement('header');
     header.className = "py-3 z-20 fixed right-0 top-0 left-0 bg-white/0 backdrop-blur-[100rem]"
@@ -45,16 +47,21 @@ const createHeader = () => {
                             </a>
                         </li>
                     </ul>
-                    
                     <div class="flex items-center gap-8 max-md:flex-col-reverse max-md:items-start">
                         <div id="account-icons" class="text-sm font-normal lg:text-base">
                             <a data-account-icons-link href="/account/?mode=login" class="primary-btn">ورود</a>
                             <a data-account-icons-link href="/account/?mode=signup" class="secondary-btn">ثبت نام</a>
-                            <a href="/account/" data-account-icons-icon class="hidden flex-row gap-2 secondary-btn border-0 max-md:pr-0">
+                            <a href="/account/?tab=info" data-account-icons-icon class="hidden flex-row gap-2 secondary-btn border-0 max-md:pr-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                 </svg>
                                 حساب کاربری
+                            </a>
+                            <a href="/account/?tab=cart" data-account-icons-icon class="hidden flex-row gap-2 secondary-btn border-0 max-md:pr-0">
+                                <svg class="size-6 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 7h13a1 1 0 0 0 1-1v-1H7.5M7 13h10"></path>
+                                </svg>
+                                سبد خرید
                             </a>
                         </div>
                         <div id="theme" class="cursor-pointer bg-primary-button-bg text-primary-button-text rounded-full p-1">
@@ -111,14 +118,19 @@ const themeControl = {
 };
 
 // show and hide account icons
-const controlAccountIcons = (links, icon, token) => {
+const controlAccountIcons = (links, icons, token) => {
     if (token) {
         links.forEach(link => {
             link.style.display = "none";
         })
-        icon.style.display = "flex";
+        icons.forEach(icon => {
+            icon.style.display = "flex";
+        })
     } else {
-        icon.style.display = "none";
+        removeToken()
+        icons.forEach(icon => {
+            icon.style.display = "none";
+        })
         links.forEach(link => {
             link.style.display = "inline-block";
         })

@@ -2,10 +2,10 @@ import * as headerComponent from "@/js/component/header/header.js"
 import {createFooter} from "@/js/component/footer/footer.js";
 import {createScrollUp} from "@/js/component/scroll-up/scroll-up.js";
 import {customObserver} from "@/js/main/main.js";
-import {accessToken} from "@/js/api/main-var.js"
+import {isRefreshTokenValid} from "@/js/api/main-var.js"
 
 const root = document.documentElement;
-const getAccessToken = sessionStorage.getItem(accessToken) || localStorage.getItem(accessToken);
+const getRefreshTokenIsValid = isRefreshTokenValid();
 
 document.addEventListener("DOMContentLoaded", () => {
     // include header
@@ -33,9 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // control account icons
         const dataAccountIconsLink = document.querySelectorAll("[data-account-icons-link]")
-        const dataAccountIconsIcon = document.querySelector("[data-account-icons-icon]")
+        const dataAccountIconsIcon = document.querySelectorAll("[data-account-icons-icon]")
 
-        headerComponent.controlAccountIcons(dataAccountIconsLink, dataAccountIconsIcon, getAccessToken)
+        headerComponent.controlAccountIcons(dataAccountIconsLink, dataAccountIconsIcon, getRefreshTokenIsValid)
 
         themeWrapper.addEventListener("click", headerComponent.themeControl.changeThemeHandler.bind(null, root))
     })();

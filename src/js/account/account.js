@@ -4,11 +4,10 @@ import {renderSignup} from "@/js/account/signup.js";
 import {renderLogin} from "@/js/account/login.js";
 import {renderUserPanel} from "@/js/account/userPanel.js"
 // import {handleGetUserInfo, handleRefreshToken, handleCreateCategory, handleLogoutUser} from "@/js/api/auth.js"
-import {accessToken} from "@/js/api/main-var.js";
+import {isRefreshTokenValid, removeToken} from "@/js/api/main-var.js";
 
 const root = document.documentElement
 const themeWrapper = document.getElementById("theme")
-const getAccessToken = sessionStorage.getItem(accessToken) || localStorage.getItem(accessToken);
 const loader = document.getElementById("loader-account")
 
 const renderSPA = {
@@ -79,7 +78,7 @@ function redirectAccountsPage(route) {
         showLoader()
         router()
         hideLoader()
-    }, 800)
+    }, 1000)
 }
 
 // render links
@@ -113,21 +112,37 @@ const pushLink = (link) => {
 }
 
 // render pages in loading address: /account/index.html
-function checkAccessToken() {
-    const mode = getModeFormURL()
+function checkRefreshToken() {
+    const getRefreshTokenIsValid = isRefreshTokenValid();
 
-    if (getAccessToken) {
-        pushLink("/account/user-panel")
+    if (getRefreshTokenIsValid) {
+        const tab = getTabPanelURL()
+        if (tab) {
+            pushLink(`/account/user-panel?tab=${tab}`)
+        } else {
+            pushLink("/account/user-panel")
+        }
         router()
-    } else if (mode) {
-        loadModeFormURL()
     } else {
-        pushLink("/account/login")
-        router()
+        removeToken()
+        const mode = getModeFormURL()
+
+        if (mode) {
+            loadModeFormURL()
+        } else {
+            pushLink("/account/login")
+            router()
+        }
     }
 }
-checkAccessToken();
 
+checkRefreshToken();
+
+// load info or cart panel when user click the main header links
+function getTabPanelURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("tab");
+}
 
 // load signup and login when click the header links
 function getModeFormURL() {
@@ -147,6 +162,7 @@ function loadModeFormURL() {
         router()
     }
 }
+
 loadModeFormURL();
 
 // const categories = [
@@ -175,16 +191,6 @@ loadModeFormURL();
 //     }
 // })();
 
-// get info user
-// (async () => {
-//     try {
-//         const res = await handleGetUserInfo()
-//         console.log(res)
-//     } catch (e) {
-//         console.log(e)
-//     }
-// })();
-
 // refresh token
 // (async () => {
 //     try {
@@ -198,4 +204,4 @@ loadModeFormURL();
 // })();
 
 window.addEventListener("popstate", router);
-export {pushLink, router, showHidePassword, handleLinks, redirectAccountsPage}
+export {pushLink, router, showHidePassword, handleLinks, redirectAccountsPage, getTabPanelURL}

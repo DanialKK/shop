@@ -1,4 +1,13 @@
-import {refreshToken, accessToken} from "@/js/api/main-var.js";
+import {
+    refreshToken,
+    accessToken,
+    accessTokenExpires,
+    refreshTokenExpires,
+    isRefreshTokenValid,
+    isAccessTokenValid,
+    getAccessToken,
+    getRefreshToken, removeToken,
+} from "@/js/api/main-var.js";
 
 // config api url
 const configAPI = () => {
@@ -80,6 +89,8 @@ async function loginUser(username, password, remember = false) {
 
     storage.setItem(accessToken, data.access);
     storage.setItem(refreshToken, data.refresh);
+    storage.setItem(accessTokenExpires, JSON.stringify(Date.now() + 60 * 60 * 1000));
+    storage.setItem(refreshTokenExpires, JSON.stringify(Date.now() + 24 * 60 * 60 * 1000));
 
     return data
 }
@@ -89,56 +100,89 @@ async function handleLoginUser({username, password, remember}) {
     return await loginUser(username, password, remember)
 }
 
+// check and refresh tokens
+async function checkAndRefreshAllTokens() {
+    const getAccessTokenIsValid = isAccessTokenValid();
+    const getRefreshTokenIsValid = isRefreshTokenValid();
+
+    if (!getRefreshTokenIsValid) {
+        removeToken()
+        window.location.href = "/account/?mode=login"
+        return false;
+    }
+
+    if (!getAccessTokenIsValid) {
+        try {
+            // عملیات رفرش توکن access
+        } catch (e) {
+            window.location.href = "/account/?mode=login"
+            return false;
+        }
+    }
+    return true;
+}
+
 // logout user
 async function logOutUser() {
-    const getTokenAccess = sessionStorage.getItem(accessToken) || localStorage.getItem(accessToken);
-    const getTokenRefresh = sessionStorage.getItem(refreshToken) || localStorage.getItem(refreshToken);
+    const gotAccessToken = getAccessToken();
+    const gotRefreshToken = getRefreshToken();
     const res = await fetch(`${baseApiURL}/auth/logout/`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${getTokenAccess}afasfafs`,
+            "Authorization": `Bearer ${gotAccessToken}`,
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({refresh: getTokenRefresh + "asfasfafs"})
+        body: JSON.stringify({refresh: gotRefreshToken})
     });
-    const data = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(data));
-    return data
+
+    if (!res.ok) throw new Error(JSON.stringify(res));
+    return true
 }
 
 // handle log out user
 async function handleLogoutUser() {
+    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
+
+    if (!checkAllTokenAreValid) {
+        throw new Error("مشکلی پیش اومده، لطفا بعدا دوباره تلاش کنید");
+    }
+
     return await logOutUser()
 }
 
 // get user info
 async function getUserInfo() {
-    const getAccessToken = sessionStorage.getItem(accessToken) || localStorage.getItem(accessToken);
+    const gotAccessToken = getAccessToken();
     const res = await fetch(`${baseApiURL}/auth/user/`, {
         method: "GET",
         headers: {
-            'Authorization': `Bearer ${getAccessToken}`,
+            'Authorization': `Bearer ${gotAccessToken}`,
             "Content-Type": "application/json"
         }
     })
-    console.log(res)
-    const json = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(json))
-    return json
+    const data = await res.json()
+    if (!res.ok) throw new Error(JSON.stringify(data))
+    return data
 }
 
 // handle get user info
 async function handleGetUserInfo() {
+    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
+
+    if (!checkAllTokenAreValid) {
+        throw new Error("مشکلی پیش اومده، لطفا بعدا دوباره تلاش کنید");
+    }
+
     return await getUserInfo()
 }
 
 // refresh tokens
 async function newRefreshToken() {
-    const getRefreshToken = sessionStorage.getItem(refreshToken) || localStorage.getItem(refreshToken);
+    const gotRefreshToken = getRefreshToken();
     const res = await fetch(`${baseApiURL}/token/refresh/`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({refresh: getRefreshToken}),
+        body: JSON.stringify({refresh: gotRefreshToken}),
     })
     console.log(res)
     const json = await res.json()
@@ -148,16 +192,22 @@ async function newRefreshToken() {
 
 // handle refresh token
 async function handleNewRefreshToken() {
+    const refreshTokenIsValidNow = isRefreshTokenValid();
+
+    if (!refreshTokenIsValidNow) {
+        window.location.href = "/account/?mode=login"
+        return false;
+    }
     return await newRefreshToken()
 }
 
 // create category
 async function createCategory(name, slug) {
-    const getAccessToken = sessionStorage.getItem(accessToken) || localStorage.getItem(accessToken);
+    const gotAccessToken = getAccessToken();
     const res = await fetch(`${baseApiURL}/categories/`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${getAccessToken}`,
+            "Authorization": `Bearer ${gotAccessToken}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({name, slug})
