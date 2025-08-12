@@ -60,6 +60,8 @@ const bindEvent = () => {
 
     loginForm.addEventListener('submit', e => {
         e.preventDefault()
+        const textError = document.querySelector("[data-error-message-login]")
+        textError.innerHTML = ""
         const username = document.getElementById('username').value
         const password = document.getElementById('password').value
         const remember = document.getElementById("remember-me").checked
@@ -68,11 +70,24 @@ const bindEvent = () => {
         (async () => {
             try {
                 await handleLoginUser(userData)
+                textError.innerHTML = ""
                 document.querySelector("[data-success-login-message]").textContent = "لاگین موفقیت آمیز بود"
                 redirectAccountsPage("user-panel")
             } catch (e) {
-                console.log(e)
-                document.querySelector("[data-error-message-login]").textContent = "رمز یا نام کاربری اشتباه است یا وجود ندارد"
+                if (e instanceof TypeError) {
+                    textError.textContent = "اتصال به سرور برقرار نشد. لطفاً بعداً تلاش کنید.";
+                } else {
+                    try {
+                        const errObj = JSON.parse(e.message);
+                        if (errObj.detail) {
+                            textError.textContent = errObj.detail;
+                        } else {
+                            textError.textContent = "رمز یا نام کاربری اشتباه است.";
+                        }
+                    } catch {
+                        textError.textContent = "خطای ناشناخته‌ای رخ داده.";
+                    }
+                }
             }
         })()
     })

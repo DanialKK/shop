@@ -96,13 +96,14 @@ async function logOutUser() {
     const res = await fetch(`${baseApiURL}/auth/logout/`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${getTokenAccess}`,
+            "Authorization": `Bearer ${getTokenAccess}afasfafs`,
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({refresh: getTokenRefresh})
+        body: JSON.stringify({refresh: getTokenRefresh + "asfasfafs"})
     });
-    if (!res.ok) throw new Error("Error in /account/logOutUser()");
-    return true
+    const data = await res.json()
+    if (!res.ok) throw new Error(JSON.stringify(data));
+    return data
 }
 
 // handle log out user

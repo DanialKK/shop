@@ -7,7 +7,7 @@ const renderSignup = () => {
         <div class="w-full max-w-md space-y-8">
             <div class="text-center">
                 <h2>فرم ثبت نام</h2>
-                <p data-success-signup-message class="mt-4 text-green-800 dark:text-green-600"></p>
+                <p data-success-signup-message class="mt-8 text-green-800 dark:text-green-600"></p>
             </div>
 
             <form id="register-form" class="space-y-6 bg-content-bg shadow-lg rounded-xl p-6 border border-custom-border">
@@ -65,6 +65,8 @@ const bindEvent = () => {
 
     form.addEventListener("submit", event => {
         event.preventDefault()
+        const textError = document.querySelector("[data-error-message-register]")
+        textError.innerHTML = ""
         const username = document.getElementById("new-username").value
         const email = document.getElementById("new-email").value
         const password = document.getElementById("new-password").value
@@ -76,9 +78,10 @@ const bindEvent = () => {
             try {
                 await handleRegisterUser(dataUser)
                 document.querySelector("[data-success-signup-message]").innerHTML = "ثبت نام موفقت امیز بود"
+                textError.innerHTML = ""
                 redirectAccountsPage("login")
             } catch (e) {
-                document.querySelector("[data-error-message-register]").textContent = e.message
+                textError.textContent = e.message
             }
         })();
     })
