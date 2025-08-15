@@ -303,6 +303,29 @@ async function handleGetAllTag() {
     return await getAllTags()
 }
 
+async function createNewProduct(productData) {
+    const gotAccessToken = getAccessToken();
+    const res = await fetch(`${baseApiURL}/products/`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${gotAccessToken}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(productData)
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(JSON.stringify(data))
+    return data
+}
+
+async function handleCreateNewProduct(productData) {
+    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
+    if (!checkAllTokenAreValid) {
+        throw new Error("مشکلی وجود دارد")
+    }
+    return await createNewProduct(productData)
+}
+
 export {
     handleRegisterUser,
     handleLoginUser,
@@ -313,5 +336,6 @@ export {
     handleCreateTag,
     handleCreateProduct,
     handleGetAllCategories,
-    handleGetAllTag
+    handleGetAllTag,
+    handleCreateNewProduct
 }

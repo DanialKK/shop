@@ -1,5 +1,5 @@
 import {isRefreshTokenValid} from "@/js/api/main-var.js";
-import {handleCreateCategory, handleCreateTag, handleGetAllCategories, handleGetAllTag} from "@/js/api/auth.js";
+import {handleCreateCategory, handleCreateTag, handleGetAllCategories, handleGetAllTag, handleCreateNewProduct} from "@/js/api/auth.js";
 import {serverDisconnect} from "@/js/api/api-utils.js";
 
 const renderAdminPanel = () => {
@@ -50,7 +50,7 @@ const renderAdminPanel = () => {
   <button type="submit" class="primary-btn w-full">اضافه کردن برچسب</button>
 </form>
 
-<!-- create product -->
+<!-- create new product -->
 <form id="create-product-form" class="w-full max-w-200 bg-card-bg p-4 rounded shadow mt-8">
   <h2 class="text-lg font-bold mb-4 text-center">افزودن محصول جدید</h2>
   <h3 data-success-message class="my-4 text-green-800 dark:text-green-600 mx-auto text-center"></h3>
@@ -59,6 +59,11 @@ const renderAdminPanel = () => {
   <label class="mb-4 flex flex-col sm:flex-row items-center justify-between">
     <span class="text-sub-text max-sm:w-8/10 max-sm:text-right inline-block mb-2">نام محصول</span>
     <input type="text" id="product-name" class="w-8/10 input-field border border-sub-text rounded p-2" placeholder="مثلاً کتاب افسانه‌ای" required />
+  </label>
+ <!-- product slug -->
+  <label class="mb-4 flex flex-col sm:flex-row items-center justify-between">
+    <span class="text-sub-text max-sm:w-8/10 max-sm:text-right inline-block mb-2">slug</span>
+    <input type="text" id="product-slug" class="w-8/10 input-field border border-sub-text rounded p-2" placeholder="مثلاً fantasy-book" required />
   </label>
 
   <!-- description -->
@@ -112,6 +117,7 @@ const bindEvent = () => {
     const createFormCategory = document.getElementById("create-category-form");
     const createTagForm = document.getElementById("create-tag-form");
     const priceInput = document.getElementById("product-price");
+    const createProductForm = document.getElementById("create-product-form");
 
     // add category
     createFormCategory.addEventListener("submit", async (e) => {
@@ -242,6 +248,7 @@ const bindEvent = () => {
         };
     }
 
+    // change format price
     function formatToPrice(value) {
         const raw = String(value).replace(/\D/g, "");
         if (!raw) return "";
@@ -253,6 +260,55 @@ const bindEvent = () => {
         priceInput.value = formatToPrice(value);
     }, 400);
     priceInput.addEventListener("input", handlePriceInput);
+
+    createProductForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("product-name").value.trim();
+        const slug = document.getElementById("product-slug").value.trim();
+        const description = document.getElementById("product-description").value.trim();
+        const priceRaw = document.getElementById("product-price").value.replace(/\D/g, ""); // just get numbers
+        const stock = Number(document.getElementById("product-inventory").value);
+        const categoryField = document.getElementById("product-category").selectedOptions[0]
+        const category = {id: Number(categoryField.value), name: categoryField.textContent, slug: categoryField.dataset.categorySlug};
+        const tagsSelect = document.getElementById("product-tags").selectedOptions;
+        const selectedTags = Array.from(tagsSelect).map(opt => ({id: Number(opt.value), name: opt.textContent}));
+        const successMessage = createProductForm.querySelector("[data-success-message]");
+        const errorMessage = createProductForm.querySelector("[data-error-message]");
+
+        if (!name || !slug || !description || !priceRaw || !stock || !category) {
+            errorMessage.textContent = "لطفاً همه فیلدهای ضروری را پر کنید.";
+            successMessage.textContent = "";
+            return;
+        }
+
+        const productData = {
+            name,
+            slug,
+            description,
+            price: Number(priceRaw),
+            stock,
+            category,
+            tags: selectedTags
+        };
+
+        console.log(productData);
+
+        try {
+            const res = await handleCreateNewProduct(productData);
+            console.log("✅ محصول ساخته شد:", res);
+            successMessage.textContent = "محصول با موفقیت اضافه شد!";
+            errorMessage.textContent = "";
+            createTagForm.reset();
+        } catch (err) {
+            successMessage.textContent = "";
+            if (err instanceof TypeError) {
+                serverDisconnect(errorMessage);
+            } else {
+                console.error("❌ خطا:", err);
+                errorMessage.textContent = err.message;
+            }
+        }
+    })
 }
 
 export {renderAdminPanel}

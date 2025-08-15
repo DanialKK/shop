@@ -178,44 +178,5 @@ function loadModeFormURL() {
 
 loadModeFormURL();
 
-// const categories = [
-//     {
-//         name: "بازی",
-//         slug: "game",
-//     },
-//     {
-//         name: "بنر",
-//         slug: "banner",
-//     },
-//     {
-//         name: "متفرقه",
-//         slug: "more",
-//     }
-// ];
-
-// create category
-// (async () => {
-//     try {
-//         for (const category of categories) {
-//             console.log(await handleCreateCategory(category.name, category.slug));
-//         }
-//     } catch (e) {
-//         console.error(e);
-//     }
-// })();
-
-// refresh token
-// (async () => {
-//     try {
-//         const res = await handleRefreshToken()
-//         console.log(res)
-//         console.log(res.access)
-//         console.log(res.refresh)
-//     } catch (e) {
-//         console.log(e)
-//     }
-// })();
-
-
 window.addEventListener("popstate", router);
 export {pushLink, router, showHidePassword, handleLinks, redirectAccountsPage, getTabPanelURL}
