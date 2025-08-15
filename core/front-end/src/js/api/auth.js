@@ -76,7 +76,7 @@ async function handleRegisterUser({username, email, password, password2}) {
 }
 
 // login
-async function loginUser(username, password, remember = false) {
+async function loginUser(username, password) {
     const res = await fetch(`${baseApiURL}/auth/login/`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
@@ -85,12 +85,11 @@ async function loginUser(username, password, remember = false) {
     if (!res.ok) throw new Error("هنوز ثبت نام نکردید یا اطلاعتتون اشتباهه")
 
     const data = await res.json()
-    const storage = remember ? localStorage : sessionStorage;
 
-    storage.setItem(accessToken, data.access);
-    storage.setItem(refreshToken, data.refresh);
-    storage.setItem(accessTokenExpires, JSON.stringify(Date.now() + 60 * 60 * 1000));
-    storage.setItem(refreshTokenExpires, JSON.stringify(Date.now() + 24 * 60 * 60 * 1000));
+    localStorage.setItem(accessToken, data.access);
+    localStorage.setItem(refreshToken, data.refresh);
+    localStorage.setItem(accessTokenExpires, JSON.stringify(Date.now() + 60 * 60 * 1000));
+    localStorage.setItem(refreshTokenExpires, JSON.stringify(Date.now() + 24 * 60 * 60 * 1000));
 
     return data
 }
@@ -222,4 +221,97 @@ async function handleCreateCategory(name, slug) {
     return await createCategory(name, slug);
 }
 
-export {handleRegisterUser, handleLoginUser, handleGetUserInfo, handleNewRefreshToken, handleCreateCategory, handleLogoutUser}
+// create tag
+async function createTag(name, slug) {
+    const gotAccessToken = getAccessToken();
+    const res = await fetch(`${baseApiURL}/tags/`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${gotAccessToken}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({name, slug})
+    });
+    const data = await res.json();
+    console.log(data);
+    if (!res.ok) throw new Error(JSON.stringify(data));
+    return data;
+}
+
+async function handleCreateTag(name, slug) {
+    return await createTag(name, slug);
+}
+
+async function createProduct(productData) {
+    const gotAccessToken = getAccessToken();
+    const res = await fetch(`${baseApiURL}/products/`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${gotAccessToken}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(productData)
+    });
+
+    const data = await res.json();
+    console.log(data);
+    if (!res.ok) throw new Error(JSON.stringify(data))
+    return data;
+}
+
+async function handleCreateProduct(productData) {
+    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
+
+    if (!checkAllTokenAreValid) {
+        throw new Error("مشکلی پیش اومده، لطفا بعدا دوباره تلاش کنید");
+    }
+
+    return await createProduct(productData);
+}
+
+async function getAllCategories() {
+    const res = await fetch(`${baseApiURL}/categories/`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    const data = await res.json()
+    if (!res.ok) throw new Error(JSON.stringify(data))
+    return data
+}
+
+async function handleGetAllCategories() {
+    return await getAllCategories()
+}
+
+async function getAllTags() {
+    const res = await fetch(`${baseApiURL}/tags/`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    const data = await res.json()
+    if (!res.ok) throw new Error(JSON.stringify(data))
+    return data
+}
+
+async function handleGetAllTag() {
+    return await getAllTags()
+}
+
+export {
+    handleRegisterUser,
+    handleLoginUser,
+    handleGetUserInfo,
+    handleNewRefreshToken,
+    handleCreateCategory,
+    handleLogoutUser,
+    handleCreateTag,
+    handleCreateProduct,
+    handleGetAllCategories,
+    handleGetAllTag
+}

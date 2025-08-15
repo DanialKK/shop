@@ -1,5 +1,6 @@
 import {handleRegisterUser} from "@/js/api/auth.js"
 import {showHidePassword, handleLinks, redirectAccountsPage} from "@/js/account/account.js";
+import {serverDisconnect} from "@/js/api/api-utils.js";
 
 const renderSignup = () => {
     const app = document.getElementById("app")
@@ -7,7 +8,7 @@ const renderSignup = () => {
         <div class="w-full max-w-md space-y-8">
             <div class="text-center">
                 <h2>فرم ثبت نام</h2>
-                <p data-success-signup-message class="mt-8 text-green-800 dark:text-green-600"></p>
+                <p data-success-signup-message class="my-8 text-green-800 dark:text-green-600"></p>
             </div>
 
             <form id="register-form" class="space-y-6 bg-content-bg shadow-lg rounded-xl p-6 border border-custom-border">
@@ -67,10 +68,10 @@ const bindEvent = () => {
         event.preventDefault()
         const textError = document.querySelector("[data-error-message-register]")
         textError.innerHTML = ""
-        const username = document.getElementById("new-username").value
-        const email = document.getElementById("new-email").value
-        const password = document.getElementById("new-password").value
-        const password2 = document.getElementById("confirm-password").value
+        const username = document.getElementById("new-username").value.trim()
+        const email = document.getElementById("new-email").value.trim()
+        const password = document.getElementById("new-password").value.trim()
+        const password2 = document.getElementById("confirm-password").value.trim()
 
         const dataUser = {username, email, password, password2};
 
@@ -81,7 +82,11 @@ const bindEvent = () => {
                 textError.innerHTML = ""
                 redirectAccountsPage("login")
             } catch (e) {
-                textError.textContent = e.message
+                if (e instanceof TypeError) {
+                    serverDisconnect(textError)
+                } else {
+                   textError.textContent = e.message
+                }
             }
         })();
     })
