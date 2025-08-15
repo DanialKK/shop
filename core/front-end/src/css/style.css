@@ -5,7 +5,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @utility container {
-    @apply max-w-[95%] mx-auto px-2 md:px-4 2xl:max-w-376;
+    @apply max-w-[98%] mx-auto px-2 2xl:max-w-376;
 }
 
 @theme {

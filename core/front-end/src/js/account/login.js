@@ -1,5 +1,6 @@
 import {showHidePassword, redirectAccountsPage} from "@/js/account/account.js"
-import {handleLoginUser} from "@/js/api/auth.js"
+import {handleLoginUser, handleGetUserInfo} from "@/js/api/auth.js"
+import {serverDisconnect} from "@/js/api/api-utils.js";
 
 const renderLogin = () => {
     const app = document.getElementById("app")
@@ -7,7 +8,7 @@ const renderLogin = () => {
         <div class="w-full max-w-md space-y-8">
             <div class="text-center">
                 <h2>فرم لاگین</h1>
-                <p data-success-login-message class="mt-4text-green-800 dark:text-green-600"></p>
+                <p data-success-login-message class="my-8 text-green-800 dark:text-green-600"></p>
             </div>
 
             <form id="login-form" class="space-y-6 bg-content-bg shadow-lg rounded-xl p-6 border border-custom-border">
@@ -25,15 +26,16 @@ const renderLogin = () => {
                       </button>
                 </div>
 
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" id="remember-me" class="peer hidden" />
-                    <span class="w-5 h-5 flex items-center justify-center border border-custom-text rounded bg-white peer-checked:bg-green-700 peer-checked:border-custom-text transition-all duration-200">
-                        <svg class="w-4 h-4 text-white peer-checked:block hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </span>
-                    <span class="text-sm text-custom-subtext">منو بخاطر بسپار</span>
-                </label>
+<!-- به دلیل مشخص نبودن ماهیت رفرش و اکسس توکن ها، هیچ فرقی نداره که کاربر بزنه این گزینه رو یا نه. -->
+<!--                <label class="flex items-center gap-2 cursor-pointer">-->
+<!--                    <input type="checkbox" id="remember-me" class="peer hidden" />-->
+<!--                    <span class="w-5 h-5 flex items-center justify-center border border-custom-text rounded bg-white peer-checked:bg-green-700 peer-checked:border-custom-text transition-all duration-200">-->
+<!--                        <svg class="w-4 h-4 text-white peer-checked:block hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">-->
+<!--                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />-->
+<!--                        </svg>-->
+<!--                    </span>-->
+<!--                    <span class="text-sm text-custom-subtext">منو بخاطر بسپار</span>-->
+<!--                </label>-->
 
                 <div>
                     <p data-error-message-login data-error-message class="text-red-700 dark:text-red-500"></p>
@@ -62,20 +64,27 @@ const bindEvent = () => {
         e.preventDefault()
         const textError = document.querySelector("[data-error-message-login]")
         textError.innerHTML = ""
-        const username = document.getElementById('username').value
-        const password = document.getElementById('password').value
-        const remember = document.getElementById("remember-me").checked
-        const userData = {username, password, remember};
+        const username = document.getElementById('username').value.trim()
+        const password = document.getElementById('password').value.trim()
+        const userData = {username, password};
 
         (async () => {
             try {
                 await handleLoginUser(userData)
                 textError.innerHTML = ""
                 document.querySelector("[data-success-login-message]").textContent = "لاگین موفقیت آمیز بود"
-                redirectAccountsPage("user-panel")
+
+                const userInfo = await handleGetUserInfo()
+
+                if (userInfo.is_superuser) {
+                    redirectAccountsPage("admin-panel")
+                } else {
+                    redirectAccountsPage("user-panel")
+                }
+
             } catch (e) {
                 if (e instanceof TypeError) {
-                    textError.textContent = "اتصال به سرور برقرار نشد. لطفاً بعداً تلاش کنید.";
+                    serverDisconnect(textError)
                 } else {
                     try {
                         const errObj = JSON.parse(e.message);
@@ -85,7 +94,7 @@ const bindEvent = () => {
                             textError.textContent = "رمز یا نام کاربری اشتباه است.";
                         }
                     } catch {
-                        textError.textContent = "خطای ناشناخته‌ای رخ داده.";
+                        textError.textContent = e.message;
                     }
                 }
             }
