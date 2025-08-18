@@ -1,6 +1,45 @@
-const baseApiURL = "/api";
+import {getAllProducts} from "@/js/api/auth.js";
+import {serverDisconnect} from "@/js/api/api-utils.js";
+import {createProductBox} from "@/js/main/main.js"
 
 export function init() {
-    console.log("baseApiURL", baseApiURL);
+    (async () => {
+        try {
+            const products = await getAllProducts();
+            console.log(products);
+        } catch (e) {
+            console.log(e)
+            if (e instanceof Error) {
+                console.log("server is disconnect: ", e)
+            } else {
+                console.error("more: ", e)
+            }
+        }
+    })()
+    const data = {
+        "id": 1,
+        "name": "کالاف دیوتی",
+        "slug": "call-of-duty",
+        "description": "call of duty black ops6",
+        "price": "1200000.00",
+        "stock": 12,
+        "discount": 15,
+        "average_rating": null,
+        "created_at": "2025-08-17T16:07:18.413677Z",
+        "category": 1,
+        "category_detail": {
+            "id": 1,
+            "name": "بازی",
+            "slug": "game"
+        },
+        "tags": [1, 2],
+        "tags_detail": [
+            { "id": 1, "name": "اکشن" },
+            { "id": 2, "name": "تخیلی" }
+        ]
+    }
+
+    const pr = createProductBox(data)
     const productsWrapper = document.getElementById('products-wrapper');
+    productsWrapper.appendChild(pr)
 }

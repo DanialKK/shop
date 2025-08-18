@@ -1,6 +1,7 @@
 import {isRefreshTokenValid} from "@/js/api/main-var.js";
 import {handleCreateCategory, handleCreateTag, handleGetAllCategories, handleGetAllTag, handleCreateNewProduct} from "@/js/api/auth.js";
 import {serverDisconnect} from "@/js/api/api-utils.js";
+import {formatToPrice} from "@/js/main/main.js"
 
 const renderAdminPanel = () => {
     const app = document.getElementById("app")
@@ -246,13 +247,6 @@ const bindEvent = () => {
             clearTimeout(timer);
             timer = setTimeout(() => fn(...args), delay);
         };
-    }
-
-    // change format price
-    function formatToPrice(value) {
-        const raw = String(value).replace(/\D/g, "");
-        if (!raw) return "";
-        return raw.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     const handlePriceInput = debounce(() => {

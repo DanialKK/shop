@@ -11,7 +11,7 @@ import {
 
 // config api url
 const baseApiURL = "/api";
-console.log("baseApiURL", baseApiURL);
+
 // validate password in signup
 function validatePassword(password) {
     const errors = [];
@@ -320,6 +320,13 @@ async function handleCreateNewProduct(productData) {
     return await createNewProduct(productData)
 }
 
+async function getAllProducts() {
+    const res = await fetch(`${baseApiURL}/products/`)
+    const data = await res.json()
+    if (!res.ok) throw new Error(JSON.stringify(data))
+    return data
+}
+
 export {
     handleRegisterUser,
     handleLoginUser,
@@ -331,5 +338,6 @@ export {
     handleCreateProduct,
     handleGetAllCategories,
     handleGetAllTag,
-    handleCreateNewProduct
+    handleCreateNewProduct,
+    getAllProducts,
 }
