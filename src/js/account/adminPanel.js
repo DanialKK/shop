@@ -269,9 +269,9 @@ const bindEvent = () => {
         const priceRaw = document.getElementById("product-price").value.replace(/\D/g, ""); // just get numbers
         const stock = Number(document.getElementById("product-inventory").value);
         const categoryField = document.getElementById("product-category").selectedOptions[0]
-        const category = {id: Number(categoryField.value), name: categoryField.textContent, slug: categoryField.dataset.categorySlug};
+        const category = Number(categoryField.value);
         const tagsSelect = document.getElementById("product-tags").selectedOptions;
-        const selectedTags = Array.from(tagsSelect).map(opt => ({id: Number(opt.value), name: opt.textContent}));
+        const selectedTags = Array.from(tagsSelect).map(opt => Number(opt.value));
         const successMessage = createProductForm.querySelector("[data-success-message]");
         const errorMessage = createProductForm.querySelector("[data-error-message]");
 
@@ -290,8 +290,6 @@ const bindEvent = () => {
             category,
             tags: selectedTags
         };
-
-        console.log(productData);
 
         try {
             const res = await handleCreateNewProduct(productData);

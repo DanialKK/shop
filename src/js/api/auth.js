@@ -10,14 +10,8 @@ import {
 } from "@/js/api/main-var.js";
 
 // config api url
-const configAPI = () => {
-    if (window.API_CONFIG && window.API_CONFIG.API_BASE_URL) {
-        return window.API_CONFIG.API_BASE_URL;
-    }
-    return import.meta.env.VITE_API_BASE_URL;
-}
-const baseApiURL = configAPI();
-
+const baseApiURL = "/api";
+console.log("baseApiURL", baseApiURL);
 // validate password in signup
 function validatePassword(password) {
     const errors = [];
@@ -82,9 +76,9 @@ async function loginUser(username, password) {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({username, password}),
     })
-    if (!res.ok) throw new Error("هنوز ثبت نام نکردید یا اطلاعتتون اشتباهه")
 
     const data = await res.json()
+    if (!res.ok) throw new Error(JSON.stringify(data))
 
     localStorage.setItem(accessToken, data.access);
     localStorage.setItem(refreshToken, data.refresh);
