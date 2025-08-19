@@ -3,12 +3,18 @@ import {serverDisconnect} from "@/js/api/api-utils.js";
 import {createProductBox} from "@/js/main/main.js"
 
 export function init() {
+    const productsWrapper = document.getElementById('products-wrapper');
     (async () => {
         try {
             const products = await getAllProducts();
-            console.log(products);
+            const fragment = document.createDocumentFragment();
+            products.forEach(product => {
+                fragment.appendChild(createProductBox(product));
+            })
+            productsWrapper.appendChild(fragment);
         } catch (e) {
             console.log(e)
+            productsWrapper.innerHTML = "<h2 class='w-full text-center'>در حال حاضر سرور در دسترس نمیباشد</h2>"
             if (e instanceof Error) {
                 console.log("server is disconnect: ", e)
             } else {
@@ -18,6 +24,7 @@ export function init() {
     })()
     const data = {
         "id": 1,
+        "image": "/static/img/custom/rainbow-six-siege-x-5760x2880-22839.jpg",
         "name": "کالاف دیوتی",
         "slug": "call-of-duty",
         "description": "call of duty black ops6",
@@ -40,6 +47,5 @@ export function init() {
     }
 
     const pr = createProductBox(data)
-    const productsWrapper = document.getElementById('products-wrapper');
-    productsWrapper.appendChild(pr)
+    // productsWrapper.appendChild(pr)
 }
