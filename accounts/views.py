@@ -19,19 +19,18 @@ class LoginView(APIView):
         user = authenticate(username=username, password=password)
         if user:
             refresh = RefreshToken.for_user(user)
-            response = JsonResponse({
-                "access": str(refresh.access_token)
-            })
+            response = Response({"access": str(refresh.access_token)}, status=status.HTTP_200_OK)
             # رفرش توکن HttpOnly کوکی شود
             response.set_cookie(
                 key="refresh_token",
                 value=str(refresh),
                 httponly=True,
                 secure=False,  # http
-                samesite="Strict"
+                samesite="Strict",
+                path = "/api/auth/token/refresh/"
             )
             return response
-        return JsonResponse({"detail": "نام کاربری یا رمز عبور اشتباه است."}, status=401)
+        return JsonResponse({"detail": "نام کاربری یا رمز عبور اشتباه است."}, status=status.HTTP_401_UNAUTHORIZED)
 
 class TokenRefreshView(APIView):
     def post(self, request):
