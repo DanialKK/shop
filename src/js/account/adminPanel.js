@@ -290,7 +290,7 @@ const bindEvent = () => {
             console.log("✅ محصول ساخته شد:", res);
             successMessage.textContent = "محصول با موفقیت اضافه شد!";
             errorMessage.textContent = "";
-            createTagForm.reset();
+            createProductForm.reset();
         } catch (err) {
             successMessage.textContent = "";
             if (err instanceof TypeError) {
