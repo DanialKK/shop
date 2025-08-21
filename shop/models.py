@@ -26,6 +26,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     discount_percent = models.PositiveIntegerField(default=0)
 
+    @property
     def discounted_price(self):
         if self.discount_percent:
             return round(self.price * (100 - self.discount_percent) / 100, 2)
@@ -36,7 +37,8 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='product_images/')
+    image = models.ImageField(upload_to='product_images/', blank=True, null=True)
+    image_url = models.URLField(blank=True, null=True)
     alt_text = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
