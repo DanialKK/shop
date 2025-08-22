@@ -51,7 +51,7 @@ function createProductBox(data) {
     priceBox.appendChild(originalPrice);
 
     // price after discount
-    if (data.discount) {
+    if (data?.discount) {
         const calcOfferPrice = data.price - (data.price * data.discount / 100);
         const offerPrice = document.createElement("span");
         offerPrice.setAttribute("data-product-offer-price", "");
@@ -62,7 +62,7 @@ function createProductBox(data) {
     priceWrapper.appendChild(priceBox);
 
     // discount
-    if (data.discount) {
+    if (data?.discount) {
         const discountSpan = document.createElement("span");
         discountSpan.className = "bg-primary text-gray-800 rounded-md p-0.5";
         discountSpan.innerHTML = `تخفیف <span data-product-offer>${data.discount || 0}%</span>`;
