@@ -43,10 +43,6 @@ const renderAdminPanel = () => {
     <span class="text-sub-text max-sm:w-8/10 max-sm:text-right inline-block mb-2">نام برچسب</span>
     <input type="text" id="tag-name" class="w-8/10 input-field border border-sub-text rounded p-2" placeholder="مثلاً تخیلی" required />
   </label>
-  <label class="mb-4 flex flex-col sm:flex-row items-center justify-between">
-    <span class="text-sub-text max-sm:w-8/10 max-sm:text-right inline-block mb-2">شناسه کوتاه (slug)</span>
-    <input type="text" id="tag-slug" class="w-8/10 input-field border border-sub-text rounded p-2" placeholder="مثلاً fantasy" required />
-  </label>
   <p data-error-message class="text-red-700 dark:text-red-500"></p>
   <button type="submit" class="primary-btn w-full">اضافه کردن برچسب</button>
 </form>
@@ -155,18 +151,17 @@ const bindEvent = () => {
     createTagForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const name = document.getElementById("tag-name").value.trim();
-        const slug = document.getElementById("tag-slug").value.trim();
+        const name = document.getElementById("tag-name").value.trim().replace(" ", "_");
         const successMessage = e.currentTarget.querySelector("[data-success-message]");
         const textError = e.currentTarget.querySelector("[data-error-message]");
 
-        if (!name || !slug) {
+        if (!name) {
             textError.textContent = "لطفاً هر دو فیلد را پر کنید.";
             return;
         }
 
         try {
-            const res = await handleCreateTag(name, slug);
+            const res = await handleCreateTag(name);
             console.log("✅ پاسخ سرور:", res);
             successMessage.textContent = "برچسب با موفقیت اضافه شد";
             textError.textContent = "";

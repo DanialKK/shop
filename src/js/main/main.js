@@ -161,7 +161,7 @@ function createProductBox(data) {
     data.tags_detail.forEach(tag => {
         const tagLink = document.createElement("a");
         tagLink.href = "#";
-        tagLink.textContent = `#${tag.name}`;
+        tagLink.textContent = `#${tag.name.replace(" ", "_")}`;
         tagsDiv.appendChild(tagLink);
     });
 
