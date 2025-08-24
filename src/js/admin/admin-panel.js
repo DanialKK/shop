@@ -1,11 +1,12 @@
 import {handleCreateCategory, handleCreateTag, handleGetAllCategories, handleGetAllTag, handleCreateNewProduct} from "@/js/api/auth.js";
-import {serverDisconnect} from "@/js/api/api-utils.js";
+import {serverDisconnect, tokenControl} from "@/js/api/api-utils.js";
 import {formatToPrice} from "@/js/main/main.js"
 
 const renderAdminPanel = () => {
     const app = document.getElementById("app")
+    const getAccessToken = tokenControl.accessToken
 
-    if (getRefreshTokenIsValid) {
+    if (getAccessToken) {
         app.innerHTML = `<section id="panel">
 <div class="container">
   <div class="text-center mb-4">

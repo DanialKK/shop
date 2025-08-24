@@ -1,4 +1,4 @@
-import {removeToken} from "@/js/api/main-var.js";
+import {tokenControl, rememberControl} from "@/js/api/api-utils.js";
 
 const createHeader = () => {
     const header = document.createElement('header');
@@ -127,7 +127,7 @@ const controlAccountIcons = (links, icons, token) => {
             icon.style.display = "flex";
         })
     } else {
-        removeToken()
+        tokenControl.removeAccessToken()
         icons.forEach(icon => {
             icon.style.display = "none";
         })

@@ -13,7 +13,6 @@ export function init() {
             })
             productsWrapper.appendChild(fragment);
         } catch (e) {
-            console.log(e)
             productsWrapper.innerHTML = "<h2 class='w-full text-center'>در حال حاضر سرور در دسترس نمیباشد</h2>"
             if (e instanceof Error) {
                 console.log("server is disconnect: ", e)

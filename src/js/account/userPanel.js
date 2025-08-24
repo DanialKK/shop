@@ -1,11 +1,12 @@
 import {handleLogoutUser, handleGetUserInfo} from "@/js/api/auth.js"
 import {redirectAccountsPage, getTabPanelURL} from "@/js/account/account.js";
-import {serverDisconnect} from "@/js/api/api-utils.js";
+import {serverDisconnect, tokenControl} from "@/js/api/api-utils.js";
 
 const renderUserPanel = () => {
     const app = document.getElementById("app")
+    const getAccessToken = tokenControl.accessToken
 
-    if (getRefreshTokenIsValid) {
+    if (getAccessToken) {
         app.innerHTML = `<div id="overlay" class="hidden fixed inset-0 -bottom-2000 bg-black/90 z-10"></div>
 <div class="container mb-14">
                             <h1 class="mx-auto text-center">پنل کاربری</h1>
@@ -85,7 +86,6 @@ const renderUserPanel = () => {
 </section>`;
         bindEvent();
     } else {
-        removeToken()
         app.innerHTML = `<div class="flex justify-center items-center flex-col gap-8">
     <h2 class="mx-auto text-center">هنوز وارد نشدید، لطفا ابتدا وارد شوید</h2>
     <a data-spa-account-links href="/account/login" class="primary-btn">ورود</a>
@@ -168,7 +168,7 @@ const bindEvent = () => {
             try {
                 const res = await handleLogoutUser()
                 if (res.ok) textSuccess.innerHTML = "خروج موفقیت آمیز بود."
-                removeToken()
+                tokenControl.removeAccessToken()
                 redirectAccountsPage("login")
             } catch (e) {
                 if (e instanceof TypeError) {

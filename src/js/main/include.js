@@ -2,6 +2,7 @@ import * as headerComponent from "@/js/component/header/header.js"
 import {createFooter} from "@/js/component/footer/footer.js";
 import {createScrollUp} from "@/js/component/scroll-up/scroll-up.js";
 import {customObserver} from "@/js/main/main.js";
+import {tokenControl} from "@/js/api/api-utils.js";
 
 const root = document.documentElement;
 
@@ -33,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const dataAccountIconsLink = document.querySelectorAll("[data-account-icons-link]")
         const dataAccountIconsIcon = document.querySelectorAll("[data-account-icons-icon]")
 
-        headerComponent.controlAccountIcons(dataAccountIconsLink, dataAccountIconsIcon)
+        headerComponent.controlAccountIcons(dataAccountIconsLink, dataAccountIconsIcon, tokenControl.accessToken)
 
         themeWrapper.addEventListener("click", headerComponent.themeControl.changeThemeHandler.bind(null, root))
     })();

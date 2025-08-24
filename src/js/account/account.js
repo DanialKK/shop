@@ -1,10 +1,8 @@
-import "@/css/style.css"
 import {themeControl} from "@/js/component/header/header.js";
 import {renderSignup} from "@/js/account/signup.js";
 import {renderLogin} from "@/js/account/login.js";
 import {renderUserPanel} from "@/js/account/userPanel.js"
-import {handleGetUserInfo} from "@/js/api/auth.js"
-import {renderAdminPanel} from "@/js/account/adminPanel.js";
+import {tokenControl} from "@/js/api/api-utils.js";
 
 const root = document.documentElement
 const themeWrapper = document.getElementById("theme")
@@ -22,10 +20,6 @@ const renderSPA = {
     "/account/user-panel": {
         render: renderUserPanel,
         title: "پنل کاربری"
-    },
-    "/account/admin-panel": {
-        render: renderAdminPanel,
-        title: "پنل ادمین"
     },
     404: {
         render: (() => {
@@ -117,25 +111,19 @@ const pushLink = (link) => {
 
 // render pages in loading address: /account/index.html
 (async () => {
-    const getRefreshTokenIsValid = isRefreshTokenValid() || false;
+    const getAccessToken = tokenControl.accessToken || false;
 
     try {
-        if (getRefreshTokenIsValid) {
-            const getUserInfo = await handleGetUserInfo();
-
-            if (getUserInfo.is_superuser) {
-                pushLink(`/account/admin-panel`)
+        if (getAccessToken) {
+            const tab = getTabPanelURL()
+            if (tab) {
+                pushLink(`/account/user-panel?tab=${tab}`)
             } else {
-                const tab = getTabPanelURL()
-                if (tab) {
-                    pushLink(`/account/user-panel?tab=${tab}`)
-                } else {
-                    pushLink("/account/user-panel")
-                }
+                pushLink("/account/user-panel")
             }
             router()
         } else {
-            removeToken()
+            tokenControl.removeAccessToken()
             const mode = getModeFormURL()
 
             if (mode) {
@@ -173,6 +161,8 @@ function loadModeFormURL() {
         }
         router()
     }
+
+    if (mode) pushLink(`/account/${mode}`)
 }
 
 loadModeFormURL();

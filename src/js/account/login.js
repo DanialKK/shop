@@ -7,7 +7,7 @@ const renderLogin = () => {
     app.innerHTML = `<section id="login" class="flex items-center justify-center px-4 bg-custom-bg text-custom-text">
         <div class="w-full max-w-md space-y-8">
             <div class="text-center">
-                <h2>فرم لاگین</h1>
+                <h2>فرم لاگین</h2>
                 <p data-success-login-message class="my-8 text-green-800 dark:text-green-600"></p>
             </div>
 
@@ -70,15 +70,15 @@ const bindEvent = () => {
 
         (async () => {
             try {
-                await handleLoginUser(userData)
-                textError.innerHTML = ""
-                document.querySelector("[data-success-login-message]").textContent = "لاگین موفقیت آمیز بود"
-
                 const userInfo = await handleGetUserInfo()
 
                 if (userInfo?.is_superuser) {
-                    redirectAccountsPage("admin-panel")
+                    textError.textContent = "لطفا از بخش ویژه وارد شوید."
                 } else {
+                    await handleLoginUser(userData)
+                    textError.innerHTML = ""
+                    document.querySelector("[data-success-login-message]").textContent = "لاگین موفقیت آمیز بود"
+
                     redirectAccountsPage("user-panel")
                 }
 

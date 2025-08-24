@@ -1,11 +1,4 @@
-import {
-    accessToken,
-    accessTokenExpires,
-    isAccessTokenValid,
-    getAccessToken,
-    removeToken,
-    rememberControl
-} from "@/js/api/main-var.js";
+import {rememberControl, tokenControl} from "@/js/api/api-utils.js";
 
 // config api url
 const baseApiURL = "/api";
@@ -76,16 +69,11 @@ async function loginUser(username, password, rememberMe) {
     })
 
     const data = await res.json()
+
     if (!res.ok) throw new Error(JSON.stringify(data))
 
-    if (rememberMe) {
-        localStorage.setItem(accessToken, data.access);
-        localStorage.setItem(accessTokenExpires, JSON.stringify(Date.now() + 60 * 60 * 1000));
-        rememberControl.rememberFlag = rememberMe
-    } else {
-        sessionStorage.setItem(accessToken, data.access);
-        rememberControl.removeRememberFlag()
-    }
+    tokenControl.setAccessToken(rememberMe, data?.access)
+    console.log(data)
 
     return data
 }
@@ -97,11 +85,11 @@ async function handleLoginUser({username, password, rememberMe}) {
 
 // logout user
 async function logOutUser() {
-    const gotAccessToken = getAccessToken();
+    const getAccessToken = tokenControl.accessToken;
     const res = await fetch(`${baseApiURL}/auth/logout/`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${gotAccessToken}`,
+            "Authorization": `Bearer ${getAccessToken}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({})
@@ -118,11 +106,11 @@ async function handleLogoutUser() {
 
 // get user info
 async function getUserInfo() {
-    const gotAccessToken = getAccessToken();
+    const getAccessToken = tokenControl.accessToken;
     const res = await fetch(`${baseApiURL}/auth/user/`, {
         method: "GET",
         headers: {
-            'Authorization': `Bearer ${gotAccessToken}`,
+            'Authorization': `Bearer ${getAccessToken}`,
             "Content-Type": "application/json"
         }
     })
@@ -143,7 +131,6 @@ async function newRefreshToken() {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({}),
     })
-    console.log(res)
     const json = await res.json()
     if (!res.ok) throw new Error(JSON.stringify(json))
     return json
@@ -151,22 +138,16 @@ async function newRefreshToken() {
 
 // handle refresh token
 async function handleNewRefreshToken() {
-    const refreshTokenIsValidNow = isRefreshTokenValid();
-
-    if (!refreshTokenIsValidNow) {
-        window.location.href = "/account/?mode=login"
-        return false;
-    }
     return await newRefreshToken()
 }
 
 // create category
 async function createCategory(name, slug) {
-    const gotAccessToken = getAccessToken();
+    const getAccessToken = tokenControl.accessToken;
     const res = await fetch(`${baseApiURL}/categories/`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${gotAccessToken}`,
+            "Authorization": `Bearer ${getAccessToken}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({name, slug})
@@ -183,11 +164,11 @@ async function handleCreateCategory(name, slug) {
 
 // create tag
 async function createTag(name, slug) {
-    const gotAccessToken = getAccessToken();
+    const getAccessToken = tokenControl.accessToken;
     const res = await fetch(`${baseApiURL}/tags/`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${gotAccessToken}`,
+            "Authorization": `Bearer ${getAccessToken}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({name, slug})
@@ -279,10 +260,6 @@ async function createNewProduct(productData) {
 }
 
 async function handleCreateNewProduct(productData) {
-    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
-    if (!checkAllTokenAreValid) {
-        throw new Error("مشکلی وجود دارد")
-    }
     return await createNewProduct(productData)
 }
 
