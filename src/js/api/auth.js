@@ -1,12 +1,10 @@
 import {
-    refreshToken,
     accessToken,
     accessTokenExpires,
-    refreshTokenExpires,
-    isRefreshTokenValid,
     isAccessTokenValid,
     getAccessToken,
-    getRefreshToken, removeToken,
+    removeToken,
+    rememberControl
 } from "@/js/api/main-var.js";
 
 // config api url
@@ -70,7 +68,7 @@ async function handleRegisterUser({username, email, password, password2}) {
 }
 
 // login
-async function loginUser(username, password) {
+async function loginUser(username, password, rememberMe) {
     const res = await fetch(`${baseApiURL}/auth/login/`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
@@ -80,52 +78,33 @@ async function loginUser(username, password) {
     const data = await res.json()
     if (!res.ok) throw new Error(JSON.stringify(data))
 
-    localStorage.setItem(accessToken, data.access);
-    localStorage.setItem(refreshToken, data.refresh);
-    localStorage.setItem(accessTokenExpires, JSON.stringify(Date.now() + 60 * 60 * 1000));
-    localStorage.setItem(refreshTokenExpires, JSON.stringify(Date.now() + 24 * 60 * 60 * 1000));
+    if (rememberMe) {
+        localStorage.setItem(accessToken, data.access);
+        localStorage.setItem(accessTokenExpires, JSON.stringify(Date.now() + 60 * 60 * 1000));
+        rememberControl.rememberFlag = rememberMe
+    } else {
+        sessionStorage.setItem(accessToken, data.access);
+        rememberControl.removeRememberFlag()
+    }
 
     return data
 }
 
 // handle login
-async function handleLoginUser({username, password, remember}) {
-    return await loginUser(username, password, remember)
-}
-
-// check and refresh tokens
-async function checkAndRefreshAllTokens() {
-    const getAccessTokenIsValid = isAccessTokenValid();
-    const getRefreshTokenIsValid = isRefreshTokenValid();
-
-    if (!getRefreshTokenIsValid) {
-        removeToken()
-        window.location.href = "/account/?mode=login"
-        return false;
-    }
-
-    if (!getAccessTokenIsValid) {
-        try {
-            // عملیات رفرش توکن access
-        } catch (e) {
-            window.location.href = "/account/?mode=login"
-            return false;
-        }
-    }
-    return true;
+async function handleLoginUser({username, password, rememberMe}) {
+    return await loginUser(username, password, rememberMe)
 }
 
 // logout user
 async function logOutUser() {
     const gotAccessToken = getAccessToken();
-    const gotRefreshToken = getRefreshToken();
     const res = await fetch(`${baseApiURL}/auth/logout/`, {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${gotAccessToken}`,
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({refresh: gotRefreshToken})
+        body: JSON.stringify({})
     });
 
     if (!res.ok) throw new Error(JSON.stringify(res));
@@ -134,12 +113,6 @@ async function logOutUser() {
 
 // handle log out user
 async function handleLogoutUser() {
-    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
-
-    if (!checkAllTokenAreValid) {
-        throw new Error("مشکلی پیش اومده، لطفا بعدا دوباره تلاش کنید");
-    }
-
     return await logOutUser()
 }
 
@@ -160,22 +133,15 @@ async function getUserInfo() {
 
 // handle get user info
 async function handleGetUserInfo() {
-    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
-
-    if (!checkAllTokenAreValid) {
-        throw new Error("مشکلی پیش اومده، لطفا بعدا دوباره تلاش کنید");
-    }
-
     return await getUserInfo()
 }
 
 // refresh tokens
 async function newRefreshToken() {
-    const gotRefreshToken = getRefreshToken();
     const res = await fetch(`${baseApiURL}/token/refresh/`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({refresh: gotRefreshToken}),
+        body: JSON.stringify({}),
     })
     console.log(res)
     const json = await res.json()

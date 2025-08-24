@@ -1,48 +1,85 @@
-const accessToken = "access-token"
-const refreshToken = "refresh-token"
-const accessTokenExpires = "access-token-expires-at"
-const refreshTokenExpires = "refresh-token-expires-at"
+// access token control
+class TokenControl {
+    static key = "access-token"
+    static expiresAt = "access-token-expires-at"
+    static time = 60 * 60 * 1000
 
-// remove tokens
-function removeToken() {
-    localStorage.removeItem(accessToken)
-    localStorage.removeItem(refreshToken)
-    localStorage.removeItem(accessTokenExpires)
-    localStorage.removeItem(refreshTokenExpires)
-    sessionStorage.removeItem(accessToken)
-    sessionStorage.removeItem(refreshToken)
-    sessionStorage.removeItem(accessTokenExpires)
-    sessionStorage.removeItem(refreshTokenExpires)
+    get key() {
+        return TokenControl.key
+    }
+
+    get keyExpires() {
+        return TokenControl.expiresAt
+    }
+
+    get time() {
+        return TokenControl.time
+    }
+
+    get accessToken() {
+        if (rememberControl.rememberFlag) {
+            return localStorage.getItem(this.key)
+        }
+        return sessionStorage.getItem(this.key)
+    }
+
+    setAccessToken(flag, token) {
+        if (flag) {
+            localStorage.setItem(this.key, token);
+            localStorage.setItem(this.keyExpires, JSON.stringify(Date.now() + this.time));
+        } else {
+            sessionStorage.setItem(this.key, token)
+            sessionStorage.setItem(this.keyExpires, JSON.stringify(Date.now() + this.time));
+            rememberControl.removeRememberFlag()
+        }
+    }
+
+    removeAccessToken() {
+        localStorage.removeItem(this.key)
+        localStorage.removeItem(this.keyExpires)
+        rememberControl.removeRememberFlag()
+        sessionStorage.removeItem(this.key)
+        sessionStorage.removeItem(this.keyExpires)
+    }
+
+    isAccessTokenValid() {
+        let expiresAt;
+
+        if (rememberControl.rememberFlag === "true") {
+            expiresAt = parseInt(JSON.parse(localStorage.getItem(this.keyExpires)));
+        } else {
+            expiresAt = parseInt(JSON.parse(sessionStorage.getItem(this.keyExpires)));
+        }
+
+        return Date.now() < expiresAt;
+    }
 }
 
-function getAccessToken() {
-    return sessionStorage.getItem(accessToken) || localStorage.getItem(accessToken)
+// remember user login control
+class RememberControl {
+    static key = "remember-flag"
+
+    get key() {
+        return RememberControl.key
+    }
+
+    get rememberFlag() {
+        return localStorage.getItem(this.key)
+    }
+
+    set rememberFlag(flag) {
+        localStorage.setItem(this.key, flag)
+    }
+
+    removeRememberFlag() {
+        localStorage.removeItem(this.key)
+    }
 }
 
-function getRefreshToken() {
-    return sessionStorage.getItem(refreshToken) || localStorage.getItem(refreshToken)
-}
-
-function isAccessTokenValid() {
-    const expiresAt = parseInt(JSON.parse(sessionStorage.getItem(accessTokenExpires))) || parseInt(JSON.parse(localStorage.getItem(accessTokenExpires)));
-    if (!expiresAt) return false;
-    return Date.now() < expiresAt;
-}
-
-function isRefreshTokenValid() {
-    const expiresAt = parseInt(JSON.parse(sessionStorage.getItem(refreshTokenExpires))) || parseInt(JSON.parse(localStorage.getItem(refreshTokenExpires)));
-    if (!expiresAt) return false;
-    return Date.now() < expiresAt;
-}
+const rememberControl = new RememberControl()
+const tokenControl = new TokenControl()
 
 export {
-    accessToken,
-    refreshToken,
-    removeToken,
-    accessTokenExpires,
-    refreshTokenExpires,
-    isAccessTokenValid,
-    isRefreshTokenValid,
-    getAccessToken,
-    getRefreshToken
+    rememberControl,
+    tokenControl
 }

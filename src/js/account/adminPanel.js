@@ -1,11 +1,9 @@
-import {isRefreshTokenValid} from "@/js/api/main-var.js";
 import {handleCreateCategory, handleCreateTag, handleGetAllCategories, handleGetAllTag, handleCreateNewProduct} from "@/js/api/auth.js";
 import {serverDisconnect} from "@/js/api/api-utils.js";
 import {formatToPrice} from "@/js/main/main.js"
 
 const renderAdminPanel = () => {
     const app = document.getElementById("app")
-    const getRefreshTokenIsValid = isRefreshTokenValid();
 
     if (getRefreshTokenIsValid) {
         app.innerHTML = `<section id="panel">

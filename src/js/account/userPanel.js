@@ -1,11 +1,9 @@
 import {handleLogoutUser, handleGetUserInfo} from "@/js/api/auth.js"
-import {isRefreshTokenValid, removeToken} from "@/js/api/main-var.js";
 import {redirectAccountsPage, getTabPanelURL} from "@/js/account/account.js";
 import {serverDisconnect} from "@/js/api/api-utils.js";
 
 const renderUserPanel = () => {
     const app = document.getElementById("app")
-    const getRefreshTokenIsValid = isRefreshTokenValid();
 
     if (getRefreshTokenIsValid) {
         app.innerHTML = `<div id="overlay" class="hidden fixed inset-0 -bottom-2000 bg-black/90 z-10"></div>

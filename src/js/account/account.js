@@ -4,7 +4,6 @@ import {renderSignup} from "@/js/account/signup.js";
 import {renderLogin} from "@/js/account/login.js";
 import {renderUserPanel} from "@/js/account/userPanel.js"
 import {handleGetUserInfo} from "@/js/api/auth.js"
-import {isRefreshTokenValid, removeToken} from "@/js/api/main-var.js";
 import {renderAdminPanel} from "@/js/account/adminPanel.js";
 
 const root = document.documentElement
@@ -118,7 +117,7 @@ const pushLink = (link) => {
 
 // render pages in loading address: /account/index.html
 (async () => {
-    const getRefreshTokenIsValid = isRefreshTokenValid();
+    const getRefreshTokenIsValid = isRefreshTokenValid() || false;
 
     try {
         if (getRefreshTokenIsValid) {
