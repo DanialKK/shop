@@ -41,11 +41,6 @@ const createHeader = () => {
                                 فروشگاه
                             </a>
                         </li>
-                        <li>
-                            <a href="/admin/" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
-                                مدیریت
-                            </a>
-                        </li>
                     </ul>
                     <div class=" *:text-sm *:font-normal max-md:flex-col-reverse max-md:gap-4 max-md:flex max-md:items-start md:flex md:items-center md:gap-2">
                         <div id="account-icons" class="flex flex-col gap-4 md:gap-0.5 md:flex-row text-sm font-normal lg:text-base">

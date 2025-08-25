@@ -111,4 +111,4 @@ function catchLoginError(e, elem) {
     }
 }
 
-export {renderLogin, getLoginData, catchLoginError}
+export {renderLogin}
