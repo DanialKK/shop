@@ -1,6 +1,15 @@
+"use strict";
+
 function serverDisconnect(elem) {
     elem.textContent = "اتصال به سرور برقرار نشد. لطفاً بعداً تلاش کنید.";
 }
+
+async function getRealTehranTime() {
+    const res = await fetch("https://api.keybit.ir/time/");
+    const data = await res.json();
+    return data.timestamp?.en * 1000;
+}
+
 // access token control
 class TokenControl {
     constructor(time = 60 * 60 * 1000) {
@@ -25,14 +34,16 @@ class TokenControl {
         return sessionStorage.getItem(this.key)
     }
 
-    setAccessToken(flag, token) {
+    async setAccessToken(flag, token) {
+        const now = await getRealTehranTime();
+
         if (flag) {
             localStorage.setItem(this.key, token);
-            localStorage.setItem(this.keyExpires, JSON.stringify(Date.now() + this.time));
+            localStorage.setItem(this.keyExpires, JSON.stringify(now + this.time));
             rememberControl.rememberFlag = "true"
         } else {
             sessionStorage.setItem(this.key, token)
-            sessionStorage.setItem(this.keyExpires, JSON.stringify(Date.now() + this.time));
+            sessionStorage.setItem(this.keyExpires, JSON.stringify(now + this.time));
             rememberControl.removeRememberFlag()
         }
     }
@@ -45,7 +56,7 @@ class TokenControl {
         sessionStorage.removeItem(this.keyExpires)
     }
 
-    isAccessTokenValid() {
+    async isAccessTokenValid() {
         const remember = rememberControl.rememberFlag === "true";
         const expiresRaw = remember ? localStorage.getItem(this.keyExpires) : sessionStorage.getItem(this.keyExpires);
 
@@ -53,7 +64,8 @@ class TokenControl {
 
         const expiresAt = parseInt(JSON.parse(expiresRaw))
 
-        return Date.now() < expiresAt;
+        const now = await getRealTehranTime();
+        return now < expiresAt;
     }
 }
 

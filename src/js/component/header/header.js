@@ -43,7 +43,7 @@ const createHeader = () => {
                         </li>
                     </ul>
                     <div class=" *:text-sm *:font-normal max-md:flex-col-reverse max-md:gap-4 max-md:flex max-md:items-start md:flex md:items-center md:gap-2">
-                        <div id="account-icons" class="flex flex-col gap-4 md:gap-0.5 md:flex-row text-sm font-normal lg:text-base">
+                        <div id="account-icons" class="flex flex-col gap-4 md:gap-2 md:flex-row text-sm font-normal lg:text-base">
                             <a data-account-icons-link href="/account/?mode=login" class="max-lg:px-2 max-lg:py-1 primary-btn">ورود</a>
                             <a data-account-icons-link href="/account/?mode=signup" class="max-lg:px-2 max-lg:py-1 secondary-btn">ثبت نام</a>
                             <a href="/account/?tab=info" data-account-icons-icon class="hidden flex-row gap-2 max-lg:px-2 max-lg:py-1 secondary-btn border-0 max-md:pr-0">

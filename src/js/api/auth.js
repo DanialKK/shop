@@ -69,10 +69,10 @@ async function loginUser(username, password, rememberMe) {
     })
 
     const data = await res.json()
-
+    console.log(data)
     if (!res.ok) throw new Error(JSON.stringify(data))
 
-    tokenControl.setAccessToken(rememberMe, data?.access)
+    await tokenControl.setAccessToken(rememberMe, data?.access)
 
     return data
 }
@@ -125,13 +125,14 @@ async function handleGetUserInfo() {
 
 // refresh tokens
 async function newRefreshToken() {
-    const res = await fetch(`${baseApiURL}/token/refresh/`, {
+    const res = await fetch(`${baseApiURL}/auth/token/refresh/`, {
         method: "POST",
+        credentials: "include",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({}),
     })
     const json = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(json))
+    if (!res.ok || !json.access) throw new Error(JSON.stringify(json))
+    await tokenControl.setAccessToken(rememberControl.rememberFlag === "true", json.access)
     return json
 }
 

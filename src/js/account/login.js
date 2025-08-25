@@ -67,18 +67,12 @@ const bindEvent = () => {
             loginData.textError.innerHTML = ""
 
             try {
-                const userInfo = await handleGetUserInfo();
-
-                if (userInfo?.is_superuser) {
-                    loginData.textError.textContent = "لطفا از بخش ویژه وارد شوید."
-                } else {
-                    await handleLoginUser(loginData.username, loginData.password, loginData.rememberMe)
-                    loginData.textError.innerHTML = ""
-                    loginData.successMessage.textContent = "لاگین موفقیت آمیز بود"
-
-                    redirectAccountsPage("user-panel")
-                }
+                await handleLoginUser(loginData.username, loginData.password, loginData.rememberMe)
+                loginData.textError.innerHTML = ""
+                loginData.successMessage.textContent = "لاگین موفقیت آمیز بود"
+                redirectAccountsPage("user-panel")
             } catch (e) {
+                console.log(e)
                 catchLoginError(e, loginData.textError)
             }
         })();
