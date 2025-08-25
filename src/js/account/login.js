@@ -60,46 +60,55 @@ const bindEvent = () => {
     const loginForm = document.getElementById('login-form')
 
     loginForm.addEventListener('submit', e => {
-        e.preventDefault()
-        const textError = document.querySelector("[data-error-message-login]")
-        textError.innerHTML = ""
-        const username = document.getElementById('username').value.trim()
-        const password = document.getElementById('password').value.trim()
-        const rememberMe = document.getElementById('remember-me').checked
-        const userData = {username, password, rememberMe};
+        e.preventDefault();
 
         (async () => {
+            const loginData = getLoginData()
+            loginData.textError.innerHTML = ""
+
             try {
-                const userInfo = await handleGetUserInfo()
+                const userInfo = await handleGetUserInfo();
 
                 if (userInfo?.is_superuser) {
-                    textError.textContent = "لطفا از بخش ویژه وارد شوید."
+                    loginData.textError.textContent = "لطفا از بخش ویژه وارد شوید."
                 } else {
-                    await handleLoginUser(userData)
-                    textError.innerHTML = ""
-                    document.querySelector("[data-success-login-message]").textContent = "لاگین موفقیت آمیز بود"
+                    await handleLoginUser(loginData.username, loginData.password, loginData.rememberMe)
+                    loginData.textError.innerHTML = ""
+                    loginData.successMessage.textContent = "لاگین موفقیت آمیز بود"
 
                     redirectAccountsPage("user-panel")
                 }
-
             } catch (e) {
-                if (e instanceof TypeError) {
-                    serverDisconnect(textError)
-                } else {
-                    try {
-                        const errObj = JSON.parse(e.message);
-                        if (errObj.detail) {
-                            textError.textContent = errObj.detail;
-                        } else {
-                            textError.textContent = "رمز یا نام کاربری اشتباه است.";
-                        }
-                    } catch {
-                        textError.textContent = e.message;
-                    }
-                }
+                catchLoginError(e, loginData.textError)
             }
-        })()
+        })();
     })
 }
 
-export {renderLogin}
+function getLoginData() {
+    const textError = document.querySelector("[data-error-message-login]")
+    const successMessage = document.querySelector("[data-success-login-message]")
+    const username = document.getElementById('username').value.trim()
+    const password = document.getElementById('password').value.trim()
+    const rememberMe = document.getElementById('remember-me').checked
+    return {username, password, rememberMe, textError, successMessage};
+}
+
+function catchLoginError(e, elem) {
+    if (e instanceof TypeError) {
+        serverDisconnect(elem)
+    } else {
+        try {
+            const errObj = JSON.parse(e.message);
+            if (errObj.detail) {
+                elem.textContent = errObj.detail;
+            } else {
+                elem.textContent = "رمز یا نام کاربری اشتباه است.";
+            }
+        } catch {
+            elem.textContent = e.message;
+        }
+    }
+}
+
+export {renderLogin, getLoginData, catchLoginError}

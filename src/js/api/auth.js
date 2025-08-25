@@ -73,13 +73,12 @@ async function loginUser(username, password, rememberMe) {
     if (!res.ok) throw new Error(JSON.stringify(data))
 
     tokenControl.setAccessToken(rememberMe, data?.access)
-    console.log(data)
 
     return data
 }
 
 // handle login
-async function handleLoginUser({username, password, rememberMe}) {
+async function handleLoginUser(username, password, rememberMe) {
     return await loginUser(username, password, rememberMe)
 }
 

@@ -42,8 +42,8 @@ const createHeader = () => {
                             </a>
                         </li>
                         <li>
-                            <a href="" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
-                                داستان ما
+                            <a href="/admin/" class="max-md:py-4 max-md:pl-4 text-custom-subtext hover:text-menu-link-hover transition-all duration-250">
+                                مدیریت
                             </a>
                         </li>
                     </ul>

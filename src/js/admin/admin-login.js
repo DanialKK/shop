@@ -1,4 +1,11 @@
-const login = `<section id="login" class="flex items-center justify-center px-4 bg-custom-bg text-custom-text">
+import {showHidePassword} from "@/js/account/account.js";
+import {catchLoginError, getLoginData} from "@/js/account/login.js";
+import {handleGetUserInfo, handleLoginUser} from "@/js/api/auth.js";
+import {redirectAdminPage} from "@/js/admin/auth-admin.js";
+
+const renderLoginAdmin = () => {
+    const app = document.getElementById('app');
+    app.innerHTML = `<section id="login" class="flex items-center justify-center px-4 bg-custom-bg text-custom-text">
         <div class="w-full max-w-md space-y-8">
             <div class="text-center">
                 <h2>فرم لاگین</h2>
@@ -45,11 +52,40 @@ const login = `<section id="login" class="flex items-center justify-center px-4 
                 <button type="submit" class="primary-btn w-full">
                     ورود
                 </button>
-
-                <div>
-                    در صورت ثبت نام نکردن،
-                    <a data-spa-account-links href="/account/signup" class="text-green-600 hover:text-menu-link-hover transition-all duration-250">ثبت نام کنید</a>
-                </div>
             </form>
         </div>
     </section>`
+
+    bindEvent()
+}
+
+const bindEvent = () => {
+    showHidePassword()
+    const loginForm = document.getElementById('login-form')
+
+    loginForm.addEventListener('submit', e => {
+        e.preventDefault();
+
+        (async () => {
+            const loginData = getLoginData()
+            loginData.textError.innerHTML = ""
+
+            try {
+                const userInfo = await handleGetUserInfo();
+
+                if (userInfo?.is_superuser) {
+                    await handleLoginUser(loginData.username, loginData.password, loginData.rememberMe)
+                    loginData.textError.innerHTML = ""
+                    loginData.successMessage.textContent = "لاگین موفقیت آمیز بود"
+                    redirectAdminPage()
+                } else {
+                    loginData.textError.textContent = "شما اجازه دسترسی به این بخش را ندارید."
+                }
+            } catch (e) {
+                catchLoginError(e, loginData.textError)
+            }
+        })();
+    });
+}
+
+export {renderLoginAdmin}

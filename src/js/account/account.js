@@ -76,7 +76,7 @@ function redirectAccountsPage(route) {
         showLoader()
         router()
         hideLoader()
-    }, 1000)
+    }, 1400)
 }
 
 // render links
@@ -168,4 +168,4 @@ function loadModeFormURL() {
 loadModeFormURL();
 
 window.addEventListener("popstate", router);
-export {pushLink, router, showHidePassword, handleLinks, redirectAccountsPage, getTabPanelURL}
+export {pushLink, router, showHidePassword, handleLinks, redirectAccountsPage, getTabPanelURL, showLoader, hideLoader}
