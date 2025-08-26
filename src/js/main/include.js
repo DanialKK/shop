@@ -2,7 +2,7 @@ import * as headerComponent from "@/js/component/header/header.js"
 import {createFooter} from "@/js/component/footer/footer.js";
 import {createScrollUp} from "@/js/component/scroll-up/scroll-up.js";
 import {customObserver} from "@/js/main/main.js";
-import {rememberControl, tokenControl} from "@/js/api/api-utils.js";
+import {tokenControl} from "@/js/api/api-utils.js";
 import {checkLoginStatus} from "@/js/account/loginStatus.js";
 
 const root = document.documentElement;
@@ -32,22 +32,20 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
         // control account icons
-        const dataAccountIconsLink = document.querySelectorAll("[data-account-icons-link]")
+        const dataAccountIconsLink = document.querySelectorAll("[data-account-icons-link]");
         const dataAccountIconsIcon = document.querySelectorAll("[data-account-icons-icon]");
 
         (async () => {
             try {
-                const isAccess = await tokenControl.isAccessTokenValid();
-
+                const isAccess = await checkLoginStatus();
                 if (isAccess) {
                     headerComponent.controlAccountIcons(dataAccountIconsLink, dataAccountIconsIcon, isAccess)
                 } else {
-                    const refresh = await checkLoginStatus()
-                    await headerComponent.controlAccountIcons(dataAccountIconsLink, dataAccountIconsIcon, refresh)
+                    tokenControl.removeAccessToken()
+                    headerComponent.controlAccountIcons(dataAccountIconsLink, dataAccountIconsIcon, false)
                 }
             } catch (e) {
                 console.log(e)
-                tokenControl.removeAccessToken()
             }
         })();
 

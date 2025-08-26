@@ -8,7 +8,7 @@ export function init() {
         try {
             const products = await getAllProducts();
             const fragment = document.createDocumentFragment();
-            products.forEach(product => {
+            products.reverse().forEach(product => {
                 fragment.appendChild(createProductBox(product));
             })
             productsWrapper.appendChild(fragment);

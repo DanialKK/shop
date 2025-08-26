@@ -1,4 +1,4 @@
-import {tokenControl, rememberControl} from "@/js/api/api-utils.js";
+import {tokenControl} from "@/js/api/api-utils.js";
 
 const createHeader = () => {
     const header = document.createElement('header');
@@ -44,15 +44,15 @@ const createHeader = () => {
                     </ul>
                     <div class=" *:text-sm *:font-normal max-md:flex-col-reverse max-md:gap-4 max-md:flex max-md:items-start md:flex md:items-center md:gap-2">
                         <div id="account-icons" class="flex flex-col gap-4 md:gap-2 md:flex-row text-sm font-normal lg:text-base">
-                            <a data-account-icons-link href="/account/?mode=login" class="max-lg:px-2 max-lg:py-1 primary-btn">ورود</a>
-                            <a data-account-icons-link href="/account/?mode=signup" class="max-lg:px-2 max-lg:py-1 secondary-btn">ثبت نام</a>
-                            <a href="/account/?tab=info" data-account-icons-icon class="hidden flex-row gap-2 max-lg:px-2 max-lg:py-1 secondary-btn border-0 max-md:pr-0">
+                            <a data-account-icons-link href="/account/?mode=login" class="hidden max-lg:px-2 max-lg:py-1 primary-btn">ورود</a>
+                            <a data-account-icons-link href="/account/?mode=signup" class="hidden max-lg:px-2 max-lg:py-1 secondary-btn">ثبت نام</a>
+                            <a href="/account/?tab=info" data-account-icons-icon class="hidden flex-row gap-2 max-lg:px-2 max-lg:py-1 secondary-btn border-0 max-md:pr-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                 </svg>
                                 حساب کاربری
                             </a>
-                            <a href="/account/?tab=cart" data-account-icons-icon class="hidden flex-row gap-2 max-lg:px-2 max-lg:py-1 secondary-btn border-0 max-md:pr-0">
+                            <a href="/account/?tab=cart" data-account-icons-icon class="hidden flex-row gap-2 max-lg:px-2 max-lg:py-1 secondary-btn border-0 max-md:pr-1">
                                 <svg class="size-6 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 7h13a1 1 0 0 0 1-1v-1H7.5M7 13h10"></path>
                                 </svg>

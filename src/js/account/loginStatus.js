@@ -5,7 +5,6 @@ import {handleNewRefreshToken} from "@/js/api/auth.js";
 
 async function checkLoginStatus() {
     const hasAccessToken = tokenControl.accessToken || false;
-
     if (!hasAccessToken) return false;
 
     const isValid = await tokenControl.isAccessTokenValid();

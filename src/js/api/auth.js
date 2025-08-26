@@ -1,4 +1,5 @@
 import {rememberControl, tokenControl} from "@/js/api/api-utils.js";
+import {checkLoginStatus} from "@/js/account/loginStatus.js";
 
 // config api url
 const baseApiURL = "/api";
@@ -69,58 +70,15 @@ async function loginUser(username, password, rememberMe) {
     })
 
     const data = await res.json()
-    console.log(data)
     if (!res.ok) throw new Error(JSON.stringify(data))
 
     await tokenControl.setAccessToken(rememberMe, data?.access)
-
     return data
 }
 
 // handle login
 async function handleLoginUser(username, password, rememberMe) {
     return await loginUser(username, password, rememberMe)
-}
-
-// logout user
-async function logOutUser() {
-    const getAccessToken = tokenControl.accessToken;
-    const res = await fetch(`${baseApiURL}/auth/logout/`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${getAccessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({})
-    });
-
-    if (!res.ok) throw new Error(JSON.stringify(res));
-    return true
-}
-
-// handle log out user
-async function handleLogoutUser() {
-    return await logOutUser()
-}
-
-// get user info
-async function getUserInfo() {
-    const getAccessToken = tokenControl.accessToken;
-    const res = await fetch(`${baseApiURL}/auth/user/`, {
-        method: "GET",
-        headers: {
-            'Authorization': `Bearer ${getAccessToken}`,
-            "Content-Type": "application/json"
-        }
-    })
-    const data = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data
-}
-
-// handle get user info
-async function handleGetUserInfo() {
-    return await getUserInfo()
 }
 
 // refresh tokens
@@ -141,6 +99,57 @@ async function handleNewRefreshToken() {
     return await newRefreshToken()
 }
 
+// logout user
+async function logOutUser() {
+    const accessToken = tokenControl.accessToken
+    const res = await fetch(`${baseApiURL}/auth/logout/`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json"
+        }
+    });
+    if (!res.ok) throw new Error(JSON.stringify(res));
+    return true
+}
+
+// handle log out user
+async function handleLogoutUser() {
+    const accessIsValid = await checkLoginStatus()
+
+    if (accessIsValid) {
+        return await logOutUser()
+    } else {
+        throw new Error(JSON.stringify(accessIsValid))
+    }
+}
+
+// get user info
+async function getUserInfo() {
+    const getAccessToken = tokenControl.accessToken;
+    const res = await fetch(`${baseApiURL}/auth/user/`, {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${getAccessToken}`,
+            "Content-Type": "application/json"
+        }
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(JSON.stringify(data))
+    return data
+}
+
+// handle get user info
+async function handleGetUserInfo() {
+    const accessIsValid = await checkLoginStatus()
+
+    if (accessIsValid) {
+        return await getUserInfo()
+    } else {
+        throw new Error(JSON.stringify(accessIsValid))
+    }
+}
+
 // create category
 async function createCategory(name, slug) {
     const getAccessToken = tokenControl.accessToken;
@@ -158,6 +167,7 @@ async function createCategory(name, slug) {
     return data
 }
 
+// handle create category
 async function handleCreateCategory(name, slug) {
     return await createCategory(name, slug);
 }
@@ -179,10 +189,12 @@ async function createTag(name, slug) {
     return data;
 }
 
+// handle create tag
 async function handleCreateTag(name, slug) {
     return await createTag(name, slug);
 }
 
+// create product
 async function createProduct(productData) {
     const gotAccessToken = getAccessToken();
     const res = await fetch(`${baseApiURL}/products/`, {
@@ -200,6 +212,7 @@ async function createProduct(productData) {
     return data;
 }
 
+// handle create product
 async function handleCreateProduct(productData) {
     const checkAllTokenAreValid = await checkAndRefreshAllTokens()
 
@@ -210,6 +223,7 @@ async function handleCreateProduct(productData) {
     return await createProduct(productData);
 }
 
+// get all category
 async function getAllCategories() {
     const res = await fetch(`${baseApiURL}/categories/`, {
         method: "GET",
@@ -223,10 +237,12 @@ async function getAllCategories() {
     return data
 }
 
+// handle get all category
 async function handleGetAllCategories() {
     return await getAllCategories()
 }
 
+// get all tags
 async function getAllTags() {
     const res = await fetch(`${baseApiURL}/tags/`, {
         method: "GET",
@@ -240,10 +256,12 @@ async function getAllTags() {
     return data
 }
 
+// handle get all tags
 async function handleGetAllTag() {
     return await getAllTags()
 }
 
+// create new product
 async function createNewProduct(productData) {
     const gotAccessToken = getAccessToken();
     const res = await fetch(`${baseApiURL}/products/`, {
@@ -259,10 +277,12 @@ async function createNewProduct(productData) {
     return data
 }
 
+// handle create new product
 async function handleCreateNewProduct(productData) {
     return await createNewProduct(productData)
 }
 
+// get all product
 async function getAllProducts() {
     const res = await fetch(`${baseApiURL}/products/`)
     const data = await res.json()

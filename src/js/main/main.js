@@ -31,8 +31,8 @@ function createProductBox(data) {
     const imgWrapper = document.createElement("div");
     imgWrapper.className = "min-h-40";
     const img = document.createElement("img");
-    img.src = data.image;
-    img.alt = data.name;
+    img.src = data.images[0];
+    img.alt = "تصویر " + data.name;
     img.className = "rounded-2xl w-full";
     imgWrapper.appendChild(img);
     wrapper.appendChild(imgWrapper);
@@ -51,21 +51,20 @@ function createProductBox(data) {
     priceBox.appendChild(originalPrice);
 
     // price after discount
-    if (data?.discount) {
-        const calcOfferPrice = data.price - (data.price * data.discount / 100);
+    if (data?.discount_percent > 0) {
         const offerPrice = document.createElement("span");
         offerPrice.setAttribute("data-product-offer-price", "");
-        offerPrice.textContent = formatToPrice(parseInt(String(calcOfferPrice)));
+        offerPrice.textContent = formatToPrice(parseInt(String(data.discounted_price)));
         priceBox.appendChild(offerPrice);
     }
 
     priceWrapper.appendChild(priceBox);
 
     // discount
-    if (data?.discount) {
+    if (data?.discount_percent > 0) {
         const discountSpan = document.createElement("span");
         discountSpan.className = "bg-primary text-gray-800 rounded-md p-0.5";
-        discountSpan.innerHTML = `تخفیف <span data-product-offer>${data.discount || 0}%</span>`;
+        discountSpan.innerHTML = `تخفیف <span data-product-offer>${data.discount_percent || 0}%</span>`;
         originalPrice.querySelector("[data-product-price]").className = "line-through text-gray-400 dark:text-gray-600";
         priceWrapper.appendChild(discountSpan);
     }

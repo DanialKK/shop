@@ -17,6 +17,7 @@ export default defineConfig({
             input: {
                 main: resolve(__dirname, "index.html"),
                 shop: resolve(__dirname, "shop/index.html"),
+                admin: resolve(__dirname, "admin/index.html"),
                 account: resolve(__dirname, "account/index.html"),
             }
         }

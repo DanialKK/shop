@@ -55,6 +55,7 @@ const renderUserPanel = () => {
       <p data-success-message-logout class="min-h-6 text-green-700 dark:text-green-500"></p>
       <p data-error-message-logout  class="min-h-6 text-red-700 dark:text-red-500"></p>
       <div id="logout-modal" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-fit max-w-120 bg-custom-bg  px-20 py-20 z-20 rounded-lg hidden max-xs:flex-col max-xs:w-full max-xs:px-0 items-center justify-center gap-4">
+      <h3 id="logout-message" class="text-center"></h3>
         <button id="logout-btn" class="text-nowrap min-w-fit cursor-pointer bg-red-700 hover:bg-red-900 text-white p-2 rounded-lg" type="button">خروج از حساب</button>
         <button id="stay-btn" class="text-nowrap min-w-fit cursor-pointer bg-green-800 hover:bg-green-900 text-white p-2 rounded-lg" type="button">ماندن در حساب</button>
       </div>
@@ -161,20 +162,22 @@ const bindEvent = () => {
         overlay.style.display = "none"
     })
     logoutBtn.addEventListener("click", e => {
+        const logoutMessage = document.getElementById("logout-message")
         e.preventDefault();
-        textError.innerHTML = "";
+        logoutMessage.innerHTML = "";
+
         // logout
         (async () => {
             try {
                 const res = await handleLogoutUser()
-                if (res.ok) textSuccess.innerHTML = "خروج موفقیت آمیز بود."
+                if (res.ok) logoutMessage.innerHTML = "خروج موفقیت آمیز بود."
                 tokenControl.removeAccessToken()
                 redirectAccountsPage("login")
             } catch (e) {
                 if (e instanceof TypeError) {
-                    textError.textContent = "اتصال به سرور برقرار نشد، لطفا بعدا تلاش کنید"
+                    logoutMessage.textContent = "اتصال به سرور برقرار نشد، لطفا بعدا تلاش کنید"
                 } else {
-                    textError.textContent = e.message
+                    logoutMessage.textContent = e.message
                 }
             }
         })();

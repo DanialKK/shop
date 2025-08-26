@@ -1,5 +1,5 @@
 import {showHidePassword, redirectAccountsPage} from "@/js/account/account.js"
-import {handleLoginUser, handleGetUserInfo} from "@/js/api/auth.js"
+import {handleLoginUser} from "@/js/api/auth.js"
 import {serverDisconnect} from "@/js/api/api-utils.js";
 
 const renderLogin = () => {
