@@ -1,11 +1,15 @@
-import "@/css/style.css"
 import {themeControl} from "@/js/component/header/header.js";
 import {renderSignup} from "@/js/account/signup.js";
 import {renderLogin} from "@/js/account/login.js";
 import {renderUserPanel} from "@/js/account/userPanel.js"
+<<<<<<< HEAD:core/front-end/src/js/account/account.js
 import {handleGetUserInfo} from "@/js/api/auth.js"
 import {isRefreshTokenValid, removeToken} from "@/js/api/main-var.js";
 import {renderAdminPanel} from "@/js/account/adminPanel.js";
+=======
+import {tokenControl} from "@/js/api/api-utils.js";
+import {checkLoginStatus} from "@/js/account/loginStatus.js";
+>>>>>>> front-end:src/js/account/account.js
 
 const root = document.documentElement
 const themeWrapper = document.getElementById("theme")
@@ -83,7 +87,7 @@ function redirectAccountsPage(route) {
         showLoader()
         router()
         hideLoader()
-    }, 1000)
+    }, 1400)
 }
 
 // render links
@@ -118,6 +122,7 @@ const pushLink = (link) => {
 
 // render pages in loading address: /account/index.html
 (async () => {
+<<<<<<< HEAD:core/front-end/src/js/account/account.js
     const getRefreshTokenIsValid = isRefreshTokenValid();
 
     try {
@@ -137,6 +142,21 @@ const pushLink = (link) => {
             router()
         } else {
             removeToken()
+=======
+    try {
+        const isAccess = await checkLoginStatus();
+
+        if (isAccess) {
+            const tab = getTabPanelURL()
+            if (tab) {
+                pushLink(`/account/user-panel?tab=${tab}`)
+            } else {
+                pushLink("/account/user-panel")
+            }
+            router()
+        } else {
+            tokenControl.removeAccessToken()
+>>>>>>> front-end:src/js/account/account.js
             const mode = getModeFormURL()
 
             if (mode) {
@@ -149,7 +169,11 @@ const pushLink = (link) => {
     } catch (e) {
         console.log(e)
     }
+<<<<<<< HEAD:core/front-end/src/js/account/account.js
 })()
+=======
+})();
+>>>>>>> front-end:src/js/account/account.js
 
 // load info or cart panel when user click the main header links
 function getTabPanelURL() {
@@ -174,10 +198,13 @@ function loadModeFormURL() {
         }
         router()
     }
+
+    if (mode) pushLink(`/account/${mode}`)
 }
 
 loadModeFormURL();
 
+<<<<<<< HEAD:core/front-end/src/js/account/account.js
 // const categories = [
 //     {
 //         name: "بازی",
@@ -217,5 +244,7 @@ loadModeFormURL();
 // })();
 
 
+=======
+>>>>>>> front-end:src/js/account/account.js
 window.addEventListener("popstate", router);
-export {pushLink, router, showHidePassword, handleLinks, redirectAccountsPage, getTabPanelURL}
+export {pushLink, router, showHidePassword, handleLinks, redirectAccountsPage, getTabPanelURL, showLoader, hideLoader}

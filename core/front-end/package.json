@@ -8,12 +8,12 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "devDependencies": {
-    "@types/node": "^24.2.1",
-    "vite": "^7.0.4"
-  },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
     "tailwindcss": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.1",
+    "vite": "^7.0.4"
   }
 }

@@ -2,10 +2,10 @@ import * as headerComponent from "@/js/component/header/header.js"
 import {createFooter} from "@/js/component/footer/footer.js";
 import {createScrollUp} from "@/js/component/scroll-up/scroll-up.js";
 import {customObserver} from "@/js/main/main.js";
-import {isRefreshTokenValid} from "@/js/api/main-var.js"
+import {tokenControl} from "@/js/api/api-utils.js";
+import {checkLoginStatus} from "@/js/account/loginStatus.js";
 
 const root = document.documentElement;
-const getRefreshTokenIsValid = isRefreshTokenValid();
 
 document.addEventListener("DOMContentLoaded", () => {
     // include header
@@ -32,10 +32,22 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
         // control account icons
-        const dataAccountIconsLink = document.querySelectorAll("[data-account-icons-link]")
-        const dataAccountIconsIcon = document.querySelectorAll("[data-account-icons-icon]")
+        const dataAccountIconsLink = document.querySelectorAll("[data-account-icons-link]");
+        const dataAccountIconsIcon = document.querySelectorAll("[data-account-icons-icon]");
 
-        headerComponent.controlAccountIcons(dataAccountIconsLink, dataAccountIconsIcon, getRefreshTokenIsValid)
+        (async () => {
+            try {
+                const isAccess = await checkLoginStatus();
+                if (isAccess) {
+                    headerComponent.controlAccountIcons(dataAccountIconsLink, dataAccountIconsIcon, isAccess)
+                } else {
+                    tokenControl.removeAccessToken()
+                    headerComponent.controlAccountIcons(dataAccountIconsLink, dataAccountIconsIcon, false)
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        })();
 
         themeWrapper.addEventListener("click", headerComponent.themeControl.changeThemeHandler.bind(null, root))
     })();

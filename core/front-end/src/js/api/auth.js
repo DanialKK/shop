@@ -1,22 +1,8 @@
-import {
-    refreshToken,
-    accessToken,
-    accessTokenExpires,
-    refreshTokenExpires,
-    isRefreshTokenValid,
-    isAccessTokenValid,
-    getAccessToken,
-    getRefreshToken, removeToken,
-} from "@/js/api/main-var.js";
+import {rememberControl, tokenControl} from "@/js/api/api-utils.js";
+import {checkLoginStatus} from "@/js/account/loginStatus.js";
 
 // config api url
-const configAPI = () => {
-    if (window.API_CONFIG && window.API_CONFIG.API_BASE_URL) {
-        return window.API_CONFIG.API_BASE_URL;
-    }
-    return import.meta.env.VITE_API_BASE_URL;
-}
-const baseApiURL = configAPI();
+const baseApiURL = "/api";
 
 // validate password in signup
 function validatePassword(password) {
@@ -76,86 +62,87 @@ async function handleRegisterUser({username, email, password, password2}) {
 }
 
 // login
+<<<<<<< HEAD:core/front-end/src/js/api/auth.js
 async function loginUser(username, password) {
+=======
+async function loginUser(username, password, rememberMe) {
+>>>>>>> front-end:src/js/api/auth.js
     const res = await fetch(`${baseApiURL}/auth/login/`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({username, password}),
     })
-    if (!res.ok) throw new Error("هنوز ثبت نام نکردید یا اطلاعتتون اشتباهه")
 
     const data = await res.json()
+<<<<<<< HEAD:core/front-end/src/js/api/auth.js
 
     localStorage.setItem(accessToken, data.access);
     localStorage.setItem(refreshToken, data.refresh);
     localStorage.setItem(accessTokenExpires, JSON.stringify(Date.now() + 60 * 60 * 1000));
     localStorage.setItem(refreshTokenExpires, JSON.stringify(Date.now() + 24 * 60 * 60 * 1000));
+=======
+    if (!res.ok) throw new Error(JSON.stringify(data))
+>>>>>>> front-end:src/js/api/auth.js
 
+    await tokenControl.setAccessToken(rememberMe, data?.access)
     return data
 }
 
 // handle login
-async function handleLoginUser({username, password, remember}) {
-    return await loginUser(username, password, remember)
+async function handleLoginUser(username, password, rememberMe) {
+    return await loginUser(username, password, rememberMe)
 }
 
-// check and refresh tokens
-async function checkAndRefreshAllTokens() {
-    const getAccessTokenIsValid = isAccessTokenValid();
-    const getRefreshTokenIsValid = isRefreshTokenValid();
+// refresh tokens
+async function newRefreshToken() {
+    const res = await fetch(`${baseApiURL}/auth/token/refresh/`, {
+        method: "POST",
+        credentials: "include",
+        headers: {"Content-Type": "application/json"},
+    })
+    const json = await res.json()
+    if (!res.ok || !json.access) throw new Error(JSON.stringify(json))
+    await tokenControl.setAccessToken(rememberControl.rememberFlag === "true", json.access)
+    return json
+}
 
-    if (!getRefreshTokenIsValid) {
-        removeToken()
-        window.location.href = "/account/?mode=login"
-        return false;
-    }
-
-    if (!getAccessTokenIsValid) {
-        try {
-            // عملیات رفرش توکن access
-        } catch (e) {
-            window.location.href = "/account/?mode=login"
-            return false;
-        }
-    }
-    return true;
+// handle refresh token
+async function handleNewRefreshToken() {
+    return await newRefreshToken()
 }
 
 // logout user
 async function logOutUser() {
-    const gotAccessToken = getAccessToken();
-    const gotRefreshToken = getRefreshToken();
+    const accessToken = tokenControl.accessToken
     const res = await fetch(`${baseApiURL}/auth/logout/`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${gotAccessToken}`,
+            "Authorization": `Bearer ${accessToken}`,
             "Content-Type": "application/json"
-        },
-        body: JSON.stringify({refresh: gotRefreshToken})
+        }
     });
-
     if (!res.ok) throw new Error(JSON.stringify(res));
     return true
 }
 
 // handle log out user
 async function handleLogoutUser() {
-    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
+    const accessIsValid = await checkLoginStatus()
 
-    if (!checkAllTokenAreValid) {
-        throw new Error("مشکلی پیش اومده، لطفا بعدا دوباره تلاش کنید");
+    if (accessIsValid) {
+        return await logOutUser()
+    } else {
+        throw new Error(JSON.stringify(accessIsValid))
     }
-
-    return await logOutUser()
 }
 
 // get user info
 async function getUserInfo() {
-    const gotAccessToken = getAccessToken();
+    const getAccessToken = tokenControl.accessToken;
     const res = await fetch(`${baseApiURL}/auth/user/`, {
         method: "GET",
         headers: {
-            'Authorization': `Bearer ${gotAccessToken}`,
+            'Authorization': `Bearer ${getAccessToken}`,
             "Content-Type": "application/json"
         }
     })
@@ -166,47 +153,22 @@ async function getUserInfo() {
 
 // handle get user info
 async function handleGetUserInfo() {
-    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
+    const accessIsValid = await checkLoginStatus()
 
-    if (!checkAllTokenAreValid) {
-        throw new Error("مشکلی پیش اومده، لطفا بعدا دوباره تلاش کنید");
+    if (accessIsValid) {
+        return await getUserInfo()
+    } else {
+        throw new Error(JSON.stringify(accessIsValid))
     }
-
-    return await getUserInfo()
-}
-
-// refresh tokens
-async function newRefreshToken() {
-    const gotRefreshToken = getRefreshToken();
-    const res = await fetch(`${baseApiURL}/token/refresh/`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({refresh: gotRefreshToken}),
-    })
-    console.log(res)
-    const json = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(json))
-    return json
-}
-
-// handle refresh token
-async function handleNewRefreshToken() {
-    const refreshTokenIsValidNow = isRefreshTokenValid();
-
-    if (!refreshTokenIsValidNow) {
-        window.location.href = "/account/?mode=login"
-        return false;
-    }
-    return await newRefreshToken()
 }
 
 // create category
 async function createCategory(name, slug) {
-    const gotAccessToken = getAccessToken();
+    const getAccessToken = tokenControl.accessToken;
     const res = await fetch(`${baseApiURL}/categories/`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${gotAccessToken}`,
+            "Authorization": `Bearer ${getAccessToken}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({name, slug})
@@ -217,17 +179,26 @@ async function createCategory(name, slug) {
     return data
 }
 
+// handle create category
 async function handleCreateCategory(name, slug) {
     return await createCategory(name, slug);
 }
 
 // create tag
 async function createTag(name, slug) {
+<<<<<<< HEAD:core/front-end/src/js/api/auth.js
     const gotAccessToken = getAccessToken();
     const res = await fetch(`${baseApiURL}/tags/`, {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${gotAccessToken}`,
+=======
+    const getAccessToken = tokenControl.accessToken;
+    const res = await fetch(`${baseApiURL}/tags/`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${getAccessToken}`,
+>>>>>>> front-end:src/js/api/auth.js
             "Content-Type": "application/json"
         },
         body: JSON.stringify({name, slug})
@@ -238,10 +209,18 @@ async function createTag(name, slug) {
     return data;
 }
 
+<<<<<<< HEAD:core/front-end/src/js/api/auth.js
+=======
+// handle create tag
+>>>>>>> front-end:src/js/api/auth.js
 async function handleCreateTag(name, slug) {
     return await createTag(name, slug);
 }
 
+<<<<<<< HEAD:core/front-end/src/js/api/auth.js
+=======
+// create product
+>>>>>>> front-end:src/js/api/auth.js
 async function createProduct(productData) {
     const gotAccessToken = getAccessToken();
     const res = await fetch(`${baseApiURL}/products/`, {
@@ -259,6 +238,10 @@ async function createProduct(productData) {
     return data;
 }
 
+<<<<<<< HEAD:core/front-end/src/js/api/auth.js
+=======
+// handle create product
+>>>>>>> front-end:src/js/api/auth.js
 async function handleCreateProduct(productData) {
     const checkAllTokenAreValid = await checkAndRefreshAllTokens()
 
@@ -269,6 +252,10 @@ async function handleCreateProduct(productData) {
     return await createProduct(productData);
 }
 
+<<<<<<< HEAD:core/front-end/src/js/api/auth.js
+=======
+// get all category
+>>>>>>> front-end:src/js/api/auth.js
 async function getAllCategories() {
     const res = await fetch(`${baseApiURL}/categories/`, {
         method: "GET",
@@ -282,10 +269,18 @@ async function getAllCategories() {
     return data
 }
 
+<<<<<<< HEAD:core/front-end/src/js/api/auth.js
+=======
+// handle get all category
+>>>>>>> front-end:src/js/api/auth.js
 async function handleGetAllCategories() {
     return await getAllCategories()
 }
 
+<<<<<<< HEAD:core/front-end/src/js/api/auth.js
+=======
+// get all tags
+>>>>>>> front-end:src/js/api/auth.js
 async function getAllTags() {
     const res = await fetch(`${baseApiURL}/tags/`, {
         method: "GET",
@@ -299,10 +294,46 @@ async function getAllTags() {
     return data
 }
 
+<<<<<<< HEAD:core/front-end/src/js/api/auth.js
+=======
+// handle get all tags
+>>>>>>> front-end:src/js/api/auth.js
 async function handleGetAllTag() {
     return await getAllTags()
 }
 
+<<<<<<< HEAD:core/front-end/src/js/api/auth.js
+=======
+// create new product
+async function createNewProduct(productData) {
+    const gotAccessToken = getAccessToken();
+    const res = await fetch(`${baseApiURL}/products/`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${gotAccessToken}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(productData)
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(JSON.stringify(data))
+    return data
+}
+
+// handle create new product
+async function handleCreateNewProduct(productData) {
+    return await createNewProduct(productData)
+}
+
+// get all product
+async function getAllProducts() {
+    const res = await fetch(`${baseApiURL}/products/`)
+    const data = await res.json()
+    if (!res.ok) throw new Error(JSON.stringify(data))
+    return data
+}
+
+>>>>>>> front-end:src/js/api/auth.js
 export {
     handleRegisterUser,
     handleLoginUser,
@@ -313,5 +344,11 @@ export {
     handleCreateTag,
     handleCreateProduct,
     handleGetAllCategories,
+<<<<<<< HEAD:core/front-end/src/js/api/auth.js
     handleGetAllTag
+=======
+    handleGetAllTag,
+    handleCreateNewProduct,
+    getAllProducts,
+>>>>>>> front-end:src/js/api/auth.js
 }
