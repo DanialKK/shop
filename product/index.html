@@ -23,10 +23,10 @@
             <div id="text-message" class="text-center"></div>
             <div id="product">
                 <div id="product-gallery">
-                    <div id="product-base-image">
+                    <div id="product-base-image" class="rounded-sm overflow-hidden">
                         <img src="/static/img/custom/call-of-duty-black-5120x2880-19463.jpg" alt="base image">
                     </div>
-                    <div id="product-images" class="mt-4 grid grid-cols-4 grid-rows-[8rem] gap-2">
+                    <div id="product-images" class="mt-4 grid grid-cols-2 grid-rows-[repeat(2,8rem)] gap-2 sm:grid-cols-4">
                         <div class="w-full p-0.5 rounded-sm cursor-pointer border-2 border-gray-300 dark:border-gray-800">
                             <img class="w-full h-full object-cover object-center" src="/static/img/custom/call-of-duty-black-5120x2880-19463.jpg" alt="product image 1">
                         </div>
@@ -44,20 +44,18 @@
                 <div id="product-detail" class="mt-4">
                     <div>
                         <h1 id="product-title">کالاف دیوتی بلک آپس 6</h1>
-                        <div id="product-discount">
-                            <div class="mt-3 flex items-center text-sm justify-between px-1 min-h-11">
-                                <span class="flex flex-col space-y-1">
-                                    <span class="pl-0.5">
-                                        <span data-product-price="" class="line-through text-gray-400 dark:text-gray-600">340,000</span>
+                        <div class="mt-4 flex items-center text-sm justify-between px-1 min-h-11">
+                            <span class="flex flex-col space-y-1">
+                                <span class="pl-0.5">
+                                    <span id="product-price" class="line-through text-gray-400 dark:text-gray-600">340,000</span>
                                         تومن
-                                    </span>
-                                    <span data-product-offer-price="">340,000</span>
                                 </span>
-                                <span class="bg-primary text-gray-800 rounded-md p-0.5">
-                                    تخفیف
-                                    <span data-product-offer="">0%</span>
-                                </span>
-                            </div>
+                                <span id="product-discount">340,000</span>
+                            </span>
+                            <span class="bg-primary text-gray-800 rounded-md p-0.5">
+                                تخفیف
+                                <span id="product-discount-percent">0%</span>
+                            </span>
                         </div>
                     </div>
                 </div>
