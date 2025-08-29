@@ -1,5 +1,4 @@
 import {getAllProducts} from "@/js/api/auth.js";
-import {serverDisconnect} from "@/js/api/api-utils.js";
 import {createProductBox} from "@/js/main/main.js"
 
 export function init() {

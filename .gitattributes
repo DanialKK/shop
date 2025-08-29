@@ -1,12 +1,13 @@
 * text=auto
 
-*.js   text eol=lf
-*.components  text eol=lf
-*.ts   text eol=lf
-*.tsx  text eol=lf
-*.styles  text eol=lf
-*.scss text eol=lf
-*.html text eol=lf
-*.json text eol=lf
-*.md   text eol=lf
-*.yml  text eol=lf
+*.js     text eol=lf
+*.ts     text eol=lf
+*.tsx    text eol=lf
+*.html   text eol=lf
+*.css    text eol=lf
+*.scss   text eol=lf
+*.json   text eol=lf
+*.md     text eol=lf
+*.yml    text eol=lf
+*.sh     text eol=lf
+*.py     text eol=lf

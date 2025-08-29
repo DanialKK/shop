@@ -31,7 +31,8 @@ function createProductBox(data) {
     const imgWrapper = document.createElement("div");
     imgWrapper.className = "min-h-40";
     const img = document.createElement("img");
-    img.src = data.images[0];
+    img.src = "/static/images/custom/call-of-duty-black-5120x2880-19463.jpg"
+    // img.src = data.images[0];
     img.alt = "تصویر " + data.name;
     img.className = "rounded-2xl w-full";
     imgWrapper.appendChild(img);

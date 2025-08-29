@@ -4,39 +4,35 @@ import {checkLoginStatus} from "@/js/account/loginStatus.js";
 // config api url
 const baseApiURL = "/api";
 
+// handle error
+async function handleApiResponse(res) {
+    let data;
+    try {
+        data = await res.json();
+    } catch {
+        throw new Error("پاسخ نامعتبر از سرور دریافت شد.");
+    }
+    if (!res.ok) {
+        const message = data?.detail || "خطای ناشناخته از سرور.";
+        throw new Error(message);
+    }
+    return data;
+}
+
 // validate password in signup
 function validatePassword(password) {
     const errors = [];
-
     // طول رمز عبور
-    if (password.length < 8) {
-        errors.push("رمز عبور باید حداقل ۸ کاراکتر باشد.");
-    }
-
+    if (password.length < 8) errors.push("رمز عبور باید حداقل ۸ کاراکتر باشد.");
     // فقط عدد بودن
-    if (/^\d+$/.test(password)) {
-        errors.push("رمز عبور نمی‌تواند فقط شامل اعداد باشد.");
-    }
-
+    if (/^\d+$/.test(password)) errors.push("رمز عبور نمی‌تواند فقط شامل اعداد باشد.");
     // فقط حروف بودن
-    if (/^[a-zA-Z]+$/.test(password)) {
-        errors.push("رمز عبور نمی‌تواند فقط شامل حروف باشد.");
-    }
-
+    if (/^[a-zA-Z]+$/.test(password)) errors.push("رمز عبور نمی‌تواند فقط شامل حروف باشد.");
     // رمزهای رایج
-    const commonPasswords = [
-        "123456", "12345678", "password", "qwerty", "111111", "abc123",
-        "123123", "qwer1234", "admin", "letmein", "welcome"
-    ];
-    if (commonPasswords.includes(password.toLowerCase())) {
-        errors.push("رمز عبور خیلی رایج و ساده است.");
-    }
-
+    const commonPasswords = ["123456", "12345678", "password", "qwerty", "111111", "abc123", "123123", "qwer1234", "admin", "letmein", "welcome"];
+    if (commonPasswords.includes(password.toLowerCase())) errors.push("رمز عبور خیلی رایج و ساده است.");
     // تکرار کاراکترها مثل "aaaaaaa"
-    if (/^(.)\1+$/.test(password)) {
-        errors.push("رمز عبور نباید شامل کاراکترهای تکراری باشد.");
-    }
-
+    if (/^(.)\1+$/.test(password)) errors.push("رمز عبور نباید شامل کاراکترهای تکراری باشد.");
     return errors.length ? errors : null;
 }
 
@@ -47,10 +43,7 @@ async function registerUser({username, email, password, password2}) {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({username, email, password, password2}),
     })
-
-    const data = await res.json()
-    if (!res.ok) throw data
-    return data
+    return await handleApiResponse(res)
 }
 
 // handle signup
@@ -68,10 +61,7 @@ async function loginUser(username, password, rememberMe) {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({username, password}),
     })
-
-    const data = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(data))
-
+    const data = await handleApiResponse(res);
     await tokenControl.setAccessToken(rememberMe, data?.access)
     return data
 }
@@ -88,10 +78,9 @@ async function newRefreshToken() {
         credentials: "include",
         headers: {"Content-Type": "application/json"},
     })
-    const json = await res.json()
-    if (!res.ok || !json.access) throw new Error(JSON.stringify(json))
-    await tokenControl.setAccessToken(rememberControl.rememberFlag === "true", json.access)
-    return json
+    const data = await handleApiResponse(res);
+    await tokenControl.setAccessToken(rememberControl.rememberFlag === "true", data.access)
+    return data
 }
 
 // handle refresh token
@@ -109,14 +98,12 @@ async function logOutUser() {
             "Content-Type": "application/json"
         }
     });
-    if (!res.ok) throw new Error(JSON.stringify(res));
-    return true
+    return await handleApiResponse(res);
 }
 
 // handle log out user
 async function handleLogoutUser() {
     const accessIsValid = await checkLoginStatus()
-
     if (accessIsValid) {
         return await logOutUser()
     } else {
@@ -134,15 +121,12 @@ async function getUserInfo() {
             "Content-Type": "application/json"
         }
     })
-    const data = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data
+    return await handleApiResponse(res);
 }
 
 // handle get user info
 async function handleGetUserInfo() {
     const accessIsValid = await checkLoginStatus()
-
     if (accessIsValid) {
         return await getUserInfo()
     } else {
@@ -150,144 +134,22 @@ async function handleGetUserInfo() {
     }
 }
 
-// create category
-async function createCategory(name, slug) {
-    const getAccessToken = tokenControl.accessToken;
-    const res = await fetch(`${baseApiURL}/categories/`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${getAccessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({name, slug})
-    })
-    const data = await res.json()
-    console.log(data)
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data
-}
-
-// handle create category
-async function handleCreateCategory(name, slug) {
-    return await createCategory(name, slug);
-}
-
-// create tag
-async function createTag(name, slug) {
-    const getAccessToken = tokenControl.accessToken;
-    const res = await fetch(`${baseApiURL}/tags/`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${getAccessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({name, slug})
-    });
-    const data = await res.json();
-    console.log(data);
-    if (!res.ok) throw new Error(JSON.stringify(data));
-    return data;
-}
-
-// handle create tag
-async function handleCreateTag(name, slug) {
-    return await createTag(name, slug);
-}
-
-// create product
-async function createProduct(productData) {
-    const gotAccessToken = getAccessToken();
-    const res = await fetch(`${baseApiURL}/products/`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${gotAccessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(productData)
-    });
-
-    const data = await res.json();
-    console.log(data);
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data;
-}
-
-// handle create product
-async function handleCreateProduct(productData) {
-    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
-
-    if (!checkAllTokenAreValid) {
-        throw new Error("مشکلی پیش اومده، لطفا بعدا دوباره تلاش کنید");
-    }
-
-    return await createProduct(productData);
-}
-
 // get all category
 async function getAllCategories() {
-    const res = await fetch(`${baseApiURL}/categories/`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
-
-    const data = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data
-}
-
-// handle get all category
-async function handleGetAllCategories() {
-    return await getAllCategories()
+    const res = await fetch(`${baseApiURL}/categories/`);
+    return await handleApiResponse(res)
 }
 
 // get all tags
 async function getAllTags() {
-    const res = await fetch(`${baseApiURL}/tags/`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-
-    const data = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data
-}
-
-// handle get all tags
-async function handleGetAllTag() {
-    return await getAllTags()
-}
-
-// create new product
-async function createNewProduct(productData) {
-    const gotAccessToken = getAccessToken();
-    const res = await fetch(`${baseApiURL}/products/`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${gotAccessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(productData)
-    })
-    const data = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data
-}
-
-// handle create new product
-async function handleCreateNewProduct(productData) {
-    return await createNewProduct(productData)
+    const res = await fetch(`${baseApiURL}/tags/`)
+    return await handleApiResponse(res)
 }
 
 // get all product
 async function getAllProducts() {
     const res = await fetch(`${baseApiURL}/products/`)
-    const data = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data
+    return await handleApiResponse(res)
 }
 
 export {
@@ -295,12 +157,8 @@ export {
     handleLoginUser,
     handleGetUserInfo,
     handleNewRefreshToken,
-    handleCreateCategory,
     handleLogoutUser,
-    handleCreateTag,
-    handleCreateProduct,
-    handleGetAllCategories,
-    handleGetAllTag,
-    handleCreateNewProduct,
+    getAllCategories,
+    getAllTags,
     getAllProducts,
 }
