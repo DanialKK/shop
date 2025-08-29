@@ -31,7 +31,7 @@ function createProductBox(data) {
     const imgWrapper = document.createElement("div");
     imgWrapper.className = "min-h-40";
     const img = document.createElement("img");
-    img.src = "/static/images/custom/call-of-duty-black-5120x2880-19463.jpg"
+    img.src = "/static/img/custom/rainbow-six-siege-x-5760x2880-22839.jpg"
     // img.src = data.images[0];
     img.alt = "تصویر " + data.name;
     img.className = "rounded-2xl w-full";

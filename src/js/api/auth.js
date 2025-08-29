@@ -152,6 +152,11 @@ async function getAllProducts() {
     return await handleApiResponse(res)
 }
 
+async function getOneProducts(id = 1) {
+    const res = await fetch(`${baseApiURL}/products/${id}`);
+    return await handleApiResponse(res)
+}
+
 export {
     handleRegisterUser,
     handleLoginUser,
@@ -161,4 +166,5 @@ export {
     getAllCategories,
     getAllTags,
     getAllProducts,
+    getOneProducts,
 }
