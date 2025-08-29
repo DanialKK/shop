@@ -1,5 +1,4 @@
 import {getAllProducts} from "@/js/api/auth.js";
-import {createProductBox} from "@/js/main/main.js"
 
 export function init() {
     const productsWrapper = document.getElementById('products-wrapper');
@@ -7,11 +6,8 @@ export function init() {
 
     (async () => {
         try {
-            const products = await getAllProducts();
             const fragment = document.createDocumentFragment();
-            products.reverse().forEach(product => {
-                fragment.appendChild(createProductBox(product));
-            })
+
             productsWrapper.appendChild(fragment);
         } catch (e) {
             if (e instanceof Error) {
