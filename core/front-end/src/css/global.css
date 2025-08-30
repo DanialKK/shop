@@ -1,0 +1,137 @@
+@import 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
+
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@utility container {
+    @apply max-w-[98%] mx-auto px-2 2xl:max-w-376;
+}
+
+@theme {
+    /* font-family */
+    --font-inter: "Inter", sans-serif;
+
+    /* break-points */
+    --breakpoint-xxs: 21rem;
+    --breakpoint-xs: 24.875rem;
+    --breakpoint-sm: 36rem;
+    --breakpoint-2xl: 94rem;
+
+    /* colors */
+    --color-primary: #50FFAF;
+    --color-custom-bg: #ffffff;
+    --color-custom-text: #111827;
+    --color-sub-text: #4D4D4D;
+    --color-black-custom: #333333;
+    --color-custom-subtext: #4b5563;
+    --color-custom-border: #e5e7eb;
+    --color-dark-green: #002414;
+    --color-menu-link-hover: #0c0c0c;
+    --color-menu-bg: #E6E6E6;
+    --color-bg-top-menu: transparent;
+    --color-info-text-bg: #50FFAF;
+    --color-info-text: #004224;
+
+    /* card */
+    --color-card-bg: #F2F2F2;
+    --color-content-bg: #fff;
+    --color-card-tag-bg: #E6E6E6;
+    --color-card-tag-text: #1A1A1A;
+    --color-card-tag-link-bg: #94FFCF;
+    --color-card-tag-link-text: #002414;
+
+    /* btn-colors */
+    --color-primary-button-bg: #1A1A1A;
+    --color-primary-button-hover: #50FFAF;
+    --color-primary-button-text: #F2F2F2;
+    --color-secondary-button-bg: #FFFFFF;
+    --color-secondary-button-hover: #333333;
+    --color-secondary-button-text: #333333;
+    --color-paginate-btn: #E6E6E6;
+    --color-c-page-btn: #4D4D4D;
+}
+
+.dark {
+    /* colors */
+    --color-custom-bg: #0E1412;
+    --color-custom-text: #f0fdf4;
+    --color-sub-text: #CCCCCC;
+    --color-black-custom: #F0FFF8;
+    --color-custom-subtext: #9ca3af;
+    --color-custom-border: #1e293b;
+    --color-menu-link-hover: #50FFAF;
+    --color-menu-bg: #090e0c;
+    --color-bg-top-menu: #374541B2;
+    --color-info-text-bg: #374541B2;
+    --color-info-text: #50FFAF;
+
+    /* card */
+    --color-card-bg: #F0FFF80D;
+    --color-content-bg: #37454199;
+    --color-card-tag-bg: #374541B2;
+    --color-card-tag-text: #50FFAF;
+    --color-card-tag-link-bg: #F0FFF8;
+    --color-card-tag-link-text: #002414;
+
+    /* btn-colors */
+    --color-primary-button-bg: #50FFAF;
+    --color-primary-button-hover: #F0FFF8;
+    --color-primary-button-text: #0E1412;
+    --color-secondary-button-bg: #0E1412;
+    --color-secondary-button-hover: #50FFAF;
+    --color-secondary-button-text: #50FFAF;
+}
+
+body {
+    @apply font-inter bg-custom-bg text-custom-text font-medium;
+}
+
+@layer components {
+    .primary-btn {
+        @apply bg-primary-button-bg text-primary-button-text;
+
+        &:hover {
+            @apply bg-primary-button-hover text-dark-green;
+        }
+    }
+
+    .secondary-btn {
+        @apply bg-transparent border border-secondary-button-text;
+
+        &:hover {
+            @apply bg-secondary-button-text text-secondary-button-bg;
+        }
+    }
+
+    .primary-btn, .secondary-btn {
+        @apply text-sm cursor-pointer py-1.5 px-4
+        rounded-[45px] transition-all duration-200 sm:text-base;
+    }
+
+    .info-label {
+        @apply text-sm bg-info-text-bg text-info-text px-6 py-2 rounded-[3rem] md:text-base;
+    }
+
+    .sub-text {
+        @apply text-sub-text text-sm/6 md:max-w-220;
+    }
+}
+
+@layer base {
+    h1 {
+        @apply text-xl xxs:text-2xl xs:text-3xl/[3rem] font-medium -tracking-[1px] max-w-100 sm:text-4xl/15 sm:max-w-120 md:text-5xl/20 md:max-w-146;
+    }
+
+    h2 {
+        @apply text-[1.8rem] font-medium md:text-4xl;
+    }
+
+    h3 {
+        @apply text-lg lg:text-xl;
+    }
+
+    h4 {
+        @apply font-medium md:text-lg;
+    }
+}
