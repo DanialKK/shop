@@ -8,11 +8,13 @@ export function init() {
     (async () => {
         try {
             const products = await getAllProducts();
-            const fragment = document.createDocumentFragment();
-            products.reverse().forEach(product => {
-                fragment.appendChild(createProductBox(product));
-            })
-            productsWrapper.appendChild(fragment);
+
+            if (products[0]) {
+                const fragment = document.createDocumentFragment();
+                productsWrapper.appendChild(fragment);
+            } else {
+                textMessage.innerHTML = "<h2 class='w-full text-center'>هیچ محصولی وجود ندارد</h2>"
+            }
         } catch (e) {
             if (e instanceof Error) {
                 textMessage.innerHTML = "<h2 class='w-full text-center'>در حال حاضر سرور در دسترس نمیباشد</h2>"
