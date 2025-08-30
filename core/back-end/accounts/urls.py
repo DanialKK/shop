@@ -1,12 +1,25 @@
 from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import RegisterView, CurrentUserView, LogoutView
+from .views import (
+    LoginView,
+    TokenRefreshView,
+    RegisterView,
+    CurrentUserView,
+    LogoutView
+)
 
 urlpatterns = [
+    # ثبت‌نام کاربر
     path('register/', RegisterView.as_view(), name='register'),
-    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+
+    # ورود کاربر (Login) – توکن دسترسی JSON + رفرش HttpOnly cookie
+    path('login/', LoginView.as_view(), name='login'),
+
+    # دریافت توکن دسترسی جدید از رفرش کوکی
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    # اطلاعات کاربر جاری
     path('user/', CurrentUserView.as_view(), name='current-user'),
+
+    # خروج (Logout)
     path('logout/', LogoutView.as_view(), name='auth_logout'),
 ]
-

@@ -1,56 +1,38 @@
-import {
-    refreshToken,
-    accessToken,
-    accessTokenExpires,
-    refreshTokenExpires,
-    isRefreshTokenValid,
-    isAccessTokenValid,
-    getAccessToken,
-    getRefreshToken, removeToken,
-} from "@/js/api/main-var.js";
+import {rememberControl, tokenControl} from "@/js/api/api-utils.js";
+import {checkLoginStatus} from "@/js/account/loginStatus.js";
 
 // config api url
-const configAPI = () => {
-    if (window.API_CONFIG && window.API_CONFIG.API_BASE_URL) {
-        return window.API_CONFIG.API_BASE_URL;
+const baseApiURL = "/api";
+
+// handle error
+async function handleApiResponse(res) {
+    let data;
+    try {
+        data = await res.json();
+    } catch {
+        throw new Error("پاسخ نامعتبر از سرور دریافت شد.");
     }
-    return import.meta.env.VITE_API_BASE_URL;
+    if (!res.ok) {
+        const message = data?.detail || "خطای ناشناخته از سرور.";
+        throw new Error(message);
+    }
+    return data;
 }
-const baseApiURL = configAPI();
 
 // validate password in signup
 function validatePassword(password) {
     const errors = [];
-
     // طول رمز عبور
-    if (password.length < 8) {
-        errors.push("رمز عبور باید حداقل ۸ کاراکتر باشد.");
-    }
-
+    if (password.length < 8) errors.push("رمز عبور باید حداقل ۸ کاراکتر باشد.");
     // فقط عدد بودن
-    if (/^\d+$/.test(password)) {
-        errors.push("رمز عبور نمی‌تواند فقط شامل اعداد باشد.");
-    }
-
+    if (/^\d+$/.test(password)) errors.push("رمز عبور نمی‌تواند فقط شامل اعداد باشد.");
     // فقط حروف بودن
-    if (/^[a-zA-Z]+$/.test(password)) {
-        errors.push("رمز عبور نمی‌تواند فقط شامل حروف باشد.");
-    }
-
+    if (/^[a-zA-Z]+$/.test(password)) errors.push("رمز عبور نمی‌تواند فقط شامل حروف باشد.");
     // رمزهای رایج
-    const commonPasswords = [
-        "123456", "12345678", "password", "qwerty", "111111", "abc123",
-        "123123", "qwer1234", "admin", "letmein", "welcome"
-    ];
-    if (commonPasswords.includes(password.toLowerCase())) {
-        errors.push("رمز عبور خیلی رایج و ساده است.");
-    }
-
+    const commonPasswords = ["123456", "12345678", "password", "qwerty", "111111", "abc123", "123123", "qwer1234", "admin", "letmein", "welcome"];
+    if (commonPasswords.includes(password.toLowerCase())) errors.push("رمز عبور خیلی رایج و ساده است.");
     // تکرار کاراکترها مثل "aaaaaaa"
-    if (/^(.)\1+$/.test(password)) {
-        errors.push("رمز عبور نباید شامل کاراکترهای تکراری باشد.");
-    }
-
+    if (/^(.)\1+$/.test(password)) errors.push("رمز عبور نباید شامل کاراکترهای تکراری باشد.");
     return errors.length ? errors : null;
 }
 
@@ -61,10 +43,7 @@ async function registerUser({username, email, password, password2}) {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({username, email, password, password2}),
     })
-
-    const data = await res.json()
-    if (!res.ok) throw data
-    return data
+    return await handleApiResponse(res)
 }
 
 // handle signup
@@ -76,231 +55,106 @@ async function handleRegisterUser({username, email, password, password2}) {
 }
 
 // login
-async function loginUser(username, password) {
+async function loginUser(username, password, rememberMe) {
     const res = await fetch(`${baseApiURL}/auth/login/`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({username, password}),
     })
-    if (!res.ok) throw new Error("هنوز ثبت نام نکردید یا اطلاعتتون اشتباهه")
-
-    const data = await res.json()
-
-    localStorage.setItem(accessToken, data.access);
-    localStorage.setItem(refreshToken, data.refresh);
-    localStorage.setItem(accessTokenExpires, JSON.stringify(Date.now() + 60 * 60 * 1000));
-    localStorage.setItem(refreshTokenExpires, JSON.stringify(Date.now() + 24 * 60 * 60 * 1000));
-
+    const data = await handleApiResponse(res);
+    await tokenControl.setAccessToken(rememberMe, data?.access)
     return data
 }
 
 // handle login
-async function handleLoginUser({username, password, remember}) {
-    return await loginUser(username, password, remember)
-}
-
-// check and refresh tokens
-async function checkAndRefreshAllTokens() {
-    const getAccessTokenIsValid = isAccessTokenValid();
-    const getRefreshTokenIsValid = isRefreshTokenValid();
-
-    if (!getRefreshTokenIsValid) {
-        removeToken()
-        window.location.href = "/account/?mode=login"
-        return false;
-    }
-
-    if (!getAccessTokenIsValid) {
-        try {
-            // عملیات رفرش توکن access
-        } catch (e) {
-            window.location.href = "/account/?mode=login"
-            return false;
-        }
-    }
-    return true;
-}
-
-// logout user
-async function logOutUser() {
-    const gotAccessToken = getAccessToken();
-    const gotRefreshToken = getRefreshToken();
-    const res = await fetch(`${baseApiURL}/auth/logout/`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${gotAccessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({refresh: gotRefreshToken})
-    });
-
-    if (!res.ok) throw new Error(JSON.stringify(res));
-    return true
-}
-
-// handle log out user
-async function handleLogoutUser() {
-    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
-
-    if (!checkAllTokenAreValid) {
-        throw new Error("مشکلی پیش اومده، لطفا بعدا دوباره تلاش کنید");
-    }
-
-    return await logOutUser()
-}
-
-// get user info
-async function getUserInfo() {
-    const gotAccessToken = getAccessToken();
-    const res = await fetch(`${baseApiURL}/auth/user/`, {
-        method: "GET",
-        headers: {
-            'Authorization': `Bearer ${gotAccessToken}`,
-            "Content-Type": "application/json"
-        }
-    })
-    const data = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data
-}
-
-// handle get user info
-async function handleGetUserInfo() {
-    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
-
-    if (!checkAllTokenAreValid) {
-        throw new Error("مشکلی پیش اومده، لطفا بعدا دوباره تلاش کنید");
-    }
-
-    return await getUserInfo()
+async function handleLoginUser(username, password, rememberMe) {
+    return await loginUser(username, password, rememberMe)
 }
 
 // refresh tokens
 async function newRefreshToken() {
-    const gotRefreshToken = getRefreshToken();
-    const res = await fetch(`${baseApiURL}/token/refresh/`, {
+    const res = await fetch(`${baseApiURL}/auth/token/refresh/`, {
         method: "POST",
+        credentials: "include",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({refresh: gotRefreshToken}),
     })
-    console.log(res)
-    const json = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(json))
-    return json
+    const data = await handleApiResponse(res);
+    await tokenControl.setAccessToken(rememberControl.rememberFlag === "true", data.access)
+    return data
 }
 
 // handle refresh token
 async function handleNewRefreshToken() {
-    const refreshTokenIsValidNow = isRefreshTokenValid();
-
-    if (!refreshTokenIsValidNow) {
-        window.location.href = "/account/?mode=login"
-        return false;
-    }
     return await newRefreshToken()
 }
 
-// create category
-async function createCategory(name, slug) {
-    const gotAccessToken = getAccessToken();
-    const res = await fetch(`${baseApiURL}/categories/`, {
+// logout user
+async function logOutUser() {
+    const accessToken = tokenControl.accessToken
+    const res = await fetch(`${baseApiURL}/auth/logout/`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${gotAccessToken}`,
+            "Authorization": `Bearer ${accessToken}`,
             "Content-Type": "application/json"
-        },
-        body: JSON.stringify({name, slug})
-    })
-    const data = await res.json()
-    console.log(data)
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data
-}
-
-async function handleCreateCategory(name, slug) {
-    return await createCategory(name, slug);
-}
-
-// create tag
-async function createTag(name, slug) {
-    const gotAccessToken = getAccessToken();
-    const res = await fetch(`${baseApiURL}/tags/`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${gotAccessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({name, slug})
+        }
     });
-    const data = await res.json();
-    console.log(data);
-    if (!res.ok) throw new Error(JSON.stringify(data));
-    return data;
+    return await handleApiResponse(res);
 }
 
-async function handleCreateTag(name, slug) {
-    return await createTag(name, slug);
-}
-
-async function createProduct(productData) {
-    const gotAccessToken = getAccessToken();
-    const res = await fetch(`${baseApiURL}/products/`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${gotAccessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(productData)
-    });
-
-    const data = await res.json();
-    console.log(data);
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data;
-}
-
-async function handleCreateProduct(productData) {
-    const checkAllTokenAreValid = await checkAndRefreshAllTokens()
-
-    if (!checkAllTokenAreValid) {
-        throw new Error("مشکلی پیش اومده، لطفا بعدا دوباره تلاش کنید");
+// handle log out user
+async function handleLogoutUser() {
+    const accessIsValid = await checkLoginStatus()
+    if (accessIsValid) {
+        return await logOutUser()
+    } else {
+        throw new Error(JSON.stringify(accessIsValid))
     }
-
-    return await createProduct(productData);
 }
 
-async function getAllCategories() {
-    const res = await fetch(`${baseApiURL}/categories/`, {
+// get user info
+async function getUserInfo() {
+    const getAccessToken = tokenControl.accessToken;
+    const res = await fetch(`${baseApiURL}/auth/user/`, {
         method: "GET",
         headers: {
-            "Content-Type": "application/json"
-        }
-    });
-
-    const data = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data
-}
-
-async function handleGetAllCategories() {
-    return await getAllCategories()
-}
-
-async function getAllTags() {
-    const res = await fetch(`${baseApiURL}/tags/`, {
-        method: "GET",
-        headers: {
+            'Authorization': `Bearer ${getAccessToken}`,
             "Content-Type": "application/json"
         }
     })
-
-    const data = await res.json()
-    if (!res.ok) throw new Error(JSON.stringify(data))
-    return data
+    return await handleApiResponse(res);
 }
 
-async function handleGetAllTag() {
-    return await getAllTags()
+// handle get user info
+async function handleGetUserInfo() {
+    const accessIsValid = await checkLoginStatus()
+    if (accessIsValid) {
+        return await getUserInfo()
+    } else {
+        throw new Error(JSON.stringify(accessIsValid))
+    }
+}
+
+// get all category
+async function getAllCategories() {
+    const res = await fetch(`${baseApiURL}/categories/`);
+    return await handleApiResponse(res)
+}
+
+// get all tags
+async function getAllTags() {
+    const res = await fetch(`${baseApiURL}/tags/`)
+    return await handleApiResponse(res)
+}
+
+// get all product
+async function getAllProducts() {
+    const res = await fetch(`${baseApiURL}/products/`)
+    return await handleApiResponse(res)
+}
+
+async function getOneProducts(id = 1) {
+    const res = await fetch(`${baseApiURL}/products/${id}`);
+    return await handleApiResponse(res)
 }
 
 export {
@@ -308,10 +162,9 @@ export {
     handleLoginUser,
     handleGetUserInfo,
     handleNewRefreshToken,
-    handleCreateCategory,
     handleLogoutUser,
-    handleCreateTag,
-    handleCreateProduct,
-    handleGetAllCategories,
-    handleGetAllTag
+    getAllCategories,
+    getAllTags,
+    getAllProducts,
+    getOneProducts,
 }

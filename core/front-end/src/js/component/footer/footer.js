@@ -78,7 +78,7 @@ const createFooter = () => {
         <section class="mt-8 pt-8 border-t border-[#4D4D4D] dark:border-[#37454199] text-center xl:col-span-3">
             <div class="container">
                 <section class="pb-4">
-                    <span>
+                    <span class="text-gray-300">
                         توسعه داده شده توسط
                     </span>
                     <a class="text-primary" href="https://card.homow.ir">homow</a>

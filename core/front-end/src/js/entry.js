@@ -1,4 +1,3 @@
-import "@/css/style.css"
 import "@/js/main/include.js"
 
 const dataPage = document.body.dataset.page

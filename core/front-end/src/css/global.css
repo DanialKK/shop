@@ -13,6 +13,7 @@
     --font-inter: "Inter", sans-serif;
 
     /* break-points */
+    --breakpoint-xxs: 21rem;
     --breakpoint-xs: 24.875rem;
     --breakpoint-sm: 36rem;
     --breakpoint-2xl: 94rem;
@@ -119,7 +120,7 @@ body {
 
 @layer base {
     h1 {
-        @apply text-3xl/[3rem] font-medium -tracking-[1px] max-w-100 sm:text-4xl/15 sm:max-w-120 md:text-5xl/20 md:max-w-146;
+        @apply text-xl xxs:text-2xl xs:text-3xl/[3rem] font-medium -tracking-[1px] max-w-100 sm:text-4xl/15 sm:max-w-120 md:text-5xl/20 md:max-w-146;
     }
 
     h2 {

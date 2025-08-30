@@ -1,11 +1,9 @@
-import "@/css/style.css"
 import {themeControl} from "@/js/component/header/header.js";
 import {renderSignup} from "@/js/account/signup.js";
 import {renderLogin} from "@/js/account/login.js";
 import {renderUserPanel} from "@/js/account/userPanel.js"
-import {handleGetUserInfo} from "@/js/api/auth.js"
-import {isRefreshTokenValid, removeToken} from "@/js/api/main-var.js";
-import {renderAdminPanel} from "@/js/account/adminPanel.js";
+import {tokenControl} from "@/js/api/api-utils.js";
+import {checkLoginStatus} from "@/js/account/loginStatus.js";
 
 const root = document.documentElement
 const themeWrapper = document.getElementById("theme")
@@ -23,10 +21,6 @@ const renderSPA = {
     "/account/user-panel": {
         render: renderUserPanel,
         title: "پنل کاربری"
-    },
-    "/account/admin-panel": {
-        render: renderAdminPanel,
-        title: "پنل ادمین"
     },
     404: {
         render: (() => {
@@ -83,7 +77,7 @@ function redirectAccountsPage(route) {
         showLoader()
         router()
         hideLoader()
-    }, 1000)
+    }, 1400)
 }
 
 // render links
@@ -118,25 +112,19 @@ const pushLink = (link) => {
 
 // render pages in loading address: /account/index.html
 (async () => {
-    const getRefreshTokenIsValid = isRefreshTokenValid();
-
     try {
-        if (getRefreshTokenIsValid) {
-            const getUserInfo = await handleGetUserInfo();
+        const isAccess = await checkLoginStatus();
 
-            if (getUserInfo.is_superuser) {
-                pushLink(`/account/admin-panel`)
+        if (isAccess) {
+            const tab = getTabPanelURL()
+            if (tab) {
+                pushLink(`/account/user-panel?tab=${tab}`)
             } else {
-                const tab = getTabPanelURL()
-                if (tab) {
-                    pushLink(`/account/user-panel?tab=${tab}`)
-                } else {
-                    pushLink("/account/user-panel")
-                }
+                pushLink("/account/user-panel")
             }
             router()
         } else {
-            removeToken()
+            tokenControl.removeAccessToken()
             const mode = getModeFormURL()
 
             if (mode) {
@@ -149,7 +137,7 @@ const pushLink = (link) => {
     } catch (e) {
         console.log(e)
     }
-})()
+})();
 
 // load info or cart panel when user click the main header links
 function getTabPanelURL() {
@@ -174,48 +162,11 @@ function loadModeFormURL() {
         }
         router()
     }
+
+    if (mode) pushLink(`/account/${mode}`)
 }
 
 loadModeFormURL();
 
-// const categories = [
-//     {
-//         name: "بازی",
-//         slug: "game",
-//     },
-//     {
-//         name: "بنر",
-//         slug: "banner",
-//     },
-//     {
-//         name: "متفرقه",
-//         slug: "more",
-//     }
-// ];
-
-// create category
-// (async () => {
-//     try {
-//         for (const category of categories) {
-//             console.log(await handleCreateCategory(category.name, category.slug));
-//         }
-//     } catch (e) {
-//         console.error(e);
-//     }
-// })();
-
-// refresh token
-// (async () => {
-//     try {
-//         const res = await handleRefreshToken()
-//         console.log(res)
-//         console.log(res.access)
-//         console.log(res.refresh)
-//     } catch (e) {
-//         console.log(e)
-//     }
-// })();
-
-
 window.addEventListener("popstate", router);
-export {pushLink, router, showHidePassword, handleLinks, redirectAccountsPage, getTabPanelURL}
+export {pushLink, router, showHidePassword, handleLinks, redirectAccountsPage, getTabPanelURL, showLoader, hideLoader}

@@ -20,7 +20,7 @@
 ```bash
 git clone --single-branch --branch front-end https://github.com/DanialKK/shop.git
 npm install
-vite
+npm run dev
 ```
 
 📡 پروژه روی http://localhost:3000 اجرا می‌شود  
@@ -60,8 +60,9 @@ server: {
 
 🧱 بیلد پروژه
 
-برای ساخت نسخه نهایی:
+برای ساخت نسخه نهایی و پیش نمایش:
 
 ```bash
-vite build
+npm run build
+npm run preview
 ```

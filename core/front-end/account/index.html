@@ -5,15 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+    <!-- style -->
+    <link rel="stylesheet" href="/src/css/global.css">
+
     <!-- title -->
     <title></title>
 
     <!-- scripts -->
-    <script src="/config.js"></script>
-    <script defer type="module" src="/src/js/account/account.js"></script>
+    <script type="module" src="/src/js/account/account.js"></script>
 </head>
 
-<body data-page="admin">
+<body>
 <div id="loader-account" class="hidden z-20 bg-custom-bg absolute inset-0 items-center justify-center">
     <span class="animate-spin rounded-full h-16 w-16 border-8 border-t-8 border-gray-200 border-b-green-800"></span>
 </div>
@@ -45,9 +47,7 @@
 </main>
 
 <footer>
-    <div class="container">
-
-    </div>
+    <div class="container"></div>
 </footer>
 </body>
 </html>
