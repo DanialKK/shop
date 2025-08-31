@@ -126,7 +126,7 @@ npm run preview
 ## 👨‍💻 توسعه‌دهنده ها
 
 - GitHub: [@DanialKK](https://github.com/DanialKK)
-- Telegram: [@homow](https://github.com/homow)
+- GitHub: [@homow](https://github.com/homow)
 
 ---
 
