@@ -1,0 +1,39 @@
+@font-face {
+    font-family: 'dana light';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: local('dana light'),
+    url('./fonts/dana/woff/dana light.woff') format('woff'),
+    url('./fonts/dana/ttf/dana light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'dana regular';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('dana regular'),
+    url('./fonts/dana/woff/dana regular.woff') format('woff'),
+    url('./fonts/dana/ttf/dana regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'dana medium';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: local('dana medium'),
+    url('./fonts/dana/woff/dana medium.woff') format('woff'),
+    url('./fonts/dana/ttf/dana medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'dana bold';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('dana bold'),
+    url('./fonts/dana/woff/dana bold.woff') format('woff'),
+    url('./fonts/dana/ttf/dana bold.ttf') format('truetype');
+}

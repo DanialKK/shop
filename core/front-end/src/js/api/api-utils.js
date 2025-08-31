@@ -5,9 +5,7 @@ function serverDisconnect(elem) {
 }
 
 async function getRealTehranTime() {
-    const res = await fetch("https://api.keybit.ir/time/");
-    const data = await res.json();
-    return data.timestamp?.en * 1000;
+    return Date.now()
 }
 
 // access token control
