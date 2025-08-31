@@ -1,5 +1,4 @@
-@import 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
-
+@import "@/css/font.css";
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -9,8 +8,12 @@
 }
 
 @theme {
-    /* font-family */
-    --font-inter: "Inter", sans-serif;
+    /* fonts */
+    --font-arial: Arial, sans-serif;
+    --font-dana-lt: "dana light", sans-serif;
+    --font-dana-rg: "dana regular", sans-serif;
+    --font-dana-md: "dana medium", sans-serif;
+    --font-dana-bl: "dana bold", sans-serif;
 
     /* break-points */
     --breakpoint-xxs: 21rem;
@@ -83,8 +86,30 @@
     --color-secondary-button-text: #50FFAF;
 }
 
-body {
-    @apply font-inter bg-custom-bg text-custom-text font-medium;
+@layer base {
+    html {
+        @apply scroll-smooth;
+    }
+
+    body {
+        @apply font-dana-rg bg-custom-bg text-custom-text font-medium;
+    }
+
+    h1 {
+        @apply text-xl xxs:text-2xl xs:text-3xl/[3rem] font-medium -tracking-[1px] max-w-100 sm:text-4xl/15 sm:max-w-120 md:text-5xl/20 md:max-w-146;
+    }
+
+    h2 {
+        @apply text-[1.8rem] font-medium md:text-4xl;
+    }
+
+    h3 {
+        @apply text-lg lg:text-xl;
+    }
+
+    h4 {
+        @apply font-medium md:text-lg;
+    }
 }
 
 @layer components {
@@ -115,23 +140,5 @@ body {
 
     .sub-text {
         @apply text-sub-text text-sm/6 md:max-w-220;
-    }
-}
-
-@layer base {
-    h1 {
-        @apply text-xl xxs:text-2xl xs:text-3xl/[3rem] font-medium -tracking-[1px] max-w-100 sm:text-4xl/15 sm:max-w-120 md:text-5xl/20 md:max-w-146;
-    }
-
-    h2 {
-        @apply text-[1.8rem] font-medium md:text-4xl;
-    }
-
-    h3 {
-        @apply text-lg lg:text-xl;
-    }
-
-    h4 {
-        @apply font-medium md:text-lg;
     }
 }
