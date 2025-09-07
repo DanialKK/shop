@@ -12,6 +12,8 @@ const productPage = data => {
      * discount_percent: number,
      * average_rating: number,
      * category_detail: string,
+     * stock: string,
+     * tags_detail: array,
      * }} data
      */
 
@@ -19,8 +21,14 @@ const productPage = data => {
     const discount = +data?.discount_percent;
     const priceDiscount = formatToPrice(parseInt(data?.discounted_price))
 
+    const tags = data?.tags_detail.map(tag => {
+        return `
+            <a href="" class="sub-text">#${tag.name.replace(" ", "_")}</a>
+        `
+    });
+
     return `
-<div data-id="1" class="bg-card-bg rounded-xl border-b-custom-border pb-6 overflow-hidden mx-auto w-11/12 sm:max-w-320">
+<div data-id="1" class="bg-card-bg rounded-xl border-b-custom-border pb-6 overflow-hidden mx-auto w-11/12 xs:max-w-320">
     <!-- product gallery --> 
     <div>
         <!-- base image -->
@@ -63,7 +71,7 @@ const productPage = data => {
         </div>
         
         <!-- prodcut price and discount -->
-        <div class="tracking-wide flex items-center justify-between border-t border-t-custom-border pt-4 mt-4 px-1 min-h-11">
+        <div class="tracking-wide flex items-center justify-between border-top-light px-1 min-h-11">
             <span class="flex flex-col space-y-1">
            
                 <!-- prodcut price -->
@@ -90,7 +98,7 @@ const productPage = data => {
         </div>
 
         <!-- prodcut rate and favorite -->        
-        <div class="flex flex-row items-center justify-between border-t border-t-custom-border pt-4 mt-4">
+        <div class="flex flex-row items-center justify-between mt-6">
         
             <!-- prodcut rate and star icon -->
             <span class="flex flex-row items-center gap-2">
@@ -103,10 +111,48 @@ const productPage = data => {
                 </span>
             </span>
             
-            <!-- prodcut favorite -->
+            <!-- prodcut favorite icon -->
             <span>
                 <svg data-add-to-favorite="false" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="" class="size-6 stroke-red-600 cursor-pointer"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"></path></svg>
             </span>
+        </div>
+
+        <!-- prodcut description -->
+        <div class="mt-8">
+            <h3>توضیحات:</h3>
+            <p class="mt-3 text-sub-text text-sm">${data?.description}</p>
+        </div>
+        
+        <!-- prodcut count and add to cart -->
+        <div class="border-top-light mt-6">
+        
+            <!-- prodcut count -->
+            <p class="sub-text">
+                موجودی: 
+                <span class="text-base text-custom-text">${data.stock}</span>
+                   عدد 
+            </p>
+            
+            <!-- prodcut add to cart -->
+            <div class="max-w-max mt-4">
+                <a href="/product/?id=1" class="primary-btn flex items-center gap-0.5">
+                    <span data-prodcut-text-add-to-cart="" class="text-sm font-normal">
+                        افزودن به سبد خرید
+                    </span>
+                    
+                    <svg data-product-icon-add-to-cart="false" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                       <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"></path>
+                    </svg>
+                </a>
+            </div>
+            
+            <!-- prodcut tags -->
+            <div class="border-top-light">
+                <h5>تگ ها:</h5>
+                <div class="flex flex-wrap gap-1 mt-2 *:text-sm *:font-normal *:hover:text-green-600 *:hover:decoration-solid *:hover:underline *:cursor-pointer">
+                    ${tags.join("")}
+                </div>
+            </div>
         </div>
     </div>
 </div>`

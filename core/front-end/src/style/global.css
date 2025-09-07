@@ -141,4 +141,8 @@
     .sub-text {
         @apply text-sub-text text-sm/6 md:max-w-220;
     }
+
+    .border-top-light {
+        @apply border-t border-t-custom-border pt-4 mt-4;
+    }
 }

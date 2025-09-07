@@ -136,7 +136,7 @@ function productBox(data) {
     tagsDiv.setAttribute("data-product-tags", "");
     tagsDiv.className = "flex flex-wrap gap-1 mt-4 *:text-sm *:font-normal *:hover:text-green-600 *:hover:decoration-solid *:hover:underline *:cursor-pointer";
 
-    data.tags_detail.forEach(tag => {
+    data?.tags_detail.forEach(tag => {
         const tagLink = document.createElement("a");
         tagLink.href = "#";
         tagLink.textContent = `#${tag.name.replace(" ", "_")}`;
