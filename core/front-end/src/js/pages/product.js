@@ -8,15 +8,11 @@ export function init() {
     // product id in URLParams
     const urlParams = new URLSearchParams(window.location.search);
     const productID = urlParams.get("id");
-    console.log(productID);
 
     (async () => {
         try {
             const product = await getOneProducts(+productID);
-            console.log(product);
-
             const template = productPage(product);
-
             productWrapper.insertAdjacentHTML("beforeend", template);
         } catch (e) {
             console.log(e)

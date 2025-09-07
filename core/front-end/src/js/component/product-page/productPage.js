@@ -21,23 +21,19 @@ const productPage = data => {
     const discount = +data?.discount_percent;
     const priceDiscount = formatToPrice(parseInt(data?.discounted_price))
 
-    const tags = data?.tags_detail.map(tag => {
-        return `
-            <a href="" class="sub-text">#${tag.name.replace(" ", "_")}</a>
-        `
-    });
+    const tags = data?.tags_detail.map(tag => `<a href="" class="sub-text">#${tag.name.replace(" ", "_")}</a>`);
 
     return `
-<div data-id="1" class="bg-card-bg rounded-xl border-b-custom-border pb-6 overflow-hidden mx-auto w-11/12 xs:max-w-320">
+<div data-id="1" class="bg-card-bg rounded-xl border-b-custom-border pb-6 overflow-hidden mx-auto w-11/12 xs:max-w-130 md:max-w-320 md:flex md:flex-row-reverse md:pt-6">
     <!-- product gallery --> 
-    <div>
+    <div class="basis-5/12 md:pl-4">
         <!-- base image -->
-        <div class="overflow-hidden">
+        <div class="overflow-hidden md:rounded-sm">
             <img src="/static/img/custom/cod-bo-6.webp" alt="base image">
         </div>
         
         <!-- all images -->
-        <div class="px-4 mt-4 grid grid-cols-2 grid-rows-[repeat(2,8rem)] gap-2 sm:grid-cols-4">
+        <div class="px-4 mt-4 grid grid-cols-2 grid-rows-[repeat(2,8rem)] gap-2 sm:grid-rows-1 sm:grid-cols-4 md:px-0 md:grid-cols-2 md:grid-rows-[repeat(2,12rem)]">
             <div class="w-full p-0.5 rounded-sm cursor-pointer border-2 border-gray-300 dark:border-gray-800">
                 <img class="w-full h-full object-cover object-center" src="/static/img/custom/cod-bo-6.webp" alt="product image 1">
             </div>
@@ -54,12 +50,12 @@ const productPage = data => {
     </div>
    
     <!-- product details -->
-    <div class="mt-4 px-4">
+    <div class="mt-8 px-4 basis-7/12 md:mt-0">
     
         <!-- prodcut name and category -->
         <div>
             <!-- prodcut name -->
-            <h2 id="product-title" class="my-6">${data.name}</h2>
+            <h2 id="product-title" class="mb-6">${data.name}</h2>
             
             <!-- prodcut category -->
             <p class="font-normal text-gray-600 dark:text-gray-400">
@@ -124,7 +120,7 @@ const productPage = data => {
         </div>
         
         <!-- prodcut count and add to cart -->
-        <div class="border-top-light mt-6">
+        <div class="border-top-light mt-6 xs:flex flex-row items-center justify-between gap-1.5">
         
             <!-- prodcut count -->
             <p class="sub-text">
@@ -134,7 +130,7 @@ const productPage = data => {
             </p>
             
             <!-- prodcut add to cart -->
-            <div class="max-w-max mt-4">
+            <div class="max-w-max mt-4 xs:mt-0">
                 <a href="/product/?id=1" class="primary-btn flex items-center gap-0.5">
                     <span data-prodcut-text-add-to-cart="" class="text-sm font-normal">
                         افزودن به سبد خرید
@@ -145,13 +141,13 @@ const productPage = data => {
                     </svg>
                 </a>
             </div>
-            
-            <!-- prodcut tags -->
-            <div class="border-top-light">
-                <h5>تگ ها:</h5>
-                <div class="flex flex-wrap gap-1 mt-2 *:text-sm *:font-normal *:hover:text-green-600 *:hover:decoration-solid *:hover:underline *:cursor-pointer">
-                    ${tags.join("")}
-                </div>
+        </div>
+        
+        <!-- prodcut tags -->
+        <div class="border-top-light">
+            <h5>تگ ها:</h5>
+            <div class="flex flex-wrap gap-1 mt-2 *:text-sm *:font-normal *:hover:text-green-600 *:hover:decoration-solid *:hover:underline *:cursor-pointer">
+                ${tags.join("")}
             </div>
         </div>
     </div>

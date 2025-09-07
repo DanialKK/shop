@@ -86,6 +86,7 @@
     --color-secondary-button-text: #50FFAF;
 }
 
+
 @layer base {
     html {
         @apply scroll-smooth;
@@ -100,7 +101,7 @@
     }
 
     h2 {
-        @apply text-[1.8rem] font-medium md:text-4xl;
+        @apply text-[1.5rem] font-medium md:text-3xl;
     }
 
     h3 {
