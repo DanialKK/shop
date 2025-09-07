@@ -1,3 +1,7 @@
+// @ts-check
+
+"use strict";
+
 import {formatToPrice} from "@/js/main/main.js";
 
 const productPage = data => {
@@ -5,7 +9,9 @@ const productPage = data => {
      * @param {{
      * price: string,
      * discounted_price: string,
-     * discount_percent: number
+     * discount_percent: number,
+     * average_rating: number,
+     * category_detail: string,
      * }} data
      */
 
@@ -14,12 +20,15 @@ const productPage = data => {
     const priceDiscount = formatToPrice(parseInt(data?.discounted_price))
 
     return `
-<div data-id="1" class="bg-card-bg rounded-xl border-b-custom-border pb-6 overflow-hidden max-w-320 mx-auto">
-    <!-- product gallery -->
+<div data-id="1" class="bg-card-bg rounded-xl border-b-custom-border pb-6 overflow-hidden mx-auto w-11/12 sm:max-w-320">
+    <!-- product gallery --> 
     <div>
+        <!-- base image -->
         <div class="overflow-hidden">
             <img src="/static/img/custom/cod-bo-6.webp" alt="base image">
         </div>
+        
+        <!-- all images -->
         <div class="px-4 mt-4 grid grid-cols-2 grid-rows-[repeat(2,8rem)] gap-2 sm:grid-cols-4">
             <div class="w-full p-0.5 rounded-sm cursor-pointer border-2 border-gray-300 dark:border-gray-800">
                 <img class="w-full h-full object-cover object-center" src="/static/img/custom/cod-bo-6.webp" alt="product image 1">
@@ -38,41 +47,69 @@ const productPage = data => {
    
     <!-- product details -->
     <div class="mt-4 px-4">
-        
+    
+        <!-- prodcut name and category -->
         <div>
             <!-- prodcut name -->
-            <h1 id="product-title">${data.name}</h1>
+            <h2 id="product-title" class="my-6">${data.name}</h2>
             
-            <!-- product price and discount -->
-            <div class="mt-4 flex items-center text-sm justify-between px-1 min-h-11">
-                <span class="flex flex-col space-y-1">
-                
-                    <!-- prodcut price -->
-                    <span class="pl-0.5">
-                        <span id="product-price" class="line-through text-gray-400 dark:text-gray-600">
-                            ${price}
-                        </span>
-                        تومن
+            <!-- prodcut category -->
+            <p class="font-normal text-gray-600 dark:text-gray-400">
+                دسته بندی:
+                <a href="" class="text-custom-text font-medium hover:text-green-600 hover:decoration-solid hover:underline">
+                    ${data.category_detail.name}
+                </a>
+            </p>
+        </div>
+        
+        <!-- prodcut price and discount -->
+        <div class="tracking-wide flex items-center justify-between border-t border-t-custom-border pt-4 mt-4 px-1 min-h-11">
+            <span class="flex flex-col space-y-1">
+           
+                <!-- prodcut price -->
+                <span>
+                    <span id="product-price" class="line-through text-gray-400 dark:text-gray-600 pl-2">
+                        ${price}
                     </span>
+                    تومن
+                </span>
+                
+                <!-- prodcut price after discount -->
+                <span style="display: ${discount ? 'inline-block' : 'none'};">
+                    ${priceDiscount}
+                </span>
+            </span>
+            
+            <!-- prodcut discount -->
+            <span style="display: ${discount ? 'inline-block' : 'none'};" class="bg-primary text-gray-800 rounded-md p-0.5">
+                تخفیف
+                <span id="product-discount-percent">
+                    ${discount}%
+                </span>
+            </span>
+        </div>
+
+        <!-- prodcut rate and favorite -->        
+        <div class="flex flex-row items-center justify-between border-t border-t-custom-border pt-4 mt-4">
+        
+            <!-- prodcut rate and star icon -->
+            <span class="flex flex-row items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="yellow-400" class="size-6 fill-yellow-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"></path>
+        </svg>
                     
-                    <!-- prodcut price after discount -->
-                    <span style="display: ${discount ? 'inline-block' : 'none'};">
-                        ${priceDiscount}
-                    </span>
+                <span class="text-sub-text text-sm">
+                    ${+data?.average_rating || "بدون رای"}
                 </span>
-                
-                <!-- prodcut discount -->
-                <span style="display: ${discount ? 'inline-block' : 'none'};" class="bg-primary text-gray-800 rounded-md p-0.5">
-                    تخفیف
-                    <span id="product-discount-percent">
-                        ${discount}%
-                    </span>
-                </span>
-            </div>
+            </span>
+            
+            <!-- prodcut favorite -->
+            <span>
+                <svg data-add-to-favorite="false" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="" class="size-6 stroke-red-600 cursor-pointer"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"></path></svg>
+            </span>
         </div>
     </div>
-</div>
-`
+</div>`
 }
 
 export default productPage;
