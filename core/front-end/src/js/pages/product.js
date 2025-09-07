@@ -1,5 +1,5 @@
 import {getOneProducts} from "@/js/api/auth.js";
-import productPage from "@/js/component/product-page/product-page.js"
+import productPage from "@/js/component/product-page/productPage.js"
 
 export function init() {
     const productWrapper = document.getElementById('product-wrapper');
