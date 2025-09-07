@@ -1,3 +1,4 @@
+import "@/css/global.css"
 import {themeControl} from "@/js/component/header/header.js";
 import {renderSignup} from "@/js/account/signup.js";
 import {renderLogin} from "@/js/account/login.js";

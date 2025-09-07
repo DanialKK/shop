@@ -6,8 +6,8 @@ export function init() {
 
     (async () => {
         try {
-            // const product = await getOneProducts(1);
-            // console.log(product)
+            const product = await getOneProducts(1);
+            console.log(product)
         } catch (e) {
             console.log(e)
             if (e instanceof Error) {
