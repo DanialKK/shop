@@ -1,6 +1,14 @@
 import {formatToPrice} from "@/js/main/main.js";
 
 const productPage = data => {
+    /**
+     * @param {{
+     * price: string,
+     * discounted_price: string,
+     * discount_percent: number
+     * }} data
+     */
+
     const price = formatToPrice(parseInt(data?.price))
     const discount = +data?.discount_percent;
     const priceDiscount = formatToPrice(parseInt(data?.discounted_price))
@@ -64,7 +72,7 @@ const productPage = data => {
         </div>
     </div>
 </div>
-`}
-
+`
+}
 
 export default productPage;
