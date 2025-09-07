@@ -1,4 +1,4 @@
-@import "@/css/font.css";
+@import "@/style/font.css";
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -96,7 +96,7 @@
     }
 
     h1 {
-        @apply text-xl xxs:text-2xl xs:text-3xl/[3rem] font-medium -tracking-[1px] max-w-100 sm:text-4xl/15 sm:max-w-120 md:text-5xl/20 md:max-w-146;
+        @apply text-2xl xxs:text-3xl xs:text-4xl/[3rem] font-medium -tracking-[1px] max-w-100 sm:text-4xl/15 sm:max-w-120 md:text-5xl/20 md:max-w-146;
     }
 
     h2 {

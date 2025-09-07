@@ -13,14 +13,9 @@ export function init() {
                 const fragment = document.createDocumentFragment();
                 const res = await getAllProducts()
 
-                const allProductsTemplate = res.map(product => {
-                    console.log(productBox(product));
+                res.forEach(product => {
                     fragment.appendChild(productBox(product));
                 });
-
-                console.log(allProductsTemplate);
-
-                console.log(fragment);
 
                 productsWrapper.appendChild(fragment);
             } else {
@@ -28,7 +23,6 @@ export function init() {
             }
         } catch (e) {
             if (e instanceof Error) {
-                console.log(e)
                 textMessage.innerHTML = "<h2 class='w-full text-center'>در حال حاضر سرور در دسترس نمیباشد</h2>"
             } else {
                 console.error("more: ", e)

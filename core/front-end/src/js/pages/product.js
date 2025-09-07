@@ -1,13 +1,23 @@
 import {getOneProducts} from "@/js/api/auth.js";
+import productPage from "@/js/component/product-page/product-page.js"
 
 export function init() {
-    const productsWrapper = document.getElementById('product');
+    const productWrapper = document.getElementById('product-wrapper');
     const textMessage = document.getElementById("text-message");
+
+    // product id in URLParams
+    const urlParams = new URLSearchParams(window.location.search);
+    const productID = urlParams.get("id");
+    console.log(productID);
 
     (async () => {
         try {
-            const product = await getOneProducts(1);
-            console.log(product)
+            const product = await getOneProducts(+productID);
+            console.log(product);
+
+            const template = productPage(product);
+
+            productWrapper.insertAdjacentHTML("beforeend", template);
         } catch (e) {
             console.log(e)
             if (e instanceof Error) {

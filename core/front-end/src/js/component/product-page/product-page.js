@@ -1,31 +1,6 @@
-<!doctype html>
-<html lang="fa" dir="rtl" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-    <!-- title -->
-    <title>محصول</title>
-
-    <!-- scripts -->
-    <script type="module" src="/src/js/entry.js"></script>
-</head>
-<body data-page="product">
-<header></header>
-
-<main id="main" class="my-60">
-    <section id="title">
-        <div id="text-message" class="text-center">
-            <h1 class="mx-auto mb-8">محصول</h1>
-        </div>
-    </section>
-
-    <section>
-        <div id="product-wrapper" class="bg-card-bg rounded-xl border-b-custom-border py-6 container">
-
-            <!-- product wrapper-->
-            <div class="my-40" data-id="1">
+const productPage = data => {
+    return `
+    <div data-id="1">
                 <div id="product-gallery">
                     <div id="product-base-image" class="rounded-sm overflow-hidden">
                         <img src="/static/img/custom/cod-bo-6.webp" alt="base image">
@@ -47,7 +22,7 @@
                 </div>
                 <div id="product-detail" class="mt-4">
                     <div>
-                        <h1 id="product-title">کالاف دیوتی بلک آپس 6</h1>
+                        <h1 id="product-title">${data.name}</h1>
                         <div class="mt-4 flex items-center text-sm justify-between px-1 min-h-11">
                             <span class="flex flex-col space-y-1">
                                 <span class="pl-0.5">
@@ -63,11 +38,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-</main>
+            </div>`
+}
 
-<footer></footer>
-</body>
-</html>
+export default productPage;

@@ -1,4 +1,4 @@
-import "@/css/global.css"
+import "@/style/global.css"
 import * as headerComponent from "@/js/component/header/header.js"
 import {createFooter} from "@/js/component/footer/footer.js";
 import {createScrollUp} from "@/js/component/scroll-up/scroll-up.js";
