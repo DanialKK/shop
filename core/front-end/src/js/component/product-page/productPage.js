@@ -131,7 +131,7 @@ const productPage = (data) => {
             
             <!-- prodcut add to cart -->
             <div class="max-w-max mt-4 xs:mt-0">
-                <button data-product-id=${data.id} type="button" class="primary-btn flex items-center gap-0.5">
+                <button id="order-item-btn" data-product-id=${data.id} type="button" class="primary-btn flex items-center gap-0.5">
                     <span data-prodcut-text-add-to-cart="" class="text-sm font-normal">
                         افزودن به سبد خرید
                     </span>
@@ -142,7 +142,10 @@ const productPage = (data) => {
                 </button>
             </div>
         </div>
-        
+        <!-- message -->
+        <div>
+            <h4 id="messages" class="text-center my-4">ابتدا باید وارد شوید</h4>
+        </div>
         <!-- prodcut tags -->
         <div class="border-top-light">
             <h5>تگ ها:</h5>

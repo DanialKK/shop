@@ -173,9 +173,9 @@ async function orderProduct(item) {
 
 async function handleOrderProduct(item) {
     const accessIsValid = await checkLoginStatus()
-    const accessToken = tokenControl.accessToken;
+    const getAccessToken = tokenControl.accessToken;
 
-    if (!accessToken) {
+    if (!getAccessToken) {
         window.location.href = "/account/?mode=login"
     } else if (accessIsValid) {
         return await orderProduct(item);

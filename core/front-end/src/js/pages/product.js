@@ -1,5 +1,6 @@
 import {getOneProducts} from "@/js/api/auth.js";
 import productPage from "@/js/component/product-page/productPage.js"
+import {handleOrderProduct} from "@/js/api/auth.js";
 
 export function init() {
     const productWrapper = document.getElementById('product-wrapper');
@@ -14,6 +15,8 @@ export function init() {
             const product = await getOneProducts(+productID);
             const template = productPage(product);
             productWrapper.insertAdjacentHTML("beforeend", template);
+
+            // bind all events
             bindProductPageEvents()
         } catch (e) {
             console.log(e)
@@ -27,6 +30,7 @@ export function init() {
 }
 
 function bindProductPageEvents() {
+    // change base image
     (() => {
         const allImg = document.querySelectorAll("[data-all-img]");
         const baseImg = document.querySelector("[data-base-img]");
@@ -37,4 +41,18 @@ function bindProductPageEvents() {
             })
         })
     })();
+
+    // order item
+    const orderItemBtn = document.getElementById("order-item-btn");
+
+    orderItemBtn.addEventListener("click", async (e) => {
+        const item = e.currentTarget.dataset.productId;
+        console.log(item);
+        try {
+            const res = await handleOrderProduct(item)
+            console.log(res)
+        } catch (e) {
+            console.log(e)
+        }
+    })
 }
