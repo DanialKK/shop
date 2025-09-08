@@ -14,6 +14,7 @@ export function init() {
             const product = await getOneProducts(+productID);
             const template = productPage(product);
             productWrapper.insertAdjacentHTML("beforeend", template);
+            bindProductPageEvents()
         } catch (e) {
             console.log(e)
             if (e instanceof Error) {
@@ -23,4 +24,17 @@ export function init() {
             }
         }
     })()
+}
+
+function bindProductPageEvents() {
+    (() => {
+        const allImg = document.querySelectorAll("[data-all-img]");
+        const baseImg = document.querySelector("[data-base-img]");
+
+        allImg.forEach(img => {
+            img.addEventListener("click", () => {
+                baseImg.src = img.src;
+            })
+        })
+    })();
 }

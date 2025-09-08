@@ -4,7 +4,7 @@
 
 import {formatToPrice} from "@/js/main/main.js";
 
-const productPage = data => {
+const productPage = (data) => {
     /**
      * @param {{
      * price: string,
@@ -24,33 +24,33 @@ const productPage = data => {
     const tags = data?.tags_detail.map(tag => `<a href="" class="sub-text">#${tag.name.replace(" ", "_")}</a>`);
 
     return `
-<div data-id="1" class="bg-card-bg rounded-xl border-b-custom-border pb-6 overflow-hidden mx-auto w-11/12 xs:max-w-130 md:max-w-320 md:flex md:flex-row-reverse md:pt-6">
+<div data-id="1" class="bg-card-bg rounded-xl border-b-custom-border pb-6 overflow-hidden mx-auto w-11/12 xs:max-w-130 md:max-w-320 md:flex md:flex-row-reverse md:justify-between md:pt-6">
     <!-- product gallery --> 
     <div class="basis-5/12 md:pl-4">
         <!-- base image -->
         <div class="overflow-hidden md:rounded-sm">
-            <img src="/static/img/custom/cod-bo-6.webp" alt="base image">
+            <img data-base-img src="/static/img/custom/cod-bo-6.webp" alt="base image">
         </div>
         
         <!-- all images -->
         <div class="px-4 mt-4 grid grid-cols-2 grid-rows-[repeat(2,8rem)] gap-2 sm:grid-rows-1 sm:grid-cols-4 md:px-0 md:grid-cols-2 md:grid-rows-[repeat(2,12rem)]">
             <div class="w-full p-0.5 rounded-sm cursor-pointer border-2 border-gray-300 dark:border-gray-800">
-                <img class="w-full h-full object-cover object-center" src="/static/img/custom/cod-bo-6.webp" alt="product image 1">
+                <img data-all-img class="w-full h-full object-cover object-center" src="/static/img/custom/cod-bo-6.webp" alt="product image 1">
             </div>
             <div class="w-full p-0.5 rounded-sm cursor-pointer border-2 border-gray-300 dark:border-gray-800">
-                <img class="w-full h-full object-cover object-center" src="/static/img/custom/cyber.webp" alt="product image 2">
+                <img data-all-img class="w-full h-full object-cover object-center" src="/static/img/custom/cyber.webp" alt="product image 2">
             </div>
             <div class="w-full p-0.5 rounded-sm cursor-pointer border-2 border-gray-300 dark:border-gray-800">
-                <img class="w-full h-full object-cover object-center" src="/static/img/custom/rb-six.webp" alt="product image 3">
+                <img data-all-img class="w-full h-full object-cover object-center" src="/static/img/custom/rb-six.webp" alt="product image 3">
             </div>
             <div class="w-full p-0.5 rounded-sm cursor-pointer border-2 border-gray-300 dark:border-gray-800">
-                <img class="w-full h-full object-cover object-center" src="/static/img/custom/custom1.webp" alt="product image 4">
+                <img data-all-img class="w-full h-full object-cover object-center" src="/static/img/custom/custom1.webp" alt="product image 4">
             </div>
         </div>
     </div>
    
     <!-- product details -->
-    <div class="mt-8 px-4 basis-7/12 md:mt-0">
+    <div class="mt-8 px-4 basis-6/12 md:mt-0">
     
         <!-- prodcut name and category -->
         <div>
