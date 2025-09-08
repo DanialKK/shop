@@ -157,6 +157,33 @@ async function getOneProducts(id = 1) {
     return await handleApiResponse(res)
 }
 
+// order items
+async function orderProduct(item) {
+    const getAccessToken = tokenControl.accessToken;
+    const res = await fetch(`${baseApiURL}/orders/`,{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Barrer ${getAccessToken}`
+        },
+        body: JSON.stringify(item)
+    });
+    return await handleApiResponse(res)
+}
+
+async function handleOrderProduct(item) {
+    const accessIsValid = await checkLoginStatus()
+    const accessToken = tokenControl.accessToken;
+
+    if (!accessToken) {
+        window.location.href = "/account/?mode=login"
+    } else if (accessIsValid) {
+        return await orderProduct(item);
+    } else {
+        throw new Error(JSON.stringify(accessIsValid))
+    }
+}
+
 export {
     handleRegisterUser,
     handleLoginUser,
@@ -167,4 +194,5 @@ export {
     getAllTags,
     getAllProducts,
     getOneProducts,
+    handleOrderProduct
 }
