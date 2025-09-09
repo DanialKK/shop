@@ -142,10 +142,12 @@ const productPage = (data) => {
                 </button>
             </div>
         </div>
+        
         <!-- message -->
         <div>
-            <h4 id="messages" class="text-center my-4">ابتدا باید وارد شوید</h4>
+            <h4 id="product-message" class="text-center my-4 text-rose-500"></h4>
         </div>
+        
         <!-- prodcut tags -->
         <div class="border-top-light">
             <h5>تگ ها:</h5>
