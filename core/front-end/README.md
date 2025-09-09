@@ -7,7 +7,7 @@
 
 ⚙️ تکنولوژی‌های استفاده‌شده
 
-- HTML, CSS, JavaScript (Vanilla)  
+- HTML, TailwindCss 4 and JavaScript (Vanilla)  
 - Vite برای توسعه سریع و بیلد بهینه  
 - Tailwind CSS با پیکربندی مستقیم در Vite  
 - JWT Authorization برای ارتباط امن با بک‌اند  

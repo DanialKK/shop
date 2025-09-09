@@ -1,3 +1,4 @@
+import "@/style/global.css"
 import {themeControl} from "@/js/component/header/header.js";
 import {renderSignup} from "@/js/account/signup.js";
 import {renderLogin} from "@/js/account/login.js";
@@ -110,6 +111,12 @@ const pushLink = (link) => {
     history.pushState(null, null, link)
 }
 
+// load signup and login when click the header links
+function getModeFormURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("mode");
+}
+
 // render pages in loading address: /account/index.html
 (async () => {
     try {
@@ -128,7 +135,7 @@ const pushLink = (link) => {
             const mode = getModeFormURL()
 
             if (mode) {
-                loadModeFormURL()
+                loadModeFormURL(mode)
             } else {
                 pushLink("/account/login")
                 router()
@@ -145,15 +152,7 @@ function getTabPanelURL() {
     return params.get("tab");
 }
 
-// load signup and login when click the header links
-function getModeFormURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("mode");
-}
-
-function loadModeFormURL() {
-    const mode = getModeFormURL();
-
+function loadModeFormURL(mode) {
     if (mode) {
         if (mode === "login") {
             pushLink("/account/login")
@@ -165,8 +164,6 @@ function loadModeFormURL() {
 
     if (mode) pushLink(`/account/${mode}`)
 }
-
-loadModeFormURL();
 
 window.addEventListener("popstate", router);
 export {pushLink, router, showHidePassword, handleLinks, redirectAccountsPage, getTabPanelURL, showLoader, hideLoader}

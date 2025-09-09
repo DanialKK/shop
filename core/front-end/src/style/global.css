@@ -1,4 +1,4 @@
-@import "@/css/font.css";
+@import "@/style/font.css";
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -86,6 +86,7 @@
     --color-secondary-button-text: #50FFAF;
 }
 
+
 @layer base {
     html {
         @apply scroll-smooth;
@@ -96,11 +97,11 @@
     }
 
     h1 {
-        @apply text-xl xxs:text-2xl xs:text-3xl/[3rem] font-medium -tracking-[1px] max-w-100 sm:text-4xl/15 sm:max-w-120 md:text-5xl/20 md:max-w-146;
+        @apply text-2xl xxs:text-3xl xs:text-4xl/[3rem] font-medium -tracking-[1px] max-w-100 sm:text-4xl/15 sm:max-w-120 md:text-5xl/20 md:max-w-146;
     }
 
     h2 {
-        @apply text-[1.8rem] font-medium md:text-4xl;
+        @apply text-[1.5rem] font-medium md:text-3xl;
     }
 
     h3 {
@@ -140,5 +141,9 @@
 
     .sub-text {
         @apply text-sub-text text-sm/6 md:max-w-220;
+    }
+
+    .border-top-light {
+        @apply border-t border-t-custom-border pt-4 mt-4;
     }
 }
