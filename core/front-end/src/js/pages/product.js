@@ -53,7 +53,7 @@ function bindProductPageEvents() {
 
             if (!accessToken) {
                 productMessage.textContent = "ابتدا باید وارد شوید"
-                setTimeout(() => window.location.href = "/account/?mode=login", 1000)
+                setTimeout(() => window.location.href = "/account/?mode=login", 1300)
             } else {
                 const item = e.currentTarget.dataset.productId;
 
