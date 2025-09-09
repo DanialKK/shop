@@ -144,6 +144,7 @@ async function orderProduct(item) {
         },
         body: JSON.stringify(item)
     });
+    console.log(res)
     return await handleApiResponse(res)
 }
 
