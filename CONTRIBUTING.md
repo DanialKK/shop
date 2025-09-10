@@ -24,11 +24,11 @@ git branch -a
 
 ## 2️⃣ برنچ‌های اصلی پروژه
 
-| برنچ | توضیح |
-|------|-------|
-| `master` | نسخه پایدار (Release) ✅ |
+| برنچ          | توضیح                              |
+|---------------|------------------------------------|
+| `master`      | نسخه پایدار (Release) ✅            |
 | `development` | توسعه فعال (آخرین تغییرات اصلی) 🛠 |
-| `backup` | بکاپ همگام با master 💾 |
+| `backup`      | بکاپ همگام با master 💾            |
 
 ---
 
@@ -58,16 +58,14 @@ git checkout -b feature/admin-panel
 اگر تغییرات داری و می‌خوای برنچ عوض کنی:
 
 ```bash
-git stash push -m "WIP: تغییرات در حال توسعه"
-git checkout development
-git pull origin development
+git stash push -m "WIP: keep changes"
 ```
 
 وقتی برگشتی:
 
 ```bash
-git checkout feature/admin-panel
-git merge development
+git fetch origin
+git rebase origin/development
 git stash pop
 ```
 
@@ -77,8 +75,8 @@ git stash pop
 
 ```bash
 git add .
-git commit -m "feat: اضافه‌کردن پنل مدیریت جدید"
-git push origin feature/admin-panel
+git commit -m "feat: add new form in user panel"
+git push origin feature/user-panel
 ```
 
 ---
@@ -124,12 +122,15 @@ git push origin backup
 3. برگرد به برنچ خودت → merge کن
 
 ```bash
-git stash
+git stash -m "message"
 git checkout development
 git pull origin development
-git checkout feature/admin-panel
-git merge origin/development
+git checkout feature/user-panel
+git rebase origin/development
 git stash pop
+git add .
+git commit -m "message"
+git push origin feature/user-panel
 ```
 
 ---

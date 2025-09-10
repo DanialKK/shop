@@ -86,23 +86,23 @@ python manage.py runserver
 
 ### Auth
 
-| عملیات | مسیر | توضیح |
-|--------|------|-------|
-| ثبت‌نام | `POST /api/auth/register/` | ایجاد حساب کاربری  
-| لاگین | `POST /api/auth/login/` | دریافت JWT  
-| رفرش توکن | `POST /api/auth/token/refresh/` | دریافت توکن جدید  
-| خروج | `POST /api/auth/logout/` | بلاک‌کردن توکن رفرش  
+| عملیات    | مسیر                            | توضیح               |
+|-----------|---------------------------------|---------------------|
+| ثبت‌نام   | `POST /api/auth/register/`      | ایجاد حساب کاربری   |
+| لاگین     | `POST /api/auth/login/`         | دریافت JWT          |
+| رفرش توکن | `POST /api/auth/token/refresh/` | دریافت توکن جدید    |
+| خروج      | `POST /api/auth/logout/`        | بلاک‌کردن توکن رفرش |
 
 ### Resources
 
-| مدل | مسیر پایه | عملیات |
-|-----|-----------|--------|
-| Category | `/api/categories/` | CRUD (فقط مدیر)  
-| Tag | `/api/tags/` | CRUD (فقط مدیر)  
-| Product | `/api/products/` | CRUD + افزودن تصویر  
-| Order | `/api/orders/` | ثبت و مشاهده سفارش  
-| OrderItem | `/api/order-items/` | مدیریت آیتم‌ها  
-| Rating | `/api/ratings/` | امتیازدهی به محصولات  
+| مدل       | مسیر پایه           | عملیات               |
+|-----------|---------------------|----------------------|
+| Category  | `/api/categories/`  | CRUD (فقط مدیر)      |
+| Tag       | `/api/tags/`        | CRUD (فقط مدیر)      |
+| Product   | `/api/products/`    | CRUD + افزودن تصویر  |
+| Order     | `/api/orders/`      | ثبت و مشاهده سفارش   |
+| OrderItem | `/api/order-items/` | مدیریت آیتم‌ها       |
+| Rating    | `/api/ratings/`     | امتیازدهی به محصولات |
 
 ---
 
