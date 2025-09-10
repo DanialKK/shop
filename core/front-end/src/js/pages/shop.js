@@ -1,5 +1,5 @@
 import {getAllProducts} from "@/js/api/auth.js";
-import {createProductBox} from "@/js/main/main.js"
+import productBox from "@/js/component/product-box/productBox.js";
 
 export function init() {
     const productsWrapper = document.getElementById('products-wrapper');
@@ -11,6 +11,12 @@ export function init() {
 
             if (products[0]) {
                 const fragment = document.createDocumentFragment();
+                const res = await getAllProducts()
+
+                res.forEach(product => {
+                    fragment.appendChild(productBox(product));
+                });
+
                 productsWrapper.appendChild(fragment);
             } else {
                 textMessage.innerHTML = "<h2 class='w-full text-center'>هیچ محصولی وجود ندارد</h2>"

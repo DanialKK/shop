@@ -24,11 +24,10 @@ git branch -a
 
 ## 2️⃣ برنچ‌های اصلی پروژه
 
-| برنچ | توضیح |
-|------|-------|
-| `master` | نسخه پایدار (Release) ✅ |
+| برنچ          | توضیح                              |
+|---------------|------------------------------------|
+| `master`      | نسخه پایدار (Release) ✅            |
 | `development` | توسعه فعال (آخرین تغییرات اصلی) 🛠 |
-| `backup` | بکاپ همگام با master 💾 |
 
 ---
 
@@ -46,55 +45,80 @@ git branch -a
 ```bash
 git checkout development
 git pull origin development
-git checkout -b feature/admin-panel
+git checkout -b feature/user-panel
 ```
 
 ---
 
 ## 4️⃣ کار روی برنچ
 
-### ذخیره‌سازی موقت (stash)
+### ذخیره‌سازی  موقت 
 
-اگر تغییرات داری و می‌خوای برنچ عوض کنی:
+اگر تغییرات داری و می‌خوای پوش کنی، قبلش حتما آخرین تغییرات رو از development بگیر:
 
 ```bash
-git stash push -m "WIP: تغییرات در حال توسعه"
-git checkout development
-git pull origin development
+git stash -m "WIP: message"
 ```
 
-وقتی برگشتی:
+تغییرات موقتا ذخیره شدن، وقتشه از development بگیری:
 
 ```bash
-git checkout feature/admin-panel
-git merge development
-git stash pop
+git checkout feature/user-panel
+git fetch origin
+git merge origin/development
 ```
 
 ---
 
-## 5️⃣ کامیت و پوش تغییرات
+## 5️⃣ چک کردن کانفلیکت 
 
 ```bash
+git status      # چک کردن کانفلیکت
+# اگر کانفلیکت وجود نداشت برید مرحله 6 در غیر اینصورت برید ادامه دستورات در پایین
+# اگر کانفلیکت وجود داشت:
+#   1. فایل‌ها رو دستی اصلاح کن
+#   2. بعد از اصلاح:
 git add .
-git commit -m "feat: اضافه‌کردن پنل مدیریت جدید"
-git push origin feature/admin-panel
+git commit
 ```
 
 ---
 
-## 6️⃣ Pull Request (PR)
+## 6️⃣ پوش کردن به برنچ جدید
 
-- از برنچ فیچر به `development` PR بزنید
-- ریویو بشه → مرج بشه 🔄
+```bash
+git stash pop       # در آوردن تغییرات از stash
+git status          # چک کردن دوباره
+git add .
+git commit -m "message"
+git push origin feature/user-panel
+```
 
 ---
 
-## 7️⃣ به‌روز کردن برنچ‌ها بعد از مرج
+## 7️⃣ به برنچ ها pr و بعداز بررسی، مرج میکنیم
+
+### اول) pr به `development`
+
+```
+از طریق وبسایت گیتهاب، یک pr بزنید به development و بعد از بررسی merge میشه
+ترجیحا برنچی که ساختید حذف میشه بعد از merge
+```
+
+### دوم) pr به `master` در صورت نسخه رسیدن به نسخه پایدار 
+
+```
+بعد از بررسی و در صورت ایجاد شدن نسخه پایدار، master هم آپدیت میکنیم با pr و merge
+```
+
+---
+
+## 7️⃣ به‌روز کردن برنچ‌ها بعد از pr در وب 
 
 ### اول) آپدیت `development`
 
 ```bash
+git fetch --all --prune    # برنچ هایی که در repo حذف شدن در لوکال هم حذف میشن
 git checkout development
 git pull origin development
 ```
@@ -102,34 +126,28 @@ git pull origin development
 ### دوم) آپدیت `master` (بعد از تست روی development)
 
 ```bash
+git fetch --all --prune
 git checkout master
-git merge origin/development
-git push origin master
-```
-
-### سوم) آپدیت `backup`
-
-```bash
-git checkout backup
-git merge origin/master
-git push origin backup
+git pull origin master
 ```
 
 ---
 
 ## 8️⃣ سناریوی همزمانی (وقتی یکی دیگه تغییر داده)
 
-1. تغییراتت رو stash کن
-2. روی `development` pull کن
-3. برگرد به برنچ خودت → merge کن
+1. تغییراتت رو commit کن
+2. آخرین تغییرات رو از development بگیر
+3. با برنچت merge کن
+4. و push کن
 
 ```bash
-git stash
-git checkout development
-git pull origin development
-git checkout feature/admin-panel
+git stash -m "WIP: message"
+git fetch origin
 git merge origin/development
 git stash pop
+git add .
+git commit -m "message"
+git push origin feature/user-panel
 ```
 
 ---
@@ -138,6 +156,5 @@ git stash pop
 
 1. از `development` برنچ بزن
 2. تغییراتت رو انجام بده → commit/push
-3. PR بزن به `development`
-4. بعد از مرج → `development` رو pull کن
-5. در صورت نیاز تغییرات رو به `master` → بعد به `backup` منتقل کن
+3. برنچ `development` رو pr و مرج کن
+4. در صورت نیاز تغییرات رو به `master` منتقل کن

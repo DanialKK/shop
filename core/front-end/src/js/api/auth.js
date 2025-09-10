@@ -19,6 +19,15 @@ async function handleApiResponse(res) {
     return data;
 }
 
+async function callApi(func, args) {
+    const accessIsValid = await checkLoginStatus();
+    if (accessIsValid) {
+        return await func(...args);
+    } else {
+        throw new Error(JSON.stringify(accessIsValid))
+    }
+}
+
 // validate password in signup
 function validatePassword(password) {
     const errors = [];
@@ -29,7 +38,7 @@ function validatePassword(password) {
     // فقط حروف بودن
     if (/^[a-zA-Z]+$/.test(password)) errors.push("رمز عبور نمی‌تواند فقط شامل حروف باشد.");
     // رمزهای رایج
-    const commonPasswords = ["123456", "12345678", "password", "qwerty", "111111", "abc123", "123123", "qwer1234", "admin", "letmein", "welcome"];
+    const commonPasswords = ["12345678", "password", "qwer1234"];
     if (commonPasswords.includes(password.toLowerCase())) errors.push("رمز عبور خیلی رایج و ساده است.");
     // تکرار کاراکترها مثل "aaaaaaa"
     if (/^(.)\1+$/.test(password)) errors.push("رمز عبور نباید شامل کاراکترهای تکراری باشد.");
@@ -103,12 +112,7 @@ async function logOutUser() {
 
 // handle log out user
 async function handleLogoutUser() {
-    const accessIsValid = await checkLoginStatus()
-    if (accessIsValid) {
-        return await logOutUser()
-    } else {
-        throw new Error(JSON.stringify(accessIsValid))
-    }
+    return await callApi(logOutUser, [])
 }
 
 // get user info
@@ -126,12 +130,26 @@ async function getUserInfo() {
 
 // handle get user info
 async function handleGetUserInfo() {
-    const accessIsValid = await checkLoginStatus()
-    if (accessIsValid) {
-        return await getUserInfo()
-    } else {
-        throw new Error(JSON.stringify(accessIsValid))
-    }
+    return await callApi(getUserInfo, [])
+}
+
+// order items
+async function orderProduct(item) {
+    const getAccessToken = tokenControl.accessToken;
+    const res = await fetch(`${baseApiURL}/orders/`,{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Barrer ${getAccessToken}`
+        },
+        body: JSON.stringify(item)
+    });
+    console.log(res)
+    return await handleApiResponse(res)
+}
+
+async function handleOrderProduct(item) {
+    return await callApi(orderProduct, [item]);
 }
 
 // get all category
@@ -167,4 +185,5 @@ export {
     getAllTags,
     getAllProducts,
     getOneProducts,
+    handleOrderProduct
 }
