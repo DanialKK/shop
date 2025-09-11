@@ -1,6 +1,7 @@
 import {showHidePassword, redirectAccountsPage} from "@/js/account/account.js"
 import {handleLoginUser} from "@/js/api/auth.js"
 import {serverDisconnect} from "@/js/api/api-utils.js";
+import {rememberProductNeedLogin} from "@/js/pages/product.js";
 
 const renderLogin = () => {
     const app = document.getElementById("app")
@@ -70,8 +71,24 @@ const bindEvent = () => {
                 await handleLoginUser(loginData.username, loginData.password, loginData.rememberMe)
                 loginData.textError.innerHTML = ""
                 loginData.successMessage.textContent = "لاگین موفقیت آمیز بود"
-                // if (true) {}
-                redirectAccountsPage("user-panel")
+
+                const hasProductInRemember = rememberProductNeedLogin.hasRememberProduct()
+
+                setTimeout(() => {
+                    if (hasProductInRemember) {
+                        loginData.successMessage.innerHTML = "در حال انتقال به محصول مورد نظر"
+                    } else {
+                        loginData.successMessage.innerHTML = "در حال ورود به حساب"
+                    }
+                }, 1600)
+
+                setTimeout(() => {
+                    if (hasProductInRemember) {
+                        window.location.href = `/product/?id=${rememberProductNeedLogin}`
+                    } else {
+                        redirectAccountsPage("user-panel")
+                    }
+                }, 1600)
             } catch (e) {
                 console.log(e)
                 catchLoginError(e, loginData.textError)

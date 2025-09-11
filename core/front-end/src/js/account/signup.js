@@ -1,6 +1,8 @@
 import {handleRegisterUser, handleLoginUser} from "@/js/api/auth.js"
 import {showHidePassword, handleLinks, redirectAccountsPage} from "@/js/account/account.js";
 import {serverDisconnect} from "@/js/api/api-utils.js";
+import {rememberProductNeedLogin} from "@/js/pages/product.js";
+
 
 const renderSignup = () => {
     const app = document.getElementById("app")
@@ -84,10 +86,23 @@ const bindEvent = () => {
 
                 await handleLoginUser(username, password, true)
 
+                const hasProductInRemember = rememberProductNeedLogin.hasRememberProduct()
+
                 setTimeout(() => {
-                    successMessage.innerHTML = "در حال ورود به حساب"
-                    redirectAccountsPage("user-panel")
-                }, 2000)
+                    if (hasProductInRemember) {
+                        successMessage.innerHTML = "در حال انتقال به محصول مورد نظر"
+                    } else {
+                        successMessage.innerHTML = "در حال ورود به حساب"
+                    }
+                }, 1600)
+
+                setTimeout(() => {
+                    if (hasProductInRemember) {
+                        window.location.href = `/product/?id=${rememberProductNeedLogin}`
+                    } else {
+                        redirectAccountsPage("user-panel")
+                    }
+                }, 1600)
             } catch (e) {
                 if (e instanceof TypeError) {
                     serverDisconnect(textError)

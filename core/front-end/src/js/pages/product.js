@@ -70,6 +70,22 @@ function bindProductPageEvents() {
 }
 
 // when user not login and redirect to login page, this function remember product after login
-const productRemember = () => {
+class RememberProductNeedLogin {
+    constructor() {
+        this.key = "productNeedLogin"
+    }
 
+    rememberProduct(id) {
+        localStorage.setItem(this.key, id);
+    }
+
+    deleteRememberProduct() {
+        localStorage.removeItem(this.key);
+    }
+
+    hasRememberProduct() {
+        return localStorage.getItem(this.key) || false;
+    }
 }
+
+export const rememberProductNeedLogin = new RememberProductNeedLogin();
