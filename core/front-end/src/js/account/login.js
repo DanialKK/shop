@@ -70,6 +70,7 @@ const bindEvent = () => {
                 await handleLoginUser(loginData.username, loginData.password, loginData.rememberMe)
                 loginData.textError.innerHTML = ""
                 loginData.successMessage.textContent = "لاگین موفقیت آمیز بود"
+                // if (true) {}
                 redirectAccountsPage("user-panel")
             } catch (e) {
                 console.log(e)
