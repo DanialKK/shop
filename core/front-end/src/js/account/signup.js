@@ -94,14 +94,14 @@ const bindEvent = () => {
                     } else {
                         successMessage.innerHTML = "در حال ورود به حساب"
                     }
-                }, 1600)
-
-                setTimeout(() => {
-                    if (hasProductInRemember) {
-                        window.location.href = `/product/?id=${rememberProductNeedLogin}`
-                    } else {
-                        redirectAccountsPage("user-panel")
-                    }
+                    setTimeout(() => {
+                        if (hasProductInRemember) {
+                            window.location.href = `/product/?id=${hasProductInRemember}`
+                            rememberProductNeedLogin.deleteRememberProduct()
+                        } else {
+                            redirectAccountsPage("user-panel")
+                        }
+                    }, 1600)
                 }, 1600)
             } catch (e) {
                 if (e instanceof TypeError) {
