@@ -53,7 +53,8 @@ function bindProductPageEvents() {
 
             if (!accessToken) {
                 productMessage.textContent = "ابتدا باید وارد شوید"
-                setTimeout(() => window.location.href = "/account/?mode=login", 1300)
+                setTimeout(() => window.location.href = "/account/?mode=login", 2000)
+
             } else {
                 const item = e.currentTarget.dataset.productId;
 
@@ -66,4 +67,9 @@ function bindProductPageEvents() {
             }
         })
     })();
+}
+
+// when user not login and redirect to login page, this function remember product after login
+const productRemember = () => {
+
 }
