@@ -61,7 +61,6 @@ function bindProductPageEvents() {
 
                 try {
                     const res = await handleOrderProduct(item)
-                    console.log(res)
                 } catch (e) {
                     console.log(e)
                 }
