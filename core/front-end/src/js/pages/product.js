@@ -75,16 +75,19 @@ class RememberProductNeedLogin {
         this.key = "productNeedLogin"
     }
 
+    // set product id
     rememberProduct(id) {
         localStorage.setItem(this.key, id);
     }
 
-    deleteRememberProduct() {
-        localStorage.removeItem(this.key);
-    }
-
+    // get product id
     hasRememberProduct() {
         return localStorage.getItem(this.key) || false;
+    }
+
+    // remove after redirect
+    deleteRememberProduct() {
+        localStorage.removeItem(this.key);
     }
 }
 
