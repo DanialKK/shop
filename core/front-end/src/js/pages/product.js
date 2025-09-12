@@ -89,4 +89,5 @@ class RememberProductNeedLogin {
     }
 }
 
+// for remember product
 export const rememberProductNeedLogin = new RememberProductNeedLogin();
