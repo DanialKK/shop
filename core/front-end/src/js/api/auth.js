@@ -137,12 +137,11 @@ async function handleGetUserInfo() {
 // order items
 async function orderProduct(item) {
     const getAccessToken = tokenControl.accessToken;
-    console.log(getAccessToken)
     const res = await fetch(`${baseApiURL}/orders/`,{
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Barrer ${getAccessToken}`
+            "Authorization": `Bearer ${getAccessToken}`
         },
         body: JSON.stringify(item)
     });
@@ -150,7 +149,11 @@ async function orderProduct(item) {
 }
 
 async function handleOrderProduct(item) {
-    return await callApi(orderProduct, [item]);
+    const data = {
+        "product_id": item,
+        "quantity": 1
+    }
+    return await callApi(orderProduct, [data]);
 }
 
 // get all category
