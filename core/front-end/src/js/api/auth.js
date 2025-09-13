@@ -7,7 +7,6 @@ const baseApiURL = "/api";
 // handle error
 async function handleApiResponse(res) {
     let data;
-    console.log(res)
     try {
         data = await res.json();
     } catch {
@@ -137,7 +136,6 @@ async function handleGetUserInfo() {
 // order items
 async function orderProduct(item) {
     const getAccessToken = tokenControl.accessToken;
-    console.log(item)
     const res = await fetch(`${baseApiURL}/orders/`, {
         method: "POST",
         headers: {
