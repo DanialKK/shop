@@ -137,7 +137,8 @@ async function handleGetUserInfo() {
 // order items
 async function orderProduct(item) {
     const getAccessToken = tokenControl.accessToken;
-    const res = await fetch(`${baseApiURL}/orders/`,{
+    console.log(item)
+    const res = await fetch(`${baseApiURL}/orders/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -150,8 +151,13 @@ async function orderProduct(item) {
 
 async function handleOrderProduct(item) {
     const data = {
-        "product_id": item,
-        "quantity": 1
+        is_paid: false,
+        items: [
+            {
+                product_id: +item,
+                quantity: 1
+            }
+        ]
     }
     return await callApi(orderProduct, [data]);
 }
