@@ -23,15 +23,12 @@ const productPage = (data) => {
     const priceDiscount = formatToPrice(parseInt(data?.discounted_price))
 
     const tags = data?.tags_detail.map(tag => `<a href="" class="sub-text">#${tag.name.replace(" ", "_")}</a>`);
-    console.log(tags)
 
+    // comments
     let comments = ""
-
     for (let i = 0; i < 4; i++) {
         comments += comment()
     }
-
-    console.log(comments);
 
     return `
 <div data-id=${data.id} class="bg-card-bg rounded-xl border-b-custom-border pb-6 overflow-hidden mx-auto w-11/12 xs:max-w-130 md:max-w-320 md:flex md:flex-row-reverse md:justify-between md:pt-6">
