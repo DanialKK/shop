@@ -160,7 +160,7 @@ const productPage = (data) => {
 </div>
 
 <!-- <=== product comments ===> -->
-<div class="mx-auto w-11/12 xs:max-w-130 md:max-w-320 mt-20 px-4 py-5 bg-card-bg rounded-xl border-b-custom-border pb-6">
+<div class="mx-auto w-11/12 xs:max-w-130 md:max-w-320 mt-20 p-10 bg-card-bg rounded-xl border-b-custom-border pb-6">
     ${comment()}
 </div>
 `
