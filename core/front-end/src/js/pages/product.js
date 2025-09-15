@@ -20,7 +20,6 @@ export function init() {
             // bind all events
             bindProductPageEvents()
         } catch (e) {
-            console.log(e)
             if (e instanceof Error) {
                 textMessage.innerHTML = "<h2 class='w-full text-center'>در حال حاضر سرور در دسترس نمیباشد</h2>"
             } else {
@@ -59,8 +58,7 @@ function bindProductPageEvents() {
                 const item = e.currentTarget.dataset.productId;
 
                 try {
-                    const res = await handleOrderProduct(item)
-                    console.log(res)
+                    await handleOrderProduct(item)
                 } catch (e) {
                     console.log(e)
                 }
