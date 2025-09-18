@@ -20,7 +20,6 @@ export function init() {
             // bind all events
             bindProductPageEvents()
         } catch (e) {
-            console.log(e)
             if (e instanceof Error) {
                 textMessage.innerHTML = "<h2 class='w-full text-center'>در حال حاضر سرور در دسترس نمیباشد</h2>"
             } else {
@@ -53,13 +52,13 @@ function bindProductPageEvents() {
 
             if (!accessToken) {
                 productMessage.textContent = "ابتدا باید وارد شوید"
-                setTimeout(() => window.location.href = "/account/?mode=login", 1300)
+                rememberProductNeedLogin.rememberProduct(orderItemBtn.dataset.productId)
+                setTimeout(() => window.location.href = "/account/?mode=login", 2000)
             } else {
                 const item = e.currentTarget.dataset.productId;
 
                 try {
-                    const res = await handleOrderProduct(item)
-                    console.log(res)
+                    await handleOrderProduct(item)
                 } catch (e) {
                     console.log(e)
                 }
@@ -67,3 +66,28 @@ function bindProductPageEvents() {
         })
     })();
 }
+
+// when user not login and redirect to login page, this function remember product after login
+class RememberProductNeedLogin {
+    constructor() {
+        this.key = "productNeedLogin"
+    }
+
+    // set product id
+    rememberProduct(id) {
+        localStorage.setItem(this.key, id);
+    }
+
+    // get product id
+    hasRememberProduct() {
+        return localStorage.getItem(this.key) || false;
+    }
+
+    // remove after redirect
+    deleteRememberProduct() {
+        localStorage.removeItem(this.key);
+    }
+}
+
+// for remember product
+export const rememberProductNeedLogin = new RememberProductNeedLogin();

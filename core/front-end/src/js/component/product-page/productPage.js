@@ -3,6 +3,7 @@
 "use strict";
 
 import {formatToPrice} from "@/js/main/main.js";
+import comment from "@/js/component/comment/comment.js";
 
 const productPage = (data) => {
     /**
@@ -22,6 +23,12 @@ const productPage = (data) => {
     const priceDiscount = formatToPrice(parseInt(data?.discounted_price))
 
     const tags = data?.tags_detail.map(tag => `<a href="" class="sub-text">#${tag.name.replace(" ", "_")}</a>`);
+
+    // comments
+    let comments = ""
+    for (let i = 0; i < 4; i++) {
+        comments += comment()
+    }
 
     return `
 <div data-id=${data.id} class="bg-card-bg rounded-xl border-b-custom-border pb-6 overflow-hidden mx-auto w-11/12 xs:max-w-130 md:max-w-320 md:flex md:flex-row-reverse md:justify-between md:pt-6">
@@ -156,7 +163,13 @@ const productPage = (data) => {
             </div>
         </div>
     </div>
-</div>`
+</div>
+
+<!-- <=== product comments ===> -->
+<div class="mx-auto w-11/12 xs:max-w-130 md:max-w-320 mt-20 p-10 bg-card-bg rounded-xl border-b-custom-border pb-12 space-y-30">
+    ${comments}
+</div>
+`
 }
 
 export default productPage;

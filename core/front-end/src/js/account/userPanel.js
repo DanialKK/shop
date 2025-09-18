@@ -9,7 +9,7 @@ const renderUserPanel = () => {
     if (getAccessToken) {
         app.innerHTML = `<div id="overlay" class="hidden fixed inset-0 -bottom-2000 bg-black/90 z-10"></div>
 <div class="container mb-14">
-                            <h1 class="mx-auto text-center">پنل کاربری</h1>
+                            <h1 class="text-start">پنل کاربری</h1>
                          </div>
 <section id="user-panel" class="container bg-content-bg rounded-2xl p-6 shadow-lg">
 <aside class="flex flex-row max-xs:flex-col gap-4 items-baseline justify-center mx-auto w-72 max-xs:w-full space-y-6 max-xs:space-y-2 divide-x-2 max-xs:divide-x-0 max-xs:divide-y-2 max-xs:items-center divide-gray-500">

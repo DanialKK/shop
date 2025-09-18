@@ -1,6 +1,8 @@
-import {handleRegisterUser} from "@/js/api/auth.js"
+import {handleRegisterUser, handleLoginUser} from "@/js/api/auth.js"
 import {showHidePassword, handleLinks, redirectAccountsPage} from "@/js/account/account.js";
 import {serverDisconnect} from "@/js/api/api-utils.js";
+import {rememberProductNeedLogin} from "@/js/pages/product.js";
+
 
 const renderSignup = () => {
     const app = document.getElementById("app")
@@ -67,6 +69,7 @@ const bindEvent = () => {
     form.addEventListener("submit", event => {
         event.preventDefault()
         const textError = document.querySelector("[data-error-message-register]")
+        const successMessage = document.querySelector("[data-success-signup-message]")
         textError.innerHTML = ""
         const username = document.getElementById("new-username").value.trim()
         const email = document.getElementById("new-email").value.trim()
@@ -78,9 +81,28 @@ const bindEvent = () => {
         (async () => {
             try {
                 await handleRegisterUser(dataUser)
-                document.querySelector("[data-success-signup-message]").innerHTML = "ثبت نام موفقت امیز بود"
+                successMessage.innerHTML = "ثبت نام موفقت امیز بود"
                 textError.innerHTML = ""
-                redirectAccountsPage("login")
+
+                await handleLoginUser(username, password, true)
+
+                const hasProductInRemember = rememberProductNeedLogin.hasRememberProduct()
+
+                setTimeout(() => {
+                    if (hasProductInRemember) {
+                        successMessage.innerHTML = "در حال انتقال به محصول مورد نظر"
+                    } else {
+                        successMessage.innerHTML = "در حال ورود به حساب"
+                    }
+                    setTimeout(() => {
+                        if (hasProductInRemember) {
+                            window.location.href = `/product/?id=${hasProductInRemember}`
+                            rememberProductNeedLogin.deleteRememberProduct()
+                        } else {
+                            redirectAccountsPage("user-panel")
+                        }
+                    }, 1600)
+                }, 1600)
             } catch (e) {
                 if (e instanceof TypeError) {
                     serverDisconnect(textError)
