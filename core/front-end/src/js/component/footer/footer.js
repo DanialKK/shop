@@ -70,7 +70,7 @@ const createFooter = () => {
                     برای دریافت تازه‌ترین خبرها، عضو شوید!
                 </h3>
                 <span class="sub-text font-light text-sm block">ایمیل</span>
-                <input type="text" placeholder="ایمیل خود را وارد کنید" class="p-2 bg-[#F0FFF8] text-black/80 rounded-3xl placeholder:text-sm placeholder:font-normal block my-2 outline-[#1A1A1A] dark:outline-[#293330] max-w-80 w-full">
+                <input dir="ltr" type="text" placeholder="ایمیل خود را وارد کنید" class="p-2 bg-[#F0FFF8] text-black/80 rounded-3xl placeholder:text-sm placeholder:font-normal block my-2 focus-within:outline-green-400 focus-within:dark:outline-green-600 max-w-80 w-full">
                 <a href="" class="primary-btn block mt-2 w-fit hover:bg-gray-400 hover:text-white">عضویت</a>
             </div>
         </section>
