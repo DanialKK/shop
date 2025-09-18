@@ -6,8 +6,9 @@ function productBox(data) {
     wrapper.setAttribute("data-product-id", data.id);
 
     // img
-    const imgWrapper = document.createElement("div");
+    const imgWrapper = document.createElement("a");
     imgWrapper.className = "min-h-40";
+    imgWrapper.href = `/product/?id=${data.id}`
     const img = document.createElement("img");
     img.src = "/static/img/custom/rb-six.webp"
     // img.src = data.images[0];
@@ -57,7 +58,7 @@ function productBox(data) {
     // name
     const title = document.createElement("h4");
     const titleLink = document.createElement("a");
-    titleLink.href = "#";
+    titleLink.href = `/product/?id=${data.id}`;
     titleLink.setAttribute("data-product-name", "");
     titleLink.className = "hover:text-green-600 hover:decoration-solid hover:underline";
     titleLink.textContent = data.name;

@@ -96,26 +96,16 @@ git push origin feature/user-panel
 
 ---
 
-## 7️⃣ به برنچ ها pr و بعداز بررسی، مرج میکنیم
+## 7️⃣ به برنچ development یک PR میزنیم در وب و بعداز بررسی، مرج میکنیم
 
-### اول) pr به `development`
+### اول) pr به `development` و بعد از بررسی، merge شود 
 
 ```
 از طریق وبسایت گیتهاب، یک pr بزنید به development و بعد از بررسی merge میشه
 ترجیحا برنچی که ساختید حذف میشه بعد از merge
 ```
 
-### دوم) pr به `master` در صورت نسخه رسیدن به نسخه پایدار 
-
-```
-بعد از بررسی و در صورت ایجاد شدن نسخه پایدار، master هم آپدیت میکنیم با pr و merge
-```
-
----
-
-## 7️⃣ به‌روز کردن برنچ‌ها بعد از pr در وب 
-
-### اول) آپدیت `development`
+### دوم) آپدیت `development`
 
 ```bash
 git fetch --all --prune    # برنچ هایی که در repo حذف شدن در لوکال هم حذف میشن
@@ -123,7 +113,17 @@ git checkout development
 git pull origin development
 ```
 
-### دوم) آپدیت `master` (بعد از تست روی development)
+---
+
+## 8️⃣ بعد از مدتی و رسیدن به نسخه پایدار، pr و merger به `master` 
+
+### اول) pr به `master` و بعد از بررسی، merge شود 
+
+```
+بعد از بررسی و در صورت ایجاد شدن نسخه پایدار، master هم آپدیت میکنیم با pr و merge
+```
+
+### دوم) آپدیت `master`
 
 ```bash
 git fetch --all --prune

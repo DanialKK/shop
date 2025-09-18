@@ -4,7 +4,7 @@ const createHeader = () => {
     const header = document.createElement('header');
     header.className = "py-3 z-20 fixed right-0 top-0 left-0 bg-white/0 backdrop-blur-[100rem]"
     header.innerHTML = `<div id="overlay" class="fixed inset-0 -bottom-2000 bg-black/60 z-10 hidden"></div>
-<div class="container bg-bg-top-menu rounded-4xl py-2">
+<div class="container bg-bg-top-menu rounded-4xl px-3 py-2">
         <div class="flex items-center justify-between md:gap-8">
             <a href="/" class="flex items-center gap-1">
                 <span class="text-2xl font-arial font-bold">Digix</span>
