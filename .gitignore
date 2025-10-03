@@ -19,7 +19,7 @@ db.sqlite3
 *.sqlite3
 media/
 staticfiles/
-.cookies.txt
+cookies.txt
 
 # VSCode & Mac
 .vscode/
