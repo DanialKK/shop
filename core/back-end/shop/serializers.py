@@ -19,14 +19,22 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductImage
-        fields = ['id', 'image', 'image_url', 'alt_text', 'src']
-    def get_src(self, obj):
-        # اگر فایل آپلود شده موجوده، اون رو برگردون
-        if obj.image:
-            return obj.image.url
-        # وگرنه لینک رو برگردون
-        return obj.image_url
+        fields = ['id', 'product', 'image', 'image_url', 'alt_text', 'src']
+        extra_kwargs = {
+            "image": {"required": False, "allow_null": True},
+            "image_url": {"required": False, "allow_null": True},
+        }
 
+    def validate(self, data):
+        if self.instance is None and not data.get("image") and not data.get("image_url"):
+            raise serializers.ValidationError("Either image or image_url must be provided.")
+        return data
+
+    def get_src(self, obj):
+        if obj.image:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.image.url) if request else obj.image.url
+        return obj.image_url
 
 # ---------- Product ----------
 class ProductSerializer(serializers.ModelSerializer):

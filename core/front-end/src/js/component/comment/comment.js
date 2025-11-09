@@ -1,8 +1,8 @@
 const comment = () => {
     return  `
-<div>
+<div class="pt-2">
     <!-- user details -->
-    <div class="flex flex-row items-center gap-4">
+    <div class="flex flex-row items-center gap-4 px-2">
         <div class="size-15 rounded-full overflow-hidden">
             <img class="w-full h-full" src="/static/img/custom/rb-six.webp" alt="user profile in comment">
         </div>
