@@ -1,7 +1,7 @@
 # shop/urls.py
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import (
+from .api_views import (
     CategoryViewSet,
     TagViewSet,
     ProductViewSet,

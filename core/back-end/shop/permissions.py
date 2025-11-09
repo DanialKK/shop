@@ -1,3 +1,4 @@
+#shop/permissions.py
 from rest_framework.permissions import BasePermission
 
 class IsSuperUser(BasePermission):
