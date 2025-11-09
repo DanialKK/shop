@@ -4,6 +4,7 @@
 
 import {formatToPrice} from "@/js/main/main.js";
 import comment from "@/js/component/comment/comment.js";
+import createComment from "@/js/component/comment/createComment.js";
 
 const productPage = (data) => {
     /**
@@ -166,10 +167,12 @@ const productPage = (data) => {
 </div>
 
 <!-- <=== product comments ===> -->
-<div class="mx-auto w-11/12 xs:max-w-130 md:max-w-320 mt-20 p-10 bg-card-bg rounded-xl border-b-custom-border pb-12 space-y-30">
-    ${comments}
-</div>
-`
+<div class="mx-auto w-11/12 xs:max-w-130 md:max-w-320 mt-20 p-10 bg-card-bg rounded-xl border-b-custom-border pb-12">
+    ${createComment()}
+    <div class="space-y-30">
+        ${comments}
+    </div>
+</div>`
 }
 
 export default productPage;
